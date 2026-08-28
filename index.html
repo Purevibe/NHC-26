@@ -570,10 +570,13 @@
         <div class="preset-pills">
           <button class="preset-pill active" data-preset="all">All (37)</button>
           <button class="preset-pill" data-preset="favs">⭐ Favorites</button>
-          <button class="preset-pill" data-preset="reggae">🇯🇲 Reggae & Dub</button>
-          <button class="preset-pill" data-preset="soca">💃 Soca & Calypso</button>
-          <button class="preset-pill" data-preset="house">🎧 House & Techno</button>
-          <button class="preset-pill" data-preset="hiphop">🎤 Hip-Hop & R&B</button>
+          <button class="preset-pill" data-preset="soca">💃 Soca</button>
+          <button class="preset-pill" data-preset="reggae">🇯🇲 Reggae</button>
+          <button class="preset-pill" data-preset="dancehall">🔥 Dancehall</button>
+          <button class="preset-pill" data-preset="bashment">🔊 Bashment</button>
+          <button class="preset-pill" data-preset="calypso">🎵 Calypso</button>
+          <button class="preset-pill" data-preset="junglednb">⚡ Jungle/DnB</button>
+          <button class="preset-pill" data-preset="garage">🎧 Garage</button>
         </div>
 
         <!-- SEARCH -->
@@ -639,10 +642,13 @@
           <div class="preset-pills" id="mapPresetPills">
             <button class="preset-pill active" data-preset="all">All</button>
             <button class="preset-pill" data-preset="favs">⭐ Favs</button>
-            <button class="preset-pill" data-preset="reggae">🇯🇲 Reggae</button>
             <button class="preset-pill" data-preset="soca">💃 Soca</button>
-            <button class="preset-pill" data-preset="house">🎧 House</button>
-            <button class="preset-pill" data-preset="hiphop">🎤 Hip-Hop</button>
+            <button class="preset-pill" data-preset="reggae">🇯🇲 Reggae</button>
+            <button class="preset-pill" data-preset="dancehall">🔥 Dancehall</button>
+            <button class="preset-pill" data-preset="bashment">🔊 Bashment</button>
+            <button class="preset-pill" data-preset="calypso">🎵 Calypso</button>
+            <button class="preset-pill" data-preset="junglednb">⚡ Jungle/DnB</button>
+            <button class="preset-pill" data-preset="garage">🎧 Garage</button>
           </div>
         </div>
       </div>
@@ -1131,10 +1137,13 @@
       const filtered = soundSystems.filter(s => {
         // Preset check
         if (currentPreset === 'favs' && !favorites.has(s.name)) return false;
+        if (currentPreset === 'soca' && !s.genres.some(g => g.toLowerCase().includes('soca'))) return false;
         if (currentPreset === 'reggae' && !s.genres.some(g => ['Reggae', 'Dub', 'Lovers Rock', 'Steppers', 'Roots Reggae'].includes(g))) return false;
-        if (currentPreset === 'soca' && !s.genres.some(g => ['Soca', 'Calypso', 'Caribbean Party Music'].includes(g))) return false;
-        if (currentPreset === 'house' && !s.genres.some(g => ['House', 'Tech House', 'Techno', 'Electronic', 'Deep House', 'Vocal House', 'Soulful House', 'Funky House', 'Acid Techno', 'Psy-Trance'].includes(g))) return false;
-        if (currentPreset === 'hiphop' && !s.genres.some(g => ['Hip-Hop', 'R&B', 'Garage', 'Urban', 'Soul', 'Grime'].includes(g))) return false;
+        if (currentPreset === 'dancehall' && !s.genres.some(g => g.toLowerCase().includes('dancehall') || g.toLowerCase().includes('ragga'))) return false;
+        if (currentPreset === 'bashment' && !s.genres.some(g => g.toLowerCase().includes('bashment') || g.toLowerCase().includes('caribbean party music'))) return false;
+        if (currentPreset === 'calypso' && !s.genres.some(g => g.toLowerCase().includes('calypso'))) return false;
+        if (currentPreset === 'junglednb' && !s.genres.some(g => ['Jungle', 'Drum & Bass', 'Breakbeat'].includes(g))) return false;
+        if (currentPreset === 'garage' && !s.genres.some(g => g.toLowerCase().includes('garage'))) return false;
 
         const matchesGenre = selectedGenres.size === 0 || s.genres.some(g => selectedGenres.has(g));
         const query = searchQuery.toLowerCase();

@@ -1135,6 +1135,22 @@
       const listEl = document.getElementById('system-list');
       listEl.innerHTML = '';
 
+      // Filter genre preset pills by typed search query
+      const query = searchQuery.toLowerCase().trim();
+      document.querySelectorAll('.preset-pill').forEach(pill => {
+        const presetKey = pill.dataset.preset;
+        if (!query || presetKey === 'all' || presetKey === 'favs' || presetKey === 'searchmore') {
+          pill.style.display = '';
+        } else {
+          const pillText = pill.textContent.toLowerCase();
+          if (pillText.includes(query) || presetKey.includes(query)) {
+            pill.style.display = '';
+          } else {
+            pill.style.display = 'none';
+          }
+        }
+      });
+
       const filtered = soundSystems.filter(s => {
         // Preset check
         if (currentPreset === 'favs' && !favorites.has(s.name)) return false;

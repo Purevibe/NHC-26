@@ -161,6 +161,8 @@
       overflow-x: auto;
       padding-bottom: 2px;
       scrollbar-width: thin;
+      touch-action: pan-x !important;
+      -webkit-overflow-scrolling: touch;
     }
     .preset-pill {
       padding: 4px 9px;
@@ -610,6 +612,7 @@
     <!-- MAP -->
     <div id="map">
       <div class="map-custom-controls">
+        <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
         <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
         <button class="map-control-btn" id="themeToggleBtn">🌙 Dark Map</button>
         <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filter POI</button>
@@ -947,10 +950,28 @@
       stationMarkers[st.name] = marker;
     });
 
-    // 2. TICKER INTERACTIVE STATION JUMP
+    // 2. TICKER INTERACTIVE STATION JUMP & TOGGLE
+    const tflTickerContainer = document.getElementById('tfl-ticker-container');
+    const tflAlertsToggleBtn = document.getElementById('tflAlertsToggleBtn');
+
+    function toggleTflTicker() {
+      const isHidden = tflTickerContainer.style.display === 'none';
+      if (isHidden) {
+        tflTickerContainer.style.display = 'flex';
+        document.getElementById('app-container').style.height = 'calc(100vh - 38px)';
+      } else {
+        tflTickerContainer.style.display = 'none';
+        document.getElementById('app-container').style.height = '100vh';
+      }
+      setTimeout(() => map.invalidateSize(), 150);
+    }
+
+    tflAlertsToggleBtn.addEventListener('click', toggleTflTicker);
+
     document.getElementById('closeTickerBtn').addEventListener('click', () => {
-      document.getElementById('tfl-ticker-container').style.display = 'none';
+      tflTickerContainer.style.display = 'none';
       document.getElementById('app-container').style.height = '100vh';
+      setTimeout(() => map.invalidateSize(), 150);
     });
 
     document.querySelectorAll('.clickable-station').forEach(el => {
@@ -1217,6 +1238,16 @@
     const poiFilterToggleBtn = document.getElementById('poiFilterToggleBtn');
     const poiFilterPanel = document.getElementById('poiFilterPanel');
     const closePoiPanelBtn = document.getElementById('closePoiPanelBtn');
+
+    // Prevent map drag/zoom when touch-scrolling floating panel or preset pills
+    if (window.L && L.DomEvent) {
+      L.DomEvent.disableScrollPropagation(poiFilterPanel);
+      L.DomEvent.disableClickPropagation(poiFilterPanel);
+      document.querySelectorAll('.preset-pills, .genres-wrapper').forEach(el => {
+        L.DomEvent.disableScrollPropagation(el);
+        L.DomEvent.disableClickPropagation(el);
+      });
+    }
 
     poiFilterToggleBtn.addEventListener('click', () => {
       const isVisible = poiFilterPanel.style.display !== 'none';

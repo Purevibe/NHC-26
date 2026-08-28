@@ -7,6 +7,7 @@
   
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
   <style>
     :root {
       --primary: #f59e0b;
@@ -20,7 +21,113 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* --------------------------------------------------
+       2. TFL TRAVEL ALERTS TICKER
+    -------------------------------------------------- */
+    #tfl-ticker-container {
+      background: #090d16;
+      border-bottom: 1px solid #334155;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 2000;
+      overflow: hidden;
+    }
+    .ticker-badge {
+      background: #dc2626;
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0 12px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 10;
+      box-shadow: 4px 0 10px rgba(0,0,0,0.5);
+      flex-shrink: 0;
+      letter-spacing: 0.5px;
+    }
+    .ticker-content-wrap {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      animation: marquee 32s linear infinite;
+    }
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      padding: 0 20px;
+      font-weight: 500;
+    }
+    .ticker-item span.alert-text {
+      color: #f8fafc;
+      font-weight: 600;
+    }
+    .ticker-item .clickable-station {
+      color: #38bdf8;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 700;
+      margin: 0 2px;
+    }
+    .ticker-item .clickable-station:hover {
+      color: #7dd3fc;
+    }
+    .ticker-close-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1rem;
+      padding: 0 12px;
+      height: 100%;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s;
+    }
+    .ticker-close-btn:hover { color: #ffffff; }
+
+    /* --------------------------------------------------
+       MAIN LAYOUT
+    -------------------------------------------------- */
+    #app-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 38px);
+      position: relative;
+      overflow: hidden;
+    }
 
     #sidebar {
       width: 440px;
@@ -33,18 +140,75 @@
       z-index: 1000;
     }
 
-    .header { padding: 14px 16px; border-bottom: 1px solid var(--border); background: #0c1424; }
-    .header h1 { font-size: 1.15rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .header { padding: 12px 16px; border-bottom: 1px solid var(--border); background: #0c1424; }
+    .header h1 { font-size: 1.1rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
     .header h1 span { color: var(--primary); }
-    .header p { font-size: 0.76rem; color: var(--muted); margin-top: 3px; }
+    .header p { font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
 
-    .controls-container { padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; background: #111a2c; }
+    .controls-container {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #111a2c;
+    }
+
+    /* Preset Filters */
+    .preset-pills {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: thin;
+    }
+    .preset-pill {
+      padding: 4px 9px;
+      border-radius: 12px;
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .preset-pill:hover { border-color: #64748b; color: #fff; }
+    .preset-pill.active {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+      font-weight: 700;
+    }
     
+    .search-row {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
     .search-row input {
-      width: 100%; padding: 8px 11px; border-radius: 6px; border: 1px solid var(--border);
-      background: #090e17; color: #fff; font-size: 0.82rem; outline: none;
+      width: 100%;
+      padding: 8px 30px 8px 11px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #090e17;
+      color: #fff;
+      font-size: 0.82rem;
+      outline: none;
     }
     .search-row input:focus { border-color: var(--primary); }
+    .search-clear-btn {
+      position: absolute;
+      right: 8px;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: none;
+    }
+    .search-clear-btn:hover { color: #fff; }
 
     .action-row { display: flex; justify-content: space-between; align-items: center; }
     .btn-action {
@@ -55,7 +219,7 @@
     .active-count { font-size: 0.74rem; font-weight: 600; color: var(--primary); }
 
     .genres-wrapper {
-      max-height: 110px;
+      max-height: 90px;
       overflow-y: auto;
       padding: 5px;
       display: flex;
@@ -71,7 +235,7 @@
       background: #1e293b;
       color: #94a3b8;
       border: 1px solid #334155;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.15s ease;
@@ -86,10 +250,10 @@
       box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
     }
 
-    .layer-toggles { display: flex; gap: 5px; flex-wrap: wrap; }
+    .layer-toggles { display: flex; gap: 4px; flex-wrap: wrap; }
     .layer-toggle-btn {
       padding: 4px 8px; border-radius: 4px; background: #182234; border: 1px solid #334155;
-      color: #cbd5e1; cursor: pointer; font-size: 0.71rem; font-weight: 600;
+      color: #cbd5e1; cursor: pointer; font-size: 0.69rem; font-weight: 600;
     }
     .layer-toggle-btn.active { background: #0369a1; border-color: #38bdf8; color: #fff; }
 
@@ -101,12 +265,57 @@
       border-left: 4px solid var(--primary);
       cursor: pointer;
       transition: background 0.15s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .list-card:hover { background: #27354f; }
+    .card-info { flex: 1; }
     .card-title { font-size: 0.86rem; font-weight: 700; color: #fff; }
     .card-genres { font-size: 0.73rem; color: #38bdf8; margin-top: 3px; font-weight: 500; }
+    .card-fav-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 4px;
+      color: #475569;
+      transition: transform 0.15s;
+    }
+    .card-fav-btn.active { color: #f59e0b; }
+    .card-fav-btn:hover { transform: scale(1.15); }
 
-    #map { flex: 1; height: 100%; }
+    /* Map & Controls */
+    #map { flex: 1; height: 100%; position: relative; }
+
+    .map-custom-controls {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .map-control-btn {
+      background: #131d31;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .map-control-btn:hover {
+      background: #1e293b;
+      border-color: #f59e0b;
+    }
 
     /* Custom Pins */
     .system-pin {
@@ -114,6 +323,11 @@
       width: 28px; height: 28px; border-radius: 50%;
       background: #d97706; color: #fff; font-size: 13px;
       border: 2px solid #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+    .system-pin.is-fav {
+      background: #b45309;
+      border-color: #f59e0b;
+      box-shadow: 0 0 10px #f59e0b;
     }
     .facility-pin {
       display: flex; align-items: center; justify-content: center;
@@ -124,7 +338,6 @@
     .pin-firstaid { width: 22px; height: 22px; background: #16a34a; color: #ffffff; font-size: 13px; font-weight: 900; }
     .pin-welfare { width: 22px; height: 22px; background: #db2777; color: #ffffff; font-size: 12px; }
     
-    /* Clear Vector Trading Pin */
     .pin-trading {
       width: 24px; height: 24px;
       background: #ea580c;
@@ -145,7 +358,18 @@
     .tube-roundel-closed { border-color: #64748b; }
     .tube-roundel-closed .tube-roundel-bar { background: #475569; }
 
-    /* Route Double Arrow Container */
+    /* User GPS Marker */
+    .user-location-pin {
+      width: 18px; height: 18px; background: #38bdf8; border: 3px solid #ffffff;
+      border-radius: 50%; box-shadow: 0 0 12px #38bdf8;
+      animation: pulse-gps 1.8s infinite;
+    }
+    @keyframes pulse-gps {
+      0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+      70% { box-shadow: 0 0 0 14px rgba(56, 189, 248, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+    }
+
     .route-arrow-marker {
       display: flex; align-items: center; justify-content: center;
       pointer-events: none;
@@ -154,7 +378,12 @@
     /* Popup & Navigation Buttons */
     .leaflet-popup-content-wrapper { background: #131d31; color: #f8fafc; border-radius: 8px; border: 1px solid #334155; }
     .leaflet-popup-tip { background: #131d31; }
+    .popup-header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
     .popup-title { font-size: 0.95rem; font-weight: 700; color: #f59e0b; margin-bottom: 4px; }
+    .popup-fav-btn {
+      background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: #475569;
+    }
+    .popup-fav-btn.active { color: #f59e0b; }
     .popup-badge-list { display: flex; flex-wrap: wrap; gap: 3px; margin: 6px 0; }
     .popup-badge { background: #1e293b; color: #38bdf8; font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; border: 1px solid #334155; }
 
@@ -171,55 +400,168 @@
     .nav-btn-apple { background: #000000; border: 1px solid #475569; }
     .nav-btn-citymapper { background: #28be00; }
 
+    /* --------------------------------------------------
+       9. MOBILE RESPONSIVE DRAWER & TABS
+    -------------------------------------------------- */
+    .mobile-tab-bar {
+      display: none;
+      height: 48px;
+      background: #090d16;
+      border-top: 1px solid #334155;
+      z-index: 2000;
+    }
+    .mobile-tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .mobile-tab-btn.active {
+      color: #f59e0b;
+      background: #131d31;
+      border-top: 2px solid #f59e0b;
+    }
+
     @media (max-width: 768px) {
-      body { flex-direction: column; }
-      #sidebar { width: 100%; height: 48vh; order: 2; }
-      #map { height: 52vh; order: 1; }
+      #app-container {
+        flex-direction: column;
+        height: calc(100vh - 38px - 48px);
+      }
+      #sidebar {
+        width: 100%;
+        height: 100%;
+        display: none;
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+      #app-container.show-drawer #sidebar {
+        display: flex;
+      }
+      #app-container.show-drawer #map {
+        display: none;
+      }
+      .mobile-tab-bar {
+        display: flex;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div id="sidebar">
-    <div class="header">
-      <h1><span>🔊</span> NHC Interactive Map & Navigator</h1>
-      <p>37 Sound Systems • Tube Stations • 40 Toilets • Aid & Stalls</p>
-    </div>
+  <!-- 2. TFL TRAVEL ALERTS TICKER -->
+  <div id="tfl-ticker-container">
+    <div class="ticker-badge">🚇 TFL ALERTS</div>
+    <div class="ticker-content-wrap">
+      <div class="ticker-track">
+        <div class="ticker-item">
+          ⛔ <span class="clickable-station" data-station="Ladbroke Grove Station">Ladbroke Grove Station</span>: CLOSED ALL WEEKEND (Circle / Hammersmith & City)
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Westbourne Park Station">Westbourne Park Station</span>: EXIT ONLY from 11:00 AM (No Entry)
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Holland Park Station">Holland Park Station</span>: Often closes early (~15:00)
+        </div>
+        <div class="ticker-item">
+          ℹ️ Recommended Alternatives: <span class="clickable-station" data-station="Bayswater Station">Bayswater</span> & <span class="clickable-station" data-station="Queensway Station">Queensway</span> Stations
+        </div>
 
-    <div class="controls-container">
-      <div class="search-row">
-        <input type="text" id="searchInput" placeholder="Search sound system or genre..." />
+        <!-- Duplicated track for seamless infinite scroll loop -->
+        <div class="ticker-item">
+          ⛔ <span class="clickable-station" data-station="Ladbroke Grove Station">Ladbroke Grove Station</span>: CLOSED ALL WEEKEND (Circle / Hammersmith & City)
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Westbourne Park Station">Westbourne Park Station</span>: EXIT ONLY from 11:00 AM (No Entry)
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Holland Park Station">Holland Park Station</span>: Often closes early (~15:00)
+        </div>
+        <div class="ticker-item">
+          ℹ️ Recommended Alternatives: <span class="clickable-station" data-station="Bayswater Station">Bayswater</span> & <span class="clickable-station" data-station="Queensway Station">Queensway</span> Stations
+        </div>
+      </div>
+    </div>
+    <button class="ticker-close-btn" id="closeTickerBtn" title="Dismiss Banner">✕</button>
+  </div>
+
+  <!-- MAIN APP WRAPPER -->
+  <div id="app-container">
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+      <div class="header">
+        <h1><span>🔊</span> NHC Interactive Map & Navigator</h1>
+        <p>37 Sound Systems • Tube Stations • 40 Toilets • Aid & Stalls</p>
       </div>
 
-      <div class="action-row">
-        <span class="active-count" id="matchCounter">Showing 37 Systems</span>
-        <div style="display:flex; gap: 4px;">
-          <button class="btn-action" id="clearGenresBtn">Clear Filters</button>
-          <button class="btn-action" id="selectAllGenresBtn">Select All</button>
+      <div class="controls-container">
+        <!-- 3. PRESET FILTERS -->
+        <div class="preset-pills">
+          <button class="preset-pill active" data-preset="all">All (37)</button>
+          <button class="preset-pill" data-preset="favs">⭐ Favorites</button>
+          <button class="preset-pill" data-preset="reggae">🇯🇲 Reggae & Dub</button>
+          <button class="preset-pill" data-preset="soca">💃 Soca & Calypso</button>
+          <button class="preset-pill" data-preset="house">🎧 House & Techno</button>
+          <button class="preset-pill" data-preset="hiphop">🎤 Hip-Hop & R&B</button>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="search-row">
+          <input type="text" id="searchInput" placeholder="Search sound system or genre..." />
+          <button class="search-clear-btn" id="searchClearBtn">✕</button>
+        </div>
+
+        <div class="action-row">
+          <span class="active-count" id="matchCounter">Showing 37 Systems</span>
+          <div style="display:flex; gap: 4px;">
+            <button class="btn-action" id="clearGenresBtn">Clear Filters</button>
+            <button class="btn-action" id="selectAllGenresBtn">Select All</button>
+          </div>
+        </div>
+
+        <!-- GENRES -->
+        <div class="genres-wrapper" id="genreContainer"></div>
+
+        <!-- CATEGORY TOGGLES -->
+        <div class="layer-toggles">
+          <button class="layer-toggle-btn active" data-layer="systems">Sound Systems (37)</button>
+          <button class="layer-toggle-btn active" data-layer="toilets">Toilets (40 WC)</button>
+          <button class="layer-toggle-btn active" data-layer="firstaid">First Aid (8)</button>
+          <button class="layer-toggle-btn active" data-layer="welfare">Welfare (5)</button>
+          <button class="layer-toggle-btn active" data-layer="trading">Street Trading (19)</button>
+          <button class="layer-toggle-btn active" data-layer="stations">Tube Stations</button>
+          <button class="layer-toggle-btn active" data-layer="parade">Parade Route</button>
+          <button class="layer-toggle-btn active" data-layer="boundary">Boundary</button>
         </div>
       </div>
 
-      <!-- Genres -->
-      <div class="genres-wrapper" id="genreContainer"></div>
-
-      <!-- Category Toggles -->
-      <div class="layer-toggles">
-        <button class="layer-toggle-btn active" data-layer="systems">Sound Systems (37)</button>
-        <button class="layer-toggle-btn active" data-layer="toilets">Toilets (40 WC)</button>
-        <button class="layer-toggle-btn active" data-layer="firstaid">First Aid (8)</button>
-        <button class="layer-toggle-btn active" data-layer="welfare">Welfare (5)</button>
-        <button class="layer-toggle-btn active" data-layer="trading">Street Trading (19)</button>
-        <button class="layer-toggle-btn active" data-layer="stations">Tube Stations</button>
-        <button class="layer-toggle-btn active" data-layer="parade">Parade Route</button>
-        <button class="layer-toggle-btn active" data-layer="boundary">Boundary</button>
-      </div>
+      <div id="system-list"></div>
     </div>
 
-    <div id="system-list"></div>
+    <!-- MAP -->
+    <div id="map">
+      <div class="map-custom-controls">
+        <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
+        <button class="map-control-btn" id="themeToggleBtn">🌙 Dark Map</button>
+      </div>
+    </div>
   </div>
 
-  <div id="map"></div>
+  <!-- 9. MOBILE RESPONSIVE TAB BAR -->
+  <div class="mobile-tab-bar">
+    <button class="mobile-tab-btn active" id="tabMapBtn">🗺️ Map View</button>
+    <button class="mobile-tab-btn" id="tabDrawerBtn">📋 Filters & Systems (37)</button>
+  </div>
 
+  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     // 37 Sound Systems
@@ -264,6 +606,31 @@
     ];
 
     const allUniqueGenres = Array.from(new Set(soundSystems.flatMap(s => s.genres))).sort();
+
+    // 4. FAVORITES PERSISTENCE
+    let favorites = new Set();
+    try {
+      const savedFavs = localStorage.getItem('nhc26_favs');
+      if (savedFavs) {
+        favorites = new Set(JSON.parse(savedFavs));
+      }
+    } catch (e) {
+      console.error("Could not load favorites from localStorage", e);
+    }
+
+    function toggleFavorite(systemName) {
+      if (favorites.has(systemName)) {
+        favorites.delete(systemName);
+      } else {
+        favorites.add(systemName);
+      }
+      try {
+        localStorage.setItem('nhc26_favs', JSON.stringify(Array.from(favorites)));
+      } catch (e) {
+        console.error("Could not save favorites to localStorage", e);
+      }
+      applyFilters();
+    }
 
     // 40 Toilets
     const toilets = [
@@ -333,49 +700,36 @@
       { name: "Paddington Station", lines: "Elizabeth Line • Rail • Underground", status: "🚆 Major interchange hub to East", statusType: "open", lat: 51.5154, lng: -0.1755 }
     ];
 
-    // Full Parade Circuit Geometry
+    // Parade Route Geometry
     const exactParadeRoads = [
-      [51.51598123570026, -0.2090721607145155],
-      [51.5177571540958, -0.21027379032066557],
-      [51.52632865867373, -0.21520905495627005],
-      [51.52612840828571, -0.2099948406928779],
-      [51.52556770251158, -0.20692639366288756],
-      [51.52523394579644, -0.2061753751590438],
-      [51.52423266097259, -0.20544581432673842],
-      [51.52380543941318, -0.20636849420288933],
-      [51.52316459955862, -0.20673327461904203],
-      [51.52247034612022, -0.20483427054561115],
-      [51.52224337638216, -0.20385794649061423],
-      [51.52241694157776, -0.20286016476407895],
-      [51.52217662035287, -0.20145468718016799],
-      [51.52058779812705, -0.2003925323661338],
-      [51.51861838278742, -0.19843988425613998],
-      [51.519052329075656, -0.19640140545999255],
-      [51.5150264839289, -0.1950281144289778],
-      [51.51441111749441, -0.20026314729411798],
-      [51.5125616215156, -0.20650732971179062],
-      [51.51598123570026, -0.2090721607145155]
+      [51.51598123570026, -0.2090721607145155], [51.5177571540958, -0.21027379032066557],
+      [51.52632865867373, -0.21520905495627005], [51.52612840828571, -0.2099948406928779],
+      [51.52556770251158, -0.20692639366288756], [51.52523394579644, -0.2061753751590438],
+      [51.52423266097259, -0.20544581432673842], [51.52380543941318, -0.20636849420288933],
+      [51.52316459955862, -0.20673327461904203], [51.52247034612022, -0.20483427054561115],
+      [51.52224337638216, -0.20385794649061423], [51.52241694157776, -0.20286016476407895],
+      [51.52217662035287, -0.20145468718016799], [51.52058779812705, -0.2003925323661338],
+      [51.51861838278742, -0.19843988425613998], [51.519052329075656, -0.19640140545999255],
+      [51.5150264839289, -0.1950281144289778], [51.51441111749441, -0.20026314729411798],
+      [51.5125616215156, -0.20650732971179062], [51.51598123570026, -0.2090721607145155]
     ];
 
-    // Explicit Arterial Arrow Points (Strict Clockwise Direction)
     const arterialArrows = [
-      { lat: 51.5175, lng: -0.2100, bearing: 338 }, // 1. Ladbroke Grove South -> North (338°)
-      { lat: 51.5220, lng: -0.2127, bearing: 340 }, // 2. Ladbroke Grove North -> North (340°)
-      { lat: 51.5262, lng: -0.2125, bearing: 94 },  // 3. Kensal Road West -> East (94°)
-      { lat: 51.5258, lng: -0.2085, bearing: 105 }, // 4. Kensal Road East -> East (105°)
-      { lat: 51.5210, lng: -0.2007, bearing: 157 }, // 5. Great Western Road -> South (157°)
-      { lat: 51.5170, lng: -0.1957, bearing: 168 }, // 6. Chepstow Road -> South (168°)
-      { lat: 51.5147, lng: -0.1976, bearing: 259 }, // 7. Westbourne Grove East -> West (259°)
-      { lat: 51.5135, lng: -0.2034, bearing: 245 }  // 8. Westbourne Grove West -> West (245°)
+      { lat: 51.5175, lng: -0.2100, bearing: 338 },
+      { lat: 51.5220, lng: -0.2127, bearing: 340 },
+      { lat: 51.5262, lng: -0.2125, bearing: 94 },
+      { lat: 51.5258, lng: -0.2085, bearing: 105 },
+      { lat: 51.5210, lng: -0.2007, bearing: 157 },
+      { lat: 51.5170, lng: -0.1957, bearing: 168 },
+      { lat: 51.5147, lng: -0.1976, bearing: 259 },
+      { lat: 51.5135, lng: -0.2034, bearing: 245 }
     ];
 
-    // Boundary
     const carnivalBoundaryCoords = [
       [51.5273, -0.2175], [51.5268, -0.2085], [51.5240, -0.2010],
       [51.5215, -0.1975], [51.5175, -0.1915], [51.5130, -0.1920],
-      [51.5100, -0.1945], [51.5085, -0.1985], [51.5090, -0.2045],
-      [51.5115, -0.2080], [51.5140, -0.2120], [51.5150, -0.2155],
-      [51.5200, -0.2175], [51.5255, -0.2185], [51.5273, -0.2175]
+      [51.5090, -0.2045], [51.5115, -0.2080], [51.5140, -0.2120],
+      [51.5150, -0.2155], [51.5200, -0.2175], [51.5255, -0.2185], [51.5273, -0.2175]
     ];
 
     // Walking Navigation HTML
@@ -396,13 +750,71 @@
       `;
     }
 
-    // Initialize Map with 100% Free OpenStreetMap Tiles
+    // 6. BASEMAP & DARK MODE SWITCHER
     const map = L.map('map', { zoomControl: true }).setView([51.5195, -0.2050], 15);
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      maxZoom: 19
+    });
+
+    const lightTiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19
-    }).addTo(map);
+    });
+
+    darkTiles.addTo(map);
+    let isDarkMode = true;
+
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    themeToggleBtn.addEventListener('click', () => {
+      if (isDarkMode) {
+        map.removeLayer(darkTiles);
+        map.addLayer(lightTiles);
+        themeToggleBtn.textContent = '☀️ Light Map';
+        isDarkMode = false;
+      } else {
+        map.removeLayer(lightTiles);
+        map.addLayer(darkTiles);
+        themeToggleBtn.textContent = '🌙 Dark Map';
+        isDarkMode = true;
+      }
+    });
+
+    // 5. REAL-TIME GPS GEOLOCATION
+    let userMarker = null;
+    let accuracyCircle = null;
+
+    document.getElementById('findLocationBtn').addEventListener('click', () => {
+      map.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true });
+    });
+
+    map.on('locationfound', (e) => {
+      const radius = e.accuracy / 2;
+      if (userMarker) map.removeLayer(userMarker);
+      if (accuracyCircle) map.removeLayer(accuracyCircle);
+
+      const gpsIcon = L.divIcon({
+        className: 'user-location-icon',
+        html: `<div class="user-location-pin"></div>`,
+        iconSize: [18, 18],
+        iconAnchor: [9, 9]
+      });
+
+      userMarker = L.marker(e.latlng, { icon: gpsIcon }).addTo(map)
+        .bindPopup(`<strong>📍 You are here</strong><br>Accuracy: within ${Math.round(radius)} meters`).openPopup();
+      
+      accuracyCircle = L.circle(e.latlng, radius, {
+        color: '#38bdf8',
+        fillColor: '#0284c7',
+        fillOpacity: 0.15,
+        weight: 1.5
+      }).addTo(map);
+    });
+
+    map.on('locationerror', (e) => {
+      alert("Unable to retrieve your location: " + e.message);
+    });
 
     // Layers
     const boundaryLayer = L.layerGroup().addTo(map);
@@ -413,6 +825,8 @@
     const welfareLayer = L.layerGroup().addTo(map);
     const tradingLayer = L.layerGroup().addTo(map);
     const systemsLayer = L.layerGroup().addTo(map);
+
+    const stationMarkers = {};
 
     // Tube Stations
     tubeStations.forEach(st => {
@@ -438,10 +852,30 @@
         </div>
       `;
 
-      L.marker([st.lat, st.lng], { icon }).bindPopup(popupContent).addTo(stationsLayer);
+      const marker = L.marker([st.lat, st.lng], { icon }).bindPopup(popupContent).addTo(stationsLayer);
+      stationMarkers[st.name] = marker;
     });
 
-    // Thick Parade Route Polyline
+    // 2. TICKER INTERACTIVE STATION JUMP
+    document.getElementById('closeTickerBtn').addEventListener('click', () => {
+      document.getElementById('tfl-ticker-container').style.display = 'none';
+      document.getElementById('app-container').style.height = '100vh';
+    });
+
+    document.querySelectorAll('.clickable-station').forEach(el => {
+      el.addEventListener('click', (e) => {
+        const targetStationName = e.target.getAttribute('data-station');
+        const marker = stationMarkers[targetStationName];
+        if (marker) {
+          // Switch to map view if on mobile drawer
+          switchToMapView();
+          map.flyTo(marker.getLatLng(), 17, { animate: true, duration: 0.6 });
+          marker.openPopup();
+        }
+      });
+    });
+
+    // Parade Route & Chevrons
     L.polyline(exactParadeRoads, {
       color: '#580c0c',
       weight: 14,
@@ -458,16 +892,13 @@
       lineCap: 'round'
     }).bindPopup("<strong>Official Parade Route</strong><br>Directional flow circuit (Clockwise)").addTo(paradeLayer);
 
-    // Render Accurate Clockwise Double Chevron Arrows (>>)
     arterialArrows.forEach(a => {
       const doubleArrowIcon = L.divIcon({
         className: 'route-arrow-marker',
         html: `
           <div style="transform: rotate(${a.bearing}deg); display: flex; align-items: center; justify-content: center; width: 22px; height: 22px;">
             <svg width="18" height="18" viewBox="0 0 24 24" style="filter: drop-shadow(0 1px 2px rgba(0,0,0,0.9));">
-              <!-- Lead Chevron pointing UP (North) at 0 deg -->
               <path d="M12 2 L3 11 L6 12 L12 6 L18 12 L21 11 Z" fill="#ffffff" />
-              <!-- Trail Chevron pointing UP (North) at 0 deg -->
               <path d="M12 10 L3 19 L6 20 L12 14 L18 20 L21 19 Z" fill="#ffffff" />
             </svg>
           </div>
@@ -488,7 +919,7 @@
       fillOpacity: 0.08
     }).bindPopup("<strong>Official Carnival Zone / Perimeter Boundary</strong>").addTo(boundaryLayer);
 
-    // Toilets
+    // Facilities
     toilets.forEach((t, i) => {
       const icon = L.divIcon({
         className: 'custom-facility-icon',
@@ -497,16 +928,10 @@
         iconAnchor: [11, 11]
       });
       L.marker([t[0], t[1]], { icon })
-        .bindPopup(`
-          <div>
-            <strong style="color:#38bdf8;">🚻 Public Toilet Station #${i + 1}</strong>
-            ${createNavHTML(t[0], t[1], `Toilet Station #${i + 1}`)}
-          </div>
-        `)
+        .bindPopup(`<div><strong style="color:#38bdf8;">🚻 Public Toilet Station #${i + 1}</strong>${createNavHTML(t[0], t[1], `Toilet Station #${i + 1}`)}</div>`)
         .addTo(toiletsLayer);
     });
 
-    // First Aid
     firstAidPosts.forEach((fa, i) => {
       const icon = L.divIcon({
         className: 'custom-facility-icon',
@@ -515,17 +940,10 @@
         iconAnchor: [11, 11]
       });
       L.marker([fa[0], fa[1]], { icon })
-        .bindPopup(`
-          <div>
-            <strong style="color:#4ade80;">🏥 First Aid Post #${i + 1}</strong>
-            <div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Medical Support Team</div>
-            ${createNavHTML(fa[0], fa[1], `First Aid Post #${i + 1}`)}
-          </div>
-        `)
+        .bindPopup(`<div><strong style="color:#4ade80;">🏥 First Aid Post #${i + 1}</strong><div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Medical Support Team</div>${createNavHTML(fa[0], fa[1], `First Aid Post #${i + 1}`)}</div>`)
         .addTo(firstAidLayer);
     });
 
-    // Welfare
     welfarePoints.forEach((w, i) => {
       const icon = L.divIcon({
         className: 'custom-facility-icon',
@@ -534,17 +952,10 @@
         iconAnchor: [11, 11]
       });
       L.marker([w[0], w[1]], { icon })
-        .bindPopup(`
-          <div>
-            <strong style="color:#f472b6;">💖 Welfare Point #${i + 1}</strong>
-            <div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Lost children & welfare support</div>
-            ${createNavHTML(w[0], w[1], `Welfare Point #${i + 1}`)}
-          </div>
-        `)
+        .bindPopup(`<div><strong style="color:#f472b6;">💖 Welfare Point #${i + 1}</strong><div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Lost children & welfare support</div>${createNavHTML(w[0], w[1], `Welfare Point #${i + 1}`)}</div>`)
         .addTo(welfareLayer);
     });
 
-    // Street Trading (Option 1: Universal Fork & Knife Pin)
     streetTradingPoints.forEach((st, i) => {
       const icon = L.divIcon({
         className: 'custom-facility-icon',
@@ -554,7 +965,7 @@
               <path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"></path>
               <path d="M15 11v11"></path>
               <path d="M6 2v20"></path>
-              <path d="M6 2a3 3 0 0 1 3 3v2a3 3 0 0 1-3 3z"></path>
+              <path d="M6 2a3 3 0 0 1 3 3z"></path>
             </svg>
           </div>
         `,
@@ -562,19 +973,14 @@
         iconAnchor: [12, 12]
       });
       L.marker([st[0], st[1]], { icon })
-        .bindPopup(`
-          <div>
-            <strong style="color:#fb923c;">🍴 Food & Street Trading Zone #${i + 1}</strong>
-            <div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Licensed food stall & refreshments</div>
-            ${createNavHTML(st[0], st[1], `Food Stalls #${i + 1}`)}
-          </div>
-        `)
+        .bindPopup(`<div><strong style="color:#fb923c;">🍴 Food & Street Trading Zone #${i + 1}</strong><div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Licensed food stall & refreshments</div>${createNavHTML(st[0], st[1], `Food Stalls #${i + 1}`)}</div>`)
         .addTo(tradingLayer);
     });
 
-    // Sound Systems Setup
+    // Sound Systems & Filtering Setup
     let selectedGenres = new Set();
     let searchQuery = '';
+    let currentPreset = 'all';
 
     const genreContainer = document.getElementById('genreContainer');
     allUniqueGenres.forEach(genre => {
@@ -595,10 +1001,10 @@
       genreContainer.appendChild(chip);
     });
 
-    function createSoundIcon() {
+    function createSoundIcon(isFav) {
       return L.divIcon({
         className: 'custom-sys-icon',
-        html: `<div class="system-pin">🎵</div>`,
+        html: `<div class="system-pin ${isFav ? 'is-fav' : ''}">${isFav ? '⭐' : '🎵'}</div>`,
         iconSize: [28, 28],
         iconAnchor: [14, 14],
         popupAnchor: [0, -14]
@@ -611,6 +1017,13 @@
       listEl.innerHTML = '';
 
       const filtered = soundSystems.filter(s => {
+        // Preset check
+        if (currentPreset === 'favs' && !favorites.has(s.name)) return false;
+        if (currentPreset === 'reggae' && !s.genres.some(g => ['Reggae', 'Dub', 'Lovers Rock', 'Steppers', 'Roots Reggae'].includes(g))) return false;
+        if (currentPreset === 'soca' && !s.genres.some(g => ['Soca', 'Calypso', 'Caribbean Party Music'].includes(g))) return false;
+        if (currentPreset === 'house' && !s.genres.some(g => ['House', 'Tech House', 'Techno', 'Electronic', 'Deep House', 'Vocal House', 'Soulful House', 'Funky House', 'Acid Techno', 'Psy-Trance'].includes(g))) return false;
+        if (currentPreset === 'hiphop' && !s.genres.some(g => ['Hip-Hop', 'R&B', 'Garage', 'Urban', 'Soul', 'Grime'].includes(g))) return false;
+
         const matchesGenre = selectedGenres.size === 0 || s.genres.some(g => selectedGenres.has(g));
         const query = searchQuery.toLowerCase();
         const matchesSearch = !query || 
@@ -623,12 +1036,16 @@
       document.getElementById('matchCounter').textContent = `Showing ${filtered.length} of 37 Systems`;
 
       filtered.forEach(s => {
-        const marker = L.marker([s.lat, s.lng], { icon: createSoundIcon() });
+        const isFav = favorites.has(s.name);
+        const marker = L.marker([s.lat, s.lng], { icon: createSoundIcon(isFav) });
         const badgeHTML = s.genres.map(g => `<span class="popup-badge">${g}</span>`).join('');
         
         const popupContent = `
           <div>
-            <div class="popup-title">${s.name}</div>
+            <div class="popup-header-row">
+              <div class="popup-title">${s.name}</div>
+              <button class="popup-fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${s.name}')" title="Toggle Favorite">⭐</button>
+            </div>
             <div class="popup-badge-list">${badgeHTML}</div>
             ${createNavHTML(s.lat, s.lng, s.name)}
           </div>
@@ -639,10 +1056,20 @@
         const item = document.createElement('div');
         item.className = 'list-card';
         item.innerHTML = `
-          <div class="card-title">${s.name}</div>
-          <div class="card-genres">${s.genres.join(' • ')}</div>
+          <div class="card-info">
+            <div class="card-title">${s.name}</div>
+            <div class="card-genres">${s.genres.join(' • ')}</div>
+          </div>
+          <button class="card-fav-btn ${isFav ? 'active' : ''}" title="Toggle Favorite">⭐</button>
         `;
+
+        item.querySelector('.card-fav-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          toggleFavorite(s.name);
+        });
+
         item.addEventListener('click', () => {
+          switchToMapView();
           map.flyTo([s.lat, s.lng], 17, { animate: true, duration: 0.6 });
           marker.openPopup();
         });
@@ -650,7 +1077,34 @@
       });
     }
 
-    // Filter Listeners
+    // Preset Pill Click Listeners
+    document.querySelectorAll('.preset-pill').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.preset-pill').forEach(p => p.classList.remove('active'));
+        e.target.classList.add('active');
+        currentPreset = e.target.dataset.preset;
+        applyFilters();
+      });
+    });
+
+    // Search Box & Clear Button
+    const searchInput = document.getElementById('searchInput');
+    const searchClearBtn = document.getElementById('searchClearBtn');
+
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      searchClearBtn.style.display = searchQuery ? 'block' : 'none';
+      applyFilters();
+    });
+
+    searchClearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      searchQuery = '';
+      searchClearBtn.style.display = 'none';
+      applyFilters();
+    });
+
+    // Filter Controls
     document.getElementById('clearGenresBtn').addEventListener('click', () => {
       selectedGenres.clear();
       document.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
@@ -660,11 +1114,6 @@
     document.getElementById('selectAllGenresBtn').addEventListener('click', () => {
       allUniqueGenres.forEach(g => selectedGenres.add(g));
       document.querySelectorAll('.genre-chip').forEach(c => c.classList.add('active'));
-      applyFilters();
-    });
-
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-      searchQuery = e.target.value;
       applyFilters();
     });
 
@@ -684,6 +1133,27 @@
         if (layerType === 'systems') isActive ? map.addLayer(systemsLayer) : map.removeLayer(systemsLayer);
       });
     });
+
+    // 9. MOBILE TAB SWITCHER LOGIC
+    const appContainer = document.getElementById('app-container');
+    const tabMapBtn = document.getElementById('tabMapBtn');
+    const tabDrawerBtn = document.getElementById('tabDrawerBtn');
+
+    function switchToMapView() {
+      appContainer.classList.remove('show-drawer');
+      tabMapBtn.classList.add('active');
+      tabDrawerBtn.classList.remove('active');
+      setTimeout(() => map.invalidateSize(), 200);
+    }
+
+    function switchToDrawerContainer() {
+      appContainer.classList.add('show-drawer');
+      tabDrawerBtn.classList.add('active');
+      tabMapBtn.classList.remove('active');
+    }
+
+    tabMapBtn.addEventListener('click', switchToMapView);
+    tabDrawerBtn.addEventListener('click', switchToDrawerContainer);
 
     applyFilters();
   </script>

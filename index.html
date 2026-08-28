@@ -317,6 +317,59 @@
       border-color: #f59e0b;
     }
 
+    /* Quick POI Filter Floating Panel */
+    .poi-filter-panel {
+      position: absolute;
+      top: 54px;
+      right: 12px;
+      z-index: 1001;
+      width: 220px;
+      background: #131d31;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+      overflow: hidden;
+    }
+    .poi-panel-header {
+      background: #0c1424;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--primary);
+      border-bottom: 1px solid #334155;
+    }
+    .poi-panel-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    .poi-panel-close:hover { color: #fff; }
+    .poi-panel-body {
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .poi-toggle-row {
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .poi-toggle-row input {
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
     /* Custom Pins */
     .system-pin {
       display: flex; align-items: center; justify-content: center;
@@ -551,6 +604,25 @@
       <div class="map-custom-controls">
         <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
         <button class="map-control-btn" id="themeToggleBtn">🌙 Dark Map</button>
+        <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filter Map Layers</button>
+      </div>
+
+      <!-- Quick Floating POI Filter Panel for Mobile & Map View -->
+      <div id="poiFilterPanel" class="poi-filter-panel" style="display: none;">
+        <div class="poi-panel-header">
+          <span>Map Layer Toggles</span>
+          <button id="closePoiPanelBtn" class="poi-panel-close">✕</button>
+        </div>
+        <div class="poi-panel-body">
+          <label class="poi-toggle-row"><input type="checkbox" data-poi="systems" checked> 🔊 Sound Systems (37)</label>
+          <label class="poi-toggle-row"><input type="checkbox" data-poi="toilets" checked> 🚻 Public Toilets (40)</label>
+          <label class="poi-toggle-row"><input type="checkbox" data-poi="firstaid" checked> 🏥 First Aid (8)</label>
+          <label class="poi-toggle-row"><input type="checkbox" data-poi="welfare" checked> 💖 Welfare Points (5)</label>
+          <label class="poi-toggle-row"><input type="checkbox" data-poi="trading" checked> 🍴 Food & Trading (19)</label>
+          <label class="poi-toggle-row"><input type="checkbox" data-poi="stations" checked> 🚇 Tube Stations (11)</label>
+          <label class="poi-toggle-row"><input type="checkbox" data-poi="parade" checked> 🔴 Parade Route</label>
+          <label class="poi-toggle-row"><input type="checkbox" data-poi="boundary" checked> 🟡 Perimeter Boundary</label>
+        </div>
       </div>
     </div>
   </div>
@@ -1117,20 +1189,64 @@
       applyFilters();
     });
 
-    // Layer Controls
+    // Floating POI Filter Panel JS Sync
+    const poiFilterToggleBtn = document.getElementById('poiFilterToggleBtn');
+    const poiFilterPanel = document.getElementById('poiFilterPanel');
+    const closePoiPanelBtn = document.getElementById('closePoiPanelBtn');
+
+    poiFilterToggleBtn.addEventListener('click', () => {
+      const isVisible = poiFilterPanel.style.display !== 'none';
+      poiFilterPanel.style.display = isVisible ? 'none' : 'block';
+    });
+
+    closePoiPanelBtn.addEventListener('click', () => {
+      poiFilterPanel.style.display = 'none';
+    });
+
+    const layerMap = {
+      systems: systemsLayer,
+      toilets: toiletsLayer,
+      firstaid: firstAidLayer,
+      welfare: welfareLayer,
+      trading: tradingLayer,
+      stations: stationsLayer,
+      parade: paradeLayer,
+      boundary: boundaryLayer
+    };
+
+    function setLayerVisibility(layerType, isActive) {
+      const targetLayer = layerMap[layerType];
+      if (targetLayer) {
+        isActive ? map.addLayer(targetLayer) : map.removeLayer(targetLayer);
+      }
+      
+      // Sync sidebar buttons
+      const sidebarBtn = document.querySelector(`.layer-toggle-btn[data-layer="${layerType}"]`);
+      if (sidebarBtn) {
+        sidebarBtn.classList.toggle('active', isActive);
+      }
+
+      // Sync floating checkboxes
+      const checkbox = document.querySelector(`.poi-toggle-row input[data-poi="${layerType}"]`);
+      if (checkbox) {
+        checkbox.checked = isActive;
+      }
+    }
+
+    // Layer Controls (Sidebar buttons)
     document.querySelectorAll('.layer-toggle-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const layerType = e.target.dataset.layer;
-        const isActive = e.target.classList.toggle('active');
+        const isActive = !e.target.classList.contains('active');
+        setLayerVisibility(layerType, isActive);
+      });
+    });
 
-        if (layerType === 'stations') isActive ? map.addLayer(stationsLayer) : map.removeLayer(stationsLayer);
-        if (layerType === 'boundary') isActive ? map.addLayer(boundaryLayer) : map.removeLayer(boundaryLayer);
-        if (layerType === 'parade') isActive ? map.addLayer(paradeLayer) : map.removeLayer(paradeLayer);
-        if (layerType === 'toilets') isActive ? map.addLayer(toiletsLayer) : map.removeLayer(toiletsLayer);
-        if (layerType === 'firstaid') isActive ? map.addLayer(firstAidLayer) : map.removeLayer(firstAidLayer);
-        if (layerType === 'welfare') isActive ? map.addLayer(welfareLayer) : map.removeLayer(welfareLayer);
-        if (layerType === 'trading') isActive ? map.addLayer(tradingLayer) : map.removeLayer(tradingLayer);
-        if (layerType === 'systems') isActive ? map.addLayer(systemsLayer) : map.removeLayer(systemsLayer);
+    // Layer Controls (Floating panel checkboxes)
+    document.querySelectorAll('.poi-toggle-row input').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const layerType = e.target.dataset.poi;
+        setLayerVisibility(layerType, e.target.checked);
       });
     });
 

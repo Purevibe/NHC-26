@@ -614,7 +614,7 @@
       <div class="map-custom-controls">
         <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
         <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
-        <button class="map-control-btn" id="themeToggleBtn">🌙 Dark Map</button>
+        <button class="map-control-btn" id="themeToggleBtn">☀️ Light Map</button>
         <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filter POI</button>
       </div>
 
@@ -865,12 +865,12 @@
       if (isDarkMode) {
         map.removeLayer(darkTiles);
         map.addLayer(lightTiles);
-        themeToggleBtn.textContent = '☀️ Light Map';
+        themeToggleBtn.textContent = '🌙 Dark Map';
         isDarkMode = false;
       } else {
         map.removeLayer(lightTiles);
         map.addLayer(darkTiles);
-        themeToggleBtn.textContent = '🌙 Dark Map';
+        themeToggleBtn.textContent = '☀️ Light Map';
         isDarkMode = true;
       }
     });

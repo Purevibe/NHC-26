@@ -492,13 +492,32 @@
       border-top: 2px solid #f59e0b;
     }
 
-    .mobile-only-pill {
-      display: none !important;
+    .close-drawer-btn {
+      display: none;
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+      transition: all 0.15s;
+    }
+    .close-drawer-btn:hover {
+      background: #334155;
+      color: #ffffff;
     }
 
     @media (max-width: 768px) {
       .mobile-only-pill {
         display: inline-block !important;
+      }
+      .close-drawer-btn {
+        display: inline-flex;
       }
       #app-container {
         flex-direction: column;
@@ -568,7 +587,10 @@
     <!-- SIDEBAR -->
     <div id="sidebar">
       <div class="header">
-        <h1><span>🔊</span> Notting Hill Carnival '26 Map</h1>
+        <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+          <h1><span>🔊</span> Notting Hill Carnival '26 Map</h1>
+          <button class="close-drawer-btn" id="closeDrawerBtn">🗺️ Return to Map ✕</button>
+        </div>
         <p>37 Sound Systems • Tube Stations • 40 Toilets • Aid & Stalls</p>
       </div>
 
@@ -630,7 +652,7 @@
         <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
         <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
         <button class="map-control-btn" id="themeToggleBtn">☀️ Light Map</button>
-        <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filter POI</button>
+        <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filters</button>
       </div>
 
       <!-- Quick Floating POI Filter Panel for Mobile & Map View -->
@@ -1368,6 +1390,11 @@
 
     tabMapBtn.addEventListener('click', switchToMapView);
     tabDrawerBtn.addEventListener('click', switchToDrawerContainer);
+    
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    if (closeDrawerBtn) {
+      closeDrawerBtn.addEventListener('click', switchToMapView);
+    }
 
     applyFilters();
   </script>

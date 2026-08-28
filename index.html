@@ -619,16 +619,9 @@
           <button class="search-clear-btn" id="searchClearBtn">✕</button>
         </div>
 
-        <div class="action-row">
+        <div class="action-row" style="margin-top: 4px;">
           <span class="active-count" id="matchCounter">Showing 37 Systems</span>
-          <div style="display:flex; gap: 4px;">
-            <button class="btn-action" id="clearGenresBtn">Clear Filters</button>
-            <button class="btn-action" id="selectAllGenresBtn">Select All</button>
-          </div>
         </div>
-
-        <!-- GENRES -->
-        <div class="genres-wrapper" id="genreContainer"></div>
       </div>
 
       <div id="system-list"></div>
@@ -1127,25 +1120,6 @@
     let searchQuery = '';
     let currentPreset = 'all';
 
-    const genreContainer = document.getElementById('genreContainer');
-    allUniqueGenres.forEach(genre => {
-      const chip = document.createElement('div');
-      chip.className = 'genre-chip';
-      chip.textContent = genre;
-      chip.dataset.genre = genre;
-      chip.addEventListener('click', () => {
-        if (selectedGenres.has(genre)) {
-          selectedGenres.delete(genre);
-          chip.classList.remove('active');
-        } else {
-          selectedGenres.add(genre);
-          chip.classList.add('active');
-        }
-        applyFilters();
-      });
-      genreContainer.appendChild(chip);
-    });
-
     function createSoundIcon(isFav) {
       return L.divIcon({
         className: 'custom-sys-icon',
@@ -1271,19 +1245,6 @@
       searchInput.value = '';
       searchQuery = '';
       searchClearBtn.style.display = 'none';
-      applyFilters();
-    });
-
-    // Filter Controls
-    document.getElementById('clearGenresBtn').addEventListener('click', () => {
-      selectedGenres.clear();
-      document.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
-      applyFilters();
-    });
-
-    document.getElementById('selectAllGenresBtn').addEventListener('click', () => {
-      allUniqueGenres.forEach(g => selectedGenres.add(g));
-      document.querySelectorAll('.genre-chip').forEach(c => c.classList.add('active'));
       applyFilters();
     });
 

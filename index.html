@@ -492,7 +492,14 @@
       border-top: 2px solid #f59e0b;
     }
 
+    .mobile-only-pill {
+      display: none !important;
+    }
+
     @media (max-width: 768px) {
+      .mobile-only-pill {
+        display: inline-block !important;
+      }
       #app-container {
         flex-direction: column;
         height: calc(100vh - 38px - 48px);
@@ -581,7 +588,7 @@
           <button class="preset-pill" data-preset="reggaeton">🎶 Reggaeton</button>
           <button class="preset-pill" data-preset="hiphop">🎤 Hip-Hop</button>
           <button class="preset-pill" data-preset="rnb">🎷 R&B</button>
-          <button class="preset-pill" id="searchMoreBtn" data-preset="searchmore">🔍 Search More...</button>
+          <button class="preset-pill mobile-only-pill" id="searchMoreBtn" data-preset="searchmore">🔍 Search More...</button>
         </div>
 
         <!-- SEARCH -->
@@ -658,7 +665,7 @@
             <button class="preset-pill" data-preset="reggaeton">🎶 Regggaeton</button>
             <button class="preset-pill" data-preset="hiphop">🎤 Hip-Hop</button>
             <button class="preset-pill" data-preset="rnb">🎷 R&B</button>
-            <button class="preset-pill" data-preset="searchmore">🔍 Search More...</button>
+            <button class="preset-pill mobile-only-pill" data-preset="searchmore">🔍 Search More...</button>
           </div>
         </div>
       </div>

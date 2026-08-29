@@ -716,12 +716,12 @@
 
     .nav-box { margin-top: 8px; padding-top: 8px; border-top: 1px solid #334155; }
     .nav-label { font-size: 0.72rem; color: #cbd5e1; font-weight: 700; text-transform: uppercase; margin-bottom: 5px; }
-    .nav-buttons { display: flex; gap: 5px; flex-wrap: wrap; }
+    .nav-buttons { display: flex; flex-direction: column; gap: 5px; width: 100%; }
     .nav-btn {
-      display: inline-flex; align-items: center; gap: 5px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
       font-size: 0.74rem; font-weight: 800; text-decoration: none;
-      padding: 5px 9px; border-radius: 5px; color: #ffffff !important; transition: opacity 0.15s, transform 0.1s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      padding: 6px 10px; border-radius: 5px; color: #ffffff !important; transition: opacity 0.15s, transform 0.1s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4); width: 100%; box-sizing: border-box;
     }
     .nav-btn:hover { opacity: 0.9; transform: translateY(-1px); }
     .nav-btn-gmaps { background: #1a73e8; border: 1px solid #4285f4; }

@@ -524,6 +524,76 @@
       border: 3px solid #fef08a;
       box-shadow: 0 0 16px rgba(217, 119, 6, 0.5);
       margin-bottom: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .about-avatar:hover {
+      transform: scale(1.06);
+      box-shadow: 0 0 24px rgba(245, 158, 11, 0.8);
+    }
+
+    /* Fullscreen Image Lightbox Styling */
+    .lightbox-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(4, 7, 13, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 100000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .lightbox-modal-card {
+      position: relative;
+      max-width: 90vw;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+    .lightbox-expanded-img {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: 12px;
+      border: 2px solid #334155;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+      object-fit: contain;
+    }
+    .lightbox-caption {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #f8fafc;
+      background: rgba(19, 29, 49, 0.8);
+      padding: 4px 12px;
+      border-radius: 14px;
+      border: 1px solid #334155;
+    }
+    .lightbox-modal-close {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      background: #ef4444;
+      border: 2px solid #ffffff;
+      color: #ffffff;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.1rem;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      transition: transform 0.15s ease;
+    }
+    .lightbox-modal-close:hover {
+      transform: scale(1.1);
+      background: #dc2626;
     }
     .about-name {
       font-size: 1.25rem;
@@ -1001,6 +1071,15 @@
           </a>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX EXPANDED IMAGE MODAL OVERLAY -->
+  <div id="imageLightboxModal" class="lightbox-modal-overlay" style="display: none;">
+    <div class="lightbox-modal-card">
+      <button id="closeLightboxModalBtn" class="lightbox-modal-close" title="Close Fullscreen Image">✕</button>
+      <img src="jason_profile.jpg" alt="Jason Johnson - Full Photo" class="lightbox-expanded-img" />
+      <div class="lightbox-caption">Jason Johnson 🇯🇲</div>
     </div>
   </div>
 
@@ -1933,6 +2012,31 @@
       aboutMeModal.addEventListener('click', (e) => {
         if (e.target === aboutMeModal) {
           aboutMeModal.style.display = 'none';
+        }
+      });
+    }
+
+    // Lightbox Expanded Image Modal Listener
+    const imageLightboxModal = document.getElementById('imageLightboxModal');
+    const closeLightboxModalBtn = document.getElementById('closeLightboxModalBtn');
+    const aboutAvatarImg = document.querySelector('.about-avatar');
+
+    if (aboutAvatarImg && imageLightboxModal) {
+      aboutAvatarImg.addEventListener('click', () => {
+        imageLightboxModal.style.display = 'flex';
+      });
+    }
+
+    if (closeLightboxModalBtn && imageLightboxModal) {
+      closeLightboxModalBtn.addEventListener('click', () => {
+        imageLightboxModal.style.display = 'none';
+      });
+    }
+
+    if (imageLightboxModal) {
+      imageLightboxModal.addEventListener('click', (e) => {
+        if (e.target === imageLightboxModal) {
+          imageLightboxModal.style.display = 'none';
         }
       });
     }

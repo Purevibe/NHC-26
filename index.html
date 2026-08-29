@@ -485,6 +485,16 @@
       border: 2px solid #ffffff;
       border-radius: 6px;
     }
+    .pin-vendor {
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, #f59e0b, #dc2626);
+      color: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      font-size: 14px;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
+      cursor: pointer;
+    }
 
     /* Tube Roundel Icon Marker */
     .tube-roundel-pin {
@@ -1217,6 +1227,82 @@
         .bindPopup(`<div><strong style="color:#f472b6;">💖 Welfare Point #${i + 1}</strong><div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Lost children & welfare support</div>${createNavHTML(w[0], w[1], `Welfare Point #${i + 1}`)}</div>`)
         .addTo(welfareLayer);
     });
+
+    // Featured Vendor Test Example: Kyice's Kitchen (St Charles Square, Ladbroke Grove)
+    const kyiceVendor = {
+      name: "KYICE'S KITCHEN",
+      tagline: "Real Caribbean Food • Real Carnival Energy",
+      location: "St Charles Square, Ladbroke Grove",
+      lat: 51.520574144967604,
+      lng: -0.21215564978359125,
+      menu: {
+        mains: [
+          { name: "Curry Goat (with Rice or Chips)", price: "£18" },
+          { name: "Jerk Chicken (with Rice or Chips)", price: "£16" },
+          { name: "Chickpea Curry (with Rice or Chips)", price: "£12" }
+        ],
+        boxes: [
+          { name: "Curry Goat Loaded Box", price: "£15" },
+          { name: "Boneless Jerk Loaded Box", price: "£15" }
+        ],
+        sides: [
+          { name: "Jerk Wings", price: "£10" },
+          { name: "Patties (Jerk / Curry Goat / Veg / Beef / Salt Fish)", price: "£6 each" }
+        ],
+        drinks: [
+          { name: "Fruit Punch / Sorrel / Pineapple & Ginger", price: "£6" },
+          { name: "Cans (Coca-Cola / Fanta)", price: "£3.50" },
+          { name: "Buxton Water", price: "£2.50" }
+        ]
+      }
+    };
+
+    const kyiceIcon = L.divIcon({
+      className: 'custom-facility-icon',
+      html: `
+        <div class="facility-pin pin-vendor" title="Kyice's Kitchen - Real Caribbean Food">
+          🍗
+        </div>
+      `,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+
+    const kyicePopupHTML = `
+      <div style="min-width: 250px; max-width: 285px;">
+        <div style="background: linear-gradient(135deg, #d97706, #dc2626); margin: -10px -10px 8px -10px; padding: 8px 10px; border-top-left-radius: 6px; border-top-right-radius: 6px;">
+          <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #fef08a;">🔥 FEATURED FOOD VENDOR</div>
+          <div style="font-size: 1rem; font-weight: 900; color: #ffffff; line-height: 1.1;">${kyiceVendor.name}</div>
+          <div style="font-size: 0.72rem; color: #fef3c7; margin-top: 2px; font-weight: 600;">📍 ${kyiceVendor.location}</div>
+        </div>
+
+        <div style="font-size: 0.72rem; color: #fbbf24; font-weight: 700; margin-bottom: 6px; text-align: center;">"${kyiceVendor.tagline}"</div>
+
+        <div style="font-size: 0.74rem; background: #0c1424; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 8px; margin-bottom: 8px;">
+          <div style="font-weight: 800; color: #f59e0b; border-bottom: 1px solid #334155; padding-bottom: 3px; margin-bottom: 4px; font-size: 0.72rem;">🍗 MAIN MEALS & LOADED BOXES</div>
+          <div style="display: flex; justify-content: space-between; color: #f8fafc; font-weight: 600;"><span>Curry Goat</span><span style="color: #4ade80;">£18</span></div>
+          <div style="display: flex; justify-content: space-between; color: #f8fafc; font-weight: 600;"><span>Jerk Chicken</span><span style="color: #4ade80;">£16</span></div>
+          <div style="display: flex; justify-content: space-between; color: #f8fafc; font-weight: 600;"><span>Chickpea Curry (Veg)</span><span style="color: #4ade80;">£12</span></div>
+          <div style="display: flex; justify-content: space-between; color: #f8fafc; font-weight: 600;"><span>Curry Goat Loaded Box</span><span style="color: #4ade80;">£15</span></div>
+          <div style="display: flex; justify-content: space-between; color: #f8fafc; font-weight: 600;"><span>Boneless Jerk Loaded Box</span><span style="color: #4ade80;">£15</span></div>
+
+          <div style="font-weight: 800; color: #f59e0b; border-bottom: 1px solid #334155; padding-bottom: 3px; margin-top: 6px; margin-bottom: 4px; font-size: 0.72rem;">🥟 WINGS & PATTIES</div>
+          <div style="display: flex; justify-content: space-between; color: #f8fafc; font-weight: 600;"><span>Jerk Wings</span><span style="color: #4ade80;">£10</span></div>
+          <div style="display: flex; justify-content: space-between; color: #f8fafc; font-weight: 600;"><span>Patties (Jerk/Goat/Veg/Beef/Fish)</span><span style="color: #4ade80;">£6</span></div>
+
+          <div style="font-weight: 800; color: #f59e0b; border-bottom: 1px solid #334155; padding-bottom: 3px; margin-top: 6px; margin-bottom: 4px; font-size: 0.72rem;">🍹 DRINKS & CARNIVAL VIBES</div>
+          <div style="display: flex; justify-content: space-between; color: #f8fafc; font-weight: 600;"><span>Fruit Punch / Sorrel / Pineapple & Ginger</span><span style="color: #4ade80;">£6</span></div>
+          <div style="display: flex; justify-content: space-between; color: #f8fafc; font-weight: 600;"><span>Cans (Coca-Cola / Fanta)</span><span style="color: #4ade80;">£3.50</span></div>
+          <div style="display: flex; justify-content: space-between; color: #f8fafc; font-weight: 600;"><span>Buxton Water</span><span style="color: #4ade80;">£2.50</span></div>
+        </div>
+
+        ${createNavHTML(kyiceVendor.lat, kyiceVendor.lng, kyiceVendor.name)}
+      </div>
+    `;
+
+    L.marker([kyiceVendor.lat, kyiceVendor.lng], { icon: kyiceIcon })
+      .bindPopup(kyicePopupHTML)
+      .addTo(tradingLayer);
 
     streetTradingPoints.forEach((st, i) => {
       const icon = L.divIcon({

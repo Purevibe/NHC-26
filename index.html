@@ -275,17 +275,27 @@
     .card-info { flex: 1; }
     .card-title { font-size: 0.86rem; font-weight: 700; color: #fff; }
     .card-genres { font-size: 0.73rem; color: #38bdf8; margin-top: 3px; font-weight: 500; }
-    .card-fav-btn {
+    .card-fav-btn, .popup-fav-btn {
       background: transparent;
       border: none;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       cursor: pointer;
       padding: 4px;
-      color: #475569;
-      transition: transform 0.15s;
+      color: #334155;
+      opacity: 0.6;
+      transition: all 0.15s ease;
+      line-height: 1;
     }
-    .card-fav-btn.active { color: #f59e0b; }
-    .card-fav-btn:hover { transform: scale(1.15); }
+    .card-fav-btn:hover, .popup-fav-btn:hover {
+      transform: scale(1.2);
+      color: #64748b;
+      opacity: 0.9;
+    }
+    .card-fav-btn.active, .popup-fav-btn.active {
+      color: #f59e0b;
+      opacity: 1;
+      text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+    }
 
     /* Map & Controls */
     #map { flex: 1; height: 100%; position: relative; }
@@ -1292,7 +1302,7 @@
           <div>
             <div class="popup-header-row">
               <div class="popup-title">${s.name}</div>
-              <button class="popup-fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${s.name}')" title="Toggle Favorite">⭐</button>
+              <button class="popup-fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${s.name}')" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
             </div>
             <div class="popup-badge-list">${badgeHTML}</div>
             ${createNavHTML(s.lat, s.lng, s.name)}
@@ -1308,7 +1318,7 @@
             <div class="card-title">${s.name}</div>
             <div class="card-genres">${s.genres.join(' • ')}</div>
           </div>
-          <button class="card-fav-btn ${isFav ? 'active' : ''}" title="Toggle Favorite">⭐</button>
+          <button class="card-fav-btn ${isFav ? 'active' : ''}" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
         `;
 
         item.querySelector('.card-fav-btn').addEventListener('click', (e) => {

@@ -297,6 +297,11 @@
       text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
     }
 
+    /* Dark Map CSS Filter for OpenStreetMap (No API key needed, 100% free forever) */
+    .dark-map-tiles {
+      filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+    }
+
     /* Map & Controls */
     #map { flex: 1; height: 100%; position: relative; }
 
@@ -998,30 +1003,23 @@
     // 6. BASEMAP & DARK MODE SWITCHER
     const map = L.map('map', { zoomControl: true }).setView([51.5195, -0.2050], 15);
 
-    const darkTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 19
-    });
-
-    const lightTiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // OpenStreetMap tile basemap (100% free, no API key required)
+    const osmTiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      className: 'dark-map-tiles',
       maxZoom: 19
-    });
+    }).addTo(map);
 
-    darkTiles.addTo(map);
     let isDarkMode = true;
 
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     themeToggleBtn.addEventListener('click', () => {
       if (isDarkMode) {
-        map.removeLayer(darkTiles);
-        map.addLayer(lightTiles);
+        osmTiles.getContainer().classList.remove('dark-map-tiles');
         themeToggleBtn.textContent = '🌙 Dark Map';
         isDarkMode = false;
       } else {
-        map.removeLayer(lightTiles);
-        map.addLayer(darkTiles);
+        osmTiles.getContainer().classList.add('dark-map-tiles');
         themeToggleBtn.textContent = '☀️ Light Map';
         isDarkMode = true;
       }

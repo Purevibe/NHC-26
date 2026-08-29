@@ -526,9 +526,47 @@
     }
 
     /* Popup & Navigation Buttons */
-    .leaflet-popup-content-wrapper { background: #131d31; color: #f8fafc; border-radius: 8px; border: 1px solid #334155; }
+    .leaflet-popup-content-wrapper {
+      background: #131d31;
+      color: #f8fafc;
+      border-radius: 10px;
+      border: 1.5px solid #334155;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.85);
+      padding: 4px;
+    }
+    .leaflet-popup-content {
+      margin: 10px 12px;
+      max-height: 65vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
     .leaflet-popup-tip { background: #131d31; }
-    .popup-header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    
+    /* High contrast, prominent close button for Leaflet Popups on mobile & desktop */
+    .leaflet-container a.leaflet-popup-close-button {
+      color: #ffffff !important;
+      background: rgba(15, 23, 42, 0.9) !important;
+      border: 1px solid #475569 !important;
+      border-radius: 50% !important;
+      width: 28px !important;
+      height: 28px !important;
+      line-height: 26px !important;
+      text-align: center !important;
+      font-size: 16px !important;
+      font-weight: bold !important;
+      top: 6px !important;
+      right: 6px !important;
+      z-index: 9999 !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6) !important;
+      transition: all 0.15s ease !important;
+    }
+    .leaflet-container a.leaflet-popup-close-button:hover {
+      background: #ef4444 !important;
+      color: #ffffff !important;
+      border-color: #ef4444 !important;
+    }
+
+    .popup-header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; padding-right: 20px; }
     .popup-title { font-size: 0.95rem; font-weight: 700; color: #f59e0b; margin-bottom: 4px; }
     .popup-fav-btn {
       background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: #475569;
@@ -1012,7 +1050,11 @@
     }
 
     // 6. BASEMAP & DARK MODE SWITCHER
-    const map = L.map('map', { zoomControl: true }).setView([51.5195, -0.2050], 15);
+    const map = L.map('map', {
+      zoomControl: true,
+      autoPanPaddingTopLeft: [20, 70],
+      autoPanPaddingBottomRight: [20, 60]
+    }).setView([51.5195, -0.2050], 15);
 
     // OpenStreetMap tile basemap (100% free, no API key required)
     const osmTiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

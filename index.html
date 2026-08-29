@@ -749,10 +749,11 @@
             </div>
             <div class="accordion-content">
               <label class="poi-toggle-row"><input type="checkbox" data-poi="systems" checked> 🔊 Sound Systems (37)</label>
+              <label class="poi-toggle-row"><input type="checkbox" data-poi="vendors" checked> 🍗 Food Vendors (1)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="toilets" checked> 🚻 Public Toilets (40)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="firstaid" checked> 🏥 First Aid (8)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="welfare" checked> 💖 Welfare Points (4)</label>
-              <label class="poi-toggle-row"><input type="checkbox" data-poi="trading" checked> 🍴 Food & Trading (19)</label>
+              <label class="poi-toggle-row"><input type="checkbox" data-poi="trading" checked> 🍴 Street Trading Stalls (19)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="stations" checked> 🚇 Tube Stations (11)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="parade" checked> 🔴 Parade Route</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="boundary" checked> 🟡 Perimeter Boundary</label>
@@ -1077,6 +1078,7 @@
     const toiletsLayer = L.layerGroup().addTo(map);
     const firstAidLayer = L.layerGroup().addTo(map);
     const welfareLayer = L.layerGroup().addTo(map);
+    const foodVendorsLayer = L.layerGroup().addTo(map);
     const tradingLayer = L.layerGroup().addTo(map);
     const systemsLayer = L.layerGroup().addTo(map);
 
@@ -1306,7 +1308,7 @@
 
     L.marker([kyiceVendor.lat, kyiceVendor.lng], { icon: kyiceIcon })
       .bindPopup(kyicePopupHTML)
-      .addTo(tradingLayer);
+      .addTo(foodVendorsLayer);
 
     streetTradingPoints.forEach((st, i) => {
       const icon = L.divIcon({
@@ -1586,6 +1588,7 @@
 
     const layerMap = {
       systems: systemsLayer,
+      vendors: foodVendorsLayer,
       toilets: toiletsLayer,
       firstaid: firstAidLayer,
       welfare: welfareLayer,

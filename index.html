@@ -449,6 +449,143 @@
       accent-color: var(--primary);
       cursor: pointer;
     }
+
+    /* About Me Modal Styling */
+    .about-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(9, 13, 22, 0.85);
+      backdrop-filter: blur(6px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .about-modal-card {
+      background: #131d31;
+      border: 1.5px solid #334155;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      overflow: hidden;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .about-modal-header {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+    .about-modal-close {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid #475569;
+      color: #94a3b8;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.15s;
+    }
+    .about-modal-close:hover {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: #ef4444;
+    }
+    .about-modal-body {
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .about-profile-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .about-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #d97706, #dc2626);
+      color: #ffffff;
+      font-size: 1.4rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #fef08a;
+      box-shadow: 0 0 16px rgba(217, 119, 6, 0.5);
+      margin-bottom: 10px;
+    }
+    .about-name {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .about-tagline {
+      font-size: 0.76rem;
+      color: #fbbf24;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    .about-bio {
+      background: #0c1424;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: #cbd5e1;
+      text-align: center;
+    }
+    .about-social-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .about-social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform 0.15s, opacity 0.15s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .about-social-btn:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+    .btn-linkedin {
+      background: #0077b5;
+      color: #ffffff !important;
+      border: 1px solid #0096e6;
+    }
+    .btn-instagram {
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: #ffffff !important;
+      border: 1px solid #e1306c;
+    }
     .poi-section-title {
       font-size: 0.69rem;
       font-weight: 800;
@@ -769,6 +906,7 @@
         <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
         <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
         <button class="map-control-btn" id="themeToggleBtn">☀️ Light Map</button>
+        <button class="map-control-btn" id="aboutMeToggleBtn">ℹ️ About Me</button>
       </div>
 
       <!-- Quick Floating POI Filter Panel for Mobile & Map View -->
@@ -825,6 +963,47 @@
               </div>
             </div>
           </div>
+    </div>
+  </div>
+
+  <!-- ABOUT ME MODAL OVERLAY -->
+  <div id="aboutMeModal" class="about-modal-overlay" style="display: none;">
+    <div class="about-modal-card">
+      <div class="about-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.4rem;">🇯🇲</span>
+          <h2 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0;">About Me</h2>
+        </div>
+        <button id="closeAboutModalBtn" class="about-modal-close">✕</button>
+      </div>
+
+      <div class="about-modal-body">
+        <div class="about-profile-hero">
+          <div class="about-avatar">JJ</div>
+          <div class="about-name">Jason Johnson <span class="flag-icon">🇯🇲</span></div>
+          <div class="about-tagline">Creator & Developer of Notting Hill Carnival '26 Map</div>
+        </div>
+
+        <div class="about-bio">
+          Building digital tools to celebrate sound system culture, Caribbean heritage, and help thousands navigate Europe's biggest street carnival effortlessly.
+        </div>
+
+        <div class="about-social-links">
+          <a href="https://www.linkedin.com/in/jasonjohnson1984" target="_blank" rel="noopener" class="about-social-btn btn-linkedin">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.25V10.9H6.46M7.86 6.78a1.62 1.62 0 1 0 0 3.24 1.62 1.62 0 0 0 0-3.24z"/>
+            </svg>
+            <span>LinkedIn Profile ↗</span>
+          </a>
+
+          <a href="https://www.instagram.com/coolandting/" target="_blank" rel="noopener" class="about-social-btn btn-instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>@coolandting on Instagram ↗</span>
+          </a>
         </div>
       </div>
     </div>
@@ -1736,6 +1915,31 @@
     const closeDrawerBtn = document.getElementById('closeDrawerBtn');
     if (closeDrawerBtn) {
       closeDrawerBtn.addEventListener('click', switchToMapView);
+    }
+
+    // About Me Modal Listener
+    const aboutMeModal = document.getElementById('aboutMeModal');
+    const aboutMeToggleBtn = document.getElementById('aboutMeToggleBtn');
+    const closeAboutModalBtn = document.getElementById('closeAboutModalBtn');
+
+    if (aboutMeToggleBtn && aboutMeModal) {
+      aboutMeToggleBtn.addEventListener('click', () => {
+        aboutMeModal.style.display = 'flex';
+      });
+    }
+
+    if (closeAboutModalBtn && aboutMeModal) {
+      closeAboutModalBtn.addEventListener('click', () => {
+        aboutMeModal.style.display = 'none';
+      });
+    }
+
+    if (aboutMeModal) {
+      aboutMeModal.addEventListener('click', (e) => {
+        if (e.target === aboutMeModal) {
+          aboutMeModal.style.display = 'none';
+        }
+      });
     }
 
     applyFilters();

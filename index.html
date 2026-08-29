@@ -536,6 +536,9 @@
     }
     .leaflet-popup-content {
       margin: 10px 12px;
+      max-height: 65vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
     }
     .leaflet-popup-tip { background: #131d31; }
     
@@ -1288,7 +1291,14 @@
         ],
         sides: [
           { name: "Jerk Wings", price: "£10" },
-      lng: -0.21215564978359125
+          { name: "Patties (Jerk / Curry Goat / Veg / Beef / Salt Fish)", price: "£6 each" }
+        ],
+        drinks: [
+          { name: "Fruit Punch / Sorrel / Pineapple & Ginger", price: "£6" },
+          { name: "Cans (Coca-Cola / Fanta)", price: "£3.50" },
+          { name: "Buxton Water", price: "£2.50" }
+        ]
+      }
     };
 
     const kyiceIcon = L.divIcon({
@@ -1303,7 +1313,7 @@
     });
 
     const kyicePopupHTML = `
-      <div style="min-width: 240px; max-width: 275px;">
+      <div style="min-width: 250px; max-width: 285px;">
         <div style="background: linear-gradient(135deg, #d97706, #dc2626); margin: -10px -10px 8px -10px; padding: 8px 10px; border-top-left-radius: 6px; border-top-right-radius: 6px;">
           <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #fef08a;">🔥 FEATURED FOOD VENDOR</div>
           <div style="font-size: 1rem; font-weight: 900; color: #ffffff; line-height: 1.1;">${kyiceVendor.name}</div>
@@ -1312,17 +1322,33 @@
 
         <div style="font-size: 0.72rem; color: #fbbf24; font-weight: 700; margin-bottom: 6px; text-align: center;">"${kyiceVendor.tagline}"</div>
 
-        <div style="font-size: 0.74rem; background: #0c1424; border: 1px solid #1e293b; border-radius: 6px; padding: 8px; margin-bottom: 8px; text-align: center;">
-          <div style="color: #cbd5e1; font-weight: 600; margin-bottom: 6px; font-size: 0.74rem;">🍗 Serving Jerk Chicken, Curry Goat, Loaded Boxes, Wings & Refreshments</div>
-          
-          <a href="https://www.instagram.com/p/Dckxd8zIAAd/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #ffffff; font-weight: 800; text-decoration: none; font-size: 0.78rem; padding: 7px 14px; border-radius: 20px; box-shadow: 0 2px 8px rgba(220, 39, 67, 0.4); margin-top: 2px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-            <span>View Full Menu Post ↗</span>
-          </a>
+        <div style="font-size: 0.74rem; background: #0c1424; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 8px; margin-bottom: 8px;">
+          <div style="text-align: center; margin-bottom: 8px;">
+            <a href="https://www.instagram.com/kyiceskitchen/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #ffffff; font-weight: 800; text-decoration: none; font-size: 0.76rem; padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(220, 39, 67, 0.4); transition: transform 0.15s;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              <span>@kyiceskitchen</span>
+            </a>
+          </div>
+
+          <div style="font-weight: 800; color: #f59e0b; border-bottom: 1px solid #334155; padding-bottom: 3px; margin-bottom: 4px; font-size: 0.72rem;">🍗 MAIN MEALS & LOADED BOXES</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Curry Goat (with Rice or Chips)</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Jerk Chicken (with Rice or Chips)</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Chickpea Curry (Veg)</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Curry Goat Loaded Box</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Boneless Jerk Loaded Box</div>
+
+          <div style="font-weight: 800; color: #f59e0b; border-bottom: 1px solid #334155; padding-bottom: 3px; margin-top: 6px; margin-bottom: 4px; font-size: 0.72rem;">🥟 WINGS & PATTIES</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Jerk Wings</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Patties (Jerk / Curry Goat / Veg / Beef / Salt Fish)</div>
+
+          <div style="font-weight: 800; color: #f59e0b; border-bottom: 1px solid #334155; padding-bottom: 3px; margin-top: 6px; margin-bottom: 4px; font-size: 0.72rem;">🍹 DRINKS & CARNIVAL VIBES</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Fruit Punch / Sorrel / Pineapple & Ginger</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Cans (Coca-Cola / Fanta)</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Buxton Water</div>
         </div>
 
         ${createNavHTML(kyiceVendor.lat, kyiceVendor.lng, kyiceVendor.name)}
@@ -1354,7 +1380,7 @@
     });
 
     const testVendorPopupHTML = `
-      <div style="min-width: 240px; max-width: 275px;">
+      <div style="min-width: 250px; max-width: 285px;">
         <div style="background: linear-gradient(135deg, #d97706, #dc2626); margin: -10px -10px 8px -10px; padding: 8px 10px; border-top-left-radius: 6px; border-top-right-radius: 6px;">
           <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #fef08a;">🔥 FEATURED FOOD VENDOR</div>
           <div style="font-size: 1rem; font-weight: 900; color: #ffffff; line-height: 1.1;">${testVendor.name}</div>
@@ -1363,17 +1389,33 @@
 
         <div style="font-size: 0.72rem; color: #fbbf24; font-weight: 700; margin-bottom: 6px; text-align: center;">"${testVendor.tagline}"</div>
 
-        <div style="font-size: 0.74rem; background: #0c1424; border: 1px solid #1e293b; border-radius: 6px; padding: 8px; margin-bottom: 8px; text-align: center;">
-          <div style="color: #cbd5e1; font-weight: 600; margin-bottom: 6px; font-size: 0.74rem;">🍗 Serving Jerk Chicken, Curry Goat, Loaded Boxes, Wings & Refreshments</div>
+        <div style="font-size: 0.74rem; background: #0c1424; border: 1px solid #1e293b; border-radius: 6px; padding: 6px 8px; margin-bottom: 8px;">
+          <div style="text-align: center; margin-bottom: 8px;">
+            <a href="https://www.instagram.com/purevibe187/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #ffffff; font-weight: 800; text-decoration: none; font-size: 0.76rem; padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 8px rgba(220, 39, 67, 0.4); transition: transform 0.15s;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              <span>@purevibe187</span>
+            </a>
+          </div>
 
-          <a href="https://www.instagram.com/p/Dckxd8zIAAd/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #ffffff; font-weight: 800; text-decoration: none; font-size: 0.78rem; padding: 7px 14px; border-radius: 20px; box-shadow: 0 2px 8px rgba(220, 39, 67, 0.4); margin-top: 2px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-            </svg>
-            <span>View Full Menu Post ↗</span>
-          </a>
+          <div style="font-weight: 800; color: #f59e0b; border-bottom: 1px solid #334155; padding-bottom: 3px; margin-bottom: 4px; font-size: 0.72rem;">🍗 MAIN MEALS & LOADED BOXES</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Curry Goat (with Rice or Chips)</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Jerk Chicken (with Rice or Chips)</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Chickpea Curry (Veg)</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Curry Goat Loaded Box</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Boneless Jerk Loaded Box</div>
+
+          <div style="font-weight: 800; color: #f59e0b; border-bottom: 1px solid #334155; padding-bottom: 3px; margin-top: 6px; margin-bottom: 4px; font-size: 0.72rem;">🥟 WINGS & PATTIES</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Jerk Wings</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Patties (Jerk / Curry Goat / Veg / Beef / Salt Fish)</div>
+
+          <div style="font-weight: 800; color: #f59e0b; border-bottom: 1px solid #334155; padding-bottom: 3px; margin-top: 6px; margin-bottom: 4px; font-size: 0.72rem;">🍹 DRINKS & CARNIVAL VIBES</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Fruit Punch / Sorrel / Pineapple & Ginger</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Cans (Coca-Cola / Fanta)</div>
+          <div style="color: #f8fafc; font-weight: 600; padding: 1px 0;">• Buxton Water</div>
         </div>
 
         ${createNavHTML(testVendor.lat, testVendor.lng, testVendor.name)}

@@ -1274,39 +1274,19 @@
         .addTo(welfareLayer);
     });
 
-    // Featured Vendor Test Example: Kyice's Kitchen (St Charles Square, Ladbroke Grove)
-    const kyiceVendor = {
-      name: "KYICE'S KITCHEN",
-      tagline: "Real Caribbean Food • Real Carnival Energy",
-      location: "St Charles Square, Ladbroke Grove",
-      lat: 51.520574144967604,
-      lng: -0.21215564978359125,
-      menu: {
-        mains: [
-          { name: "Curry Goat (with Rice or Chips)", price: "£18" },
-          { name: "Jerk Chicken (with Rice or Chips)", price: "£16" },
-          { name: "Chickpea Curry (with Rice or Chips)", price: "£12" }
-        ],
-        boxes: [
-          { name: "Curry Goat Loaded Box", price: "£15" },
-          { name: "Boneless Jerk Loaded Box", price: "£15" }
-        ],
-        sides: [
-          { name: "Jerk Wings", price: "£10" },
-          { name: "Patties (Jerk / Curry Goat / Veg / Beef / Salt Fish)", price: "£6 each" }
-        ],
-        drinks: [
-          { name: "Fruit Punch / Sorrel / Pineapple & Ginger", price: "£6" },
-          { name: "Cans (Coca-Cola / Fanta)", price: "£3.50" },
-          { name: "Buxton Water", price: "£2.50" }
-        ]
-      }
+    // Featured Food Vendor: The Jerk Shac (Westbourne Park Rd, W11 1BT)
+    const jerkShacVendor = {
+      name: "THE JERK SHAC",
+      tagline: "The Best Jamaican & Guyanese Fusion",
+      location: "Westbourne Park Rd, W11 1BT",
+      lat: 51.518213605281495,
+      lng: -0.19973076560653774
     };
 
-    const kyiceIcon = L.divIcon({
+    const jerkShacIcon = L.divIcon({
       className: 'custom-facility-icon',
       html: `
-        <div class="facility-pin pin-vendor" title="Kyice's Kitchen - Real Caribbean Food">
+        <div class="facility-pin pin-vendor" title="The Jerk Shac - Jamaican & Guyanese Fusion">
           🍗
         </div>
       `,
@@ -1314,41 +1294,41 @@
       iconAnchor: [14, 14]
     });
 
-    const kyicePopupHTML = `
+    const jerkShacPopupHTML = `
       <div style="min-width: 240px; max-width: 275px;">
-        <div style="background: linear-gradient(135deg, #d97706, #dc2626); margin: -10px -10px 8px -10px; padding: 8px 10px; border-top-left-radius: 6px; border-top-right-radius: 6px;">
+        <div style="background: linear-gradient(135deg, #16a34a, #d97706, #dc2626); margin: -10px -10px 8px -10px; padding: 8px 10px; border-top-left-radius: 6px; border-top-right-radius: 6px;">
           <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #fef08a;">🔥 FEATURED FOOD VENDOR</div>
-          <div style="font-size: 1rem; font-weight: 900; color: #ffffff; line-height: 1.1;">${kyiceVendor.name}</div>
-          <div style="font-size: 0.72rem; color: #fef3c7; margin-top: 2px; font-weight: 600;">📍 ${kyiceVendor.location}</div>
+          <div style="font-size: 1rem; font-weight: 900; color: #ffffff; line-height: 1.1;">${jerkShacVendor.name}</div>
+          <div style="font-size: 0.72rem; color: #fef3c7; margin-top: 2px; font-weight: 600;">📍 ${jerkShacVendor.location}</div>
         </div>
 
-        <div style="font-size: 0.72rem; color: #fbbf24; font-weight: 700; margin-bottom: 6px; text-align: center;">"${kyiceVendor.tagline}"</div>
+        <div style="font-size: 0.72rem; color: #fbbf24; font-weight: 700; margin-bottom: 6px; text-align: center;">"${jerkShacVendor.tagline}"</div>
 
         <div style="font-size: 0.74rem; background: #0c1424; border: 1px solid #1e293b; border-radius: 6px; padding: 8px; margin-bottom: 8px; text-align: center;">
           <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 8px;">
-            <a href="https://www.instagram.com/kyiceskitchen/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #ffffff; font-weight: 800; text-decoration: none; font-size: 0.74rem; padding: 5px 10px; border-radius: 16px;">
+            <a href="https://www.instagram.com/thejerkshac/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #ffffff; font-weight: 800; text-decoration: none; font-size: 0.74rem; padding: 5px 10px; border-radius: 16px;">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
               </svg>
-              <span>@kyiceskitchen</span>
+              <span>@thejerkshac</span>
             </a>
           </div>
 
-          <div style="color: #cbd5e1; font-weight: 600; margin-bottom: 8px; font-size: 0.72rem;">🍗 Jerk Chicken • Curry Goat • Loaded Boxes • Patties • Wings • Refreshments</div>
+          <div style="color: #cbd5e1; font-weight: 600; margin-bottom: 8px; font-size: 0.72rem;">🍗 Jerk Pork • Jerk Chicken • Jerk Wings • Jerk Bagels • Roti & Curry • Jerk Wrap • Mac & Cheese • Vegan Options • Fruit Punch</div>
           
-          <a href="https://www.instagram.com/p/Dckxd8zIAAd/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; background: #2563eb; color: #ffffff; font-weight: 800; text-decoration: none; font-size: 0.76rem; padding: 6px 12px; border-radius: 6px; border: 1px solid #3b82f6; width: 90%;">
-            <span>📖 View Full Menu Post ↗</span>
+          <a href="https://www.instagram.com/thejerkshac/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; justify-content: center; gap: 5px; background: #2563eb; color: #ffffff; font-weight: 800; text-decoration: none; font-size: 0.76rem; padding: 6px 12px; border-radius: 6px; border: 1px solid #3b82f6; width: 90%;">
+            <span>📸 View Instagram Page ↗</span>
           </a>
         </div>
 
-        ${createNavHTML(kyiceVendor.lat, kyiceVendor.lng, kyiceVendor.name)}
+        ${createNavHTML(jerkShacVendor.lat, jerkShacVendor.lng, jerkShacVendor.name)}
       </div>
     `;
 
-    L.marker([kyiceVendor.lat, kyiceVendor.lng], { icon: kyiceIcon })
-      .bindPopup(kyicePopupHTML)
+    L.marker([jerkShacVendor.lat, jerkShacVendor.lng], { icon: jerkShacIcon })
+      .bindPopup(jerkShacPopupHTML)
       .addTo(foodVendorsLayer);
 
     // Duplicate Test Food Vendor: Test Vendor (@purevibe187)

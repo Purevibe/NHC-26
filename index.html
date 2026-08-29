@@ -536,9 +536,11 @@
     }
     .leaflet-popup-content {
       margin: 10px 12px;
-      max-height: 65vh;
-      overflow-y: auto;
-      scrollbar-width: thin;
+      overflow: visible;
+      scrollbar-width: none;
+    }
+    .leaflet-popup-content::-webkit-scrollbar {
+      display: none;
     }
     .leaflet-popup-tip { background: #131d31; }
     

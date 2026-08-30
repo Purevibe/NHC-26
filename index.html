@@ -3016,12 +3016,14 @@
       });
     });
 
-    // Clear All Filters Listener (Uncheck all layers)
+    // Clear All Filters Listener (Uncheck facility layers, keep Parade Route & Perimeter Boundary visible)
     const clearFiltersBtn = document.getElementById('clearFiltersBtn');
     if (clearFiltersBtn) {
       clearFiltersBtn.addEventListener('click', () => {
         Object.keys(layerMap).forEach(lType => {
-          setLayerVisibility(lType, false);
+          if (lType !== 'parade' && lType !== 'boundary') {
+            setLayerVisibility(lType, false);
+          }
         });
       });
     }

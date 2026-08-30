@@ -843,21 +843,6 @@
       display: flex; align-items: center; justify-content: center;
       pointer-events: none;
     }
-    
-    .route-street-label {
-      background: rgba(15, 23, 42, 0.92);
-      color: #ffffff;
-      border: 1.5px solid #ef4444;
-      border-radius: 12px;
-      padding: 3px 8px;
-      font-size: 0.7rem;
-      font-weight: 800;
-      white-space: nowrap;
-      letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
-      pointer-events: none;
-      text-transform: uppercase;
-    }
 
     /* Popup & Navigation Buttons */
     .leaflet-popup-content-wrapper {
@@ -1829,26 +1814,6 @@
       });
 
       L.marker([a.lat, a.lng], { icon: doubleArrowIcon, interactive: false }).addTo(paradeLayer);
-    });
-
-    // Street Road Names along the Parade Circuit
-    const paradeRoadNames = [
-      { name: "Ladbroke Grove", lat: 51.5220, lng: -0.2127 },
-      { name: "Kensal Road", lat: 51.5262, lng: -0.2125 },
-      { name: "Elkstone Road", lat: 51.5255, lng: -0.2069 },
-      { name: "Great Western Road", lat: 51.5224, lng: -0.2028 },
-      { name: "Westbourne Grove", lat: 51.5170, lng: -0.1957 },
-      { name: "Chepstow Road", lat: 51.5147, lng: -0.1976 }
-    ];
-
-    paradeRoadNames.forEach(rn => {
-      const labelIcon = L.divIcon({
-        className: 'route-arrow-marker',
-        html: `<div class="route-street-label">🛣️ ${rn.name}</div>`,
-        iconSize: [120, 24],
-        iconAnchor: [60, 12]
-      });
-      L.marker([rn.lat, rn.lng], { icon: labelIcon, interactive: false }).addTo(paradeLayer);
     });
 
     // Boundary

@@ -1166,6 +1166,7 @@
       <div class="map-custom-controls">
         <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filters and Key</button>
         <button class="map-control-btn" id="programmeToggleBtn">📅 Programme</button>
+        <button class="map-control-btn" id="historyToggleBtn">📜 Carnival History</button>
         <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
         <button class="map-control-btn" id="travelInfoToggleBtn">🚌 Travel Info</button>
         <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
@@ -1445,6 +1446,120 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </div>
+
+  <!-- CARNIVAL HISTORY MODAL OVERLAY -->
+  <div id="historyModal" class="about-modal-overlay" style="display: none;">
+    <div class="about-modal-card programme-modal-card">
+      <div class="about-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.4rem;">📜</span>
+          <h2 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0;">Notting Hill Carnival History</h2>
+        </div>
+        <button id="closeHistoryModalBtn" class="about-modal-close">✕</button>
+      </div>
+
+      <div class="about-modal-body prog-modal-body" style="padding: 14px;">
+        <!-- HERO WELCOME BANNER -->
+        <div style="background: linear-gradient(135deg, #1e1b4b, #312e81); border: 1.5px solid #6366f1; border-radius: 10px; padding: 14px; margin-bottom: 16px; text-align: center;">
+          <div style="font-size: 1.1rem; font-weight: 900; color: #fef08a; margin-bottom: 4px;">Welcome to Notting Hill Carnival!</div>
+          <p style="font-size: 0.8rem; color: #e0e7ff; line-height: 1.5; margin-bottom: 10px;">
+            Celebrating 60 years of incredible music, vibrant colours, and rich Caribbean culture, Notting Hill Carnival is London's biggest street party — welcoming over two million people of all ages for an unforgettable weekend of joy, dance, and community spirit!
+          </p>
+          <a href="https://nhcarnival.org/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; background: #ea580c; color: #ffffff; font-weight: 800; font-size: 0.78rem; padding: 7px 14px; border-radius: 20px; text-decoration: none; box-shadow: 0 4px 10px rgba(234, 88, 12, 0.4);">
+            <span>🌐 Visit Official Website (nhcarnival.org) ↗</span>
+          </a>
+        </div>
+
+        <!-- TIMELINE SECTION -->
+        <div class="prog-day-title" style="margin-bottom: 10px;">How the Magic Began</div>
+        <p style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 12px;">
+          What started as a grassroots community gathering has blossomed into a world-renowned cultural institution:
+        </p>
+
+        <div class="prog-event-card" style="border-left: 4px solid #f59e0b;">
+          <div class="prog-event-header">
+            <span class="prog-event-title">✨ 1959 — The Spark</span>
+          </div>
+          <p class="prog-event-desc">
+            Activist <strong>Claudia Jones</strong> organised an indoor Caribbean showcase at St Pancras Town Hall to bring people together and lift spirits through calypso and steelpan.
+          </p>
+        </div>
+
+        <div class="prog-event-card" style="border-left: 4px solid #ec4899;">
+          <div class="prog-event-header">
+            <span class="prog-event-title">🥁 1966 — Taking to the Streets</span>
+          </div>
+          <p class="prog-event-desc">
+            Community leader <strong>Rhaune Laslett</strong> launched the first outdoor street festival featuring local children dressed in colourful characters alongside Trinidadian steelpan players and brass bands.
+          </p>
+        </div>
+
+        <div class="prog-event-card" style="border-left: 4px solid #3b82f6;">
+          <div class="prog-event-header">
+            <span class="prog-event-title">🔊 1973 — The Sound System Era</span>
+          </div>
+          <p class="prog-event-desc">
+            Leslie "Teacher" Palmer introduced static street sound systems and costume floats across Ladbroke Grove, creating the electric outdoor experience we know today.
+          </p>
+        </div>
+
+        <!-- EXPERIENCE HIGHLIGHTS -->
+        <div class="prog-day-title" style="margin-top: 18px; margin-bottom: 10px;">What to See & Experience</div>
+
+        <div class="prog-event-card">
+          <div class="prog-event-header">
+            <span class="prog-event-title">💃 The Spectacular Mas Parade</span>
+          </div>
+          <p class="prog-event-desc">
+            Marvel at breathtaking masquerade dancers in glittering, hand-crafted costumes with towering feather headdresses dancing along the parade route.
+          </p>
+        </div>
+
+        <div class="prog-event-card">
+          <div class="prog-event-header">
+            <span class="prog-event-title">🎶 Thunderous Steelbands</span>
+          </div>
+          <p class="prog-event-desc">
+            Feel the uplifting, melodic harmonies of live steelpan orchestras and drum troupes that keep crowds swaying from morning to night.
+          </p>
+        </div>
+
+        <div class="prog-event-card">
+          <div class="prog-event-header">
+            <span class="prog-event-title">🔊 Legendary Sound Systems</span>
+          </div>
+          <p class="prog-event-desc">
+            Discover dozens of iconic sound stages across West London — widely known as the "World Cup" of sound system culture — spinning everything from roots reggae and calypso to high-energy soca, bouyon, and house.
+          </p>
+        </div>
+
+        <div class="prog-event-card">
+          <div class="prog-event-header">
+            <span class="prog-event-title">🍗 Delicious Caribbean Flavours</span>
+          </div>
+          <p class="prog-event-desc">
+            Follow the smoky, mouth-watering aromas of classic jerk chicken, warm roti, fried plantains, and sweet treats from licensed stalls across the neighbourhood.
+          </p>
+        </div>
+
+        <div class="prog-event-card">
+          <div class="prog-event-header">
+            <span class="prog-event-title">👶 Family Day Fun</span>
+          </div>
+          <p class="prog-event-desc">
+            Carnival Sunday is traditionally dedicated to children and families, featuring the junior mas parade and welcoming spaces for young ones to dance and explore.
+          </p>
+        </div>
+
+        <!-- CLOSING BANNER -->
+        <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 12px; margin-top: 14px; text-align: center;">
+          <p style="font-size: 0.78rem; color: #f8fafc; font-weight: 600; line-height: 1.4;">
+            Carnival is all about sharing love, cultural pride, and pure happiness across generations. Put on your brightest colours, bring the family, and come ready to celebrate! ❤️💛💚
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -1846,12 +1961,12 @@
     ];
 
     const paradeRoadLabels = [
-      { name: "LADBROKE GROVE", lat: 51.5200, lng: -0.2117, rotation: -115 },
-      { name: "KENSAL ROAD", lat: 51.5263, lng: -0.2132, rotation: -3 },
-      { name: "ELKSTONE ROAD", lat: 51.5257, lng: -0.2078, rotation: 12 },
-      { name: "GREAT WESTERN ROAD", lat: 51.5205, lng: -0.2003, rotation: 123 },
-      { name: "CHEPSTOW ROAD", lat: 51.5165, lng: -0.1956, rotation: 78 },
-      { name: "WESTBOURNE GROVE", lat: 51.5135, lng: -0.2015, rotation: -155 }
+      { name: "LADBROKE GROVE", lat: 51.5200, lng: -0.2117, rotation: 0 },
+      { name: "KENSAL ROAD", lat: 51.5263, lng: -0.2132, rotation: 0 },
+      { name: "ELKSTONE ROAD", lat: 51.5257, lng: -0.2078, rotation: 0 },
+      { name: "GREAT WESTERN RD", lat: 51.5205, lng: -0.2003, rotation: 0 },
+      { name: "CHEPSTOW ROAD", lat: 51.5165, lng: -0.1956, rotation: 0 },
+      { name: "WESTBOURNE GROVE", lat: 51.5135, lng: -0.2015, rotation: 0 }
     ];
 
     const carnivalBoundaryCoords = [
@@ -2860,19 +2975,28 @@
       });
     }
 
-    if (progTabSunday && progTabMonday) {
-      progTabSunday.addEventListener('click', () => {
-        progTabSunday.classList.add('active');
-        progTabMonday.classList.remove('active');
-        progContentSunday.style.display = 'block';
-        progContentMonday.style.display = 'none';
-      });
+    // Carnival History Modal Listeners
+    const historyModal = document.getElementById('historyModal');
+    const historyToggleBtn = document.getElementById('historyToggleBtn');
+    const closeHistoryModalBtn = document.getElementById('closeHistoryModalBtn');
 
-      progTabMonday.addEventListener('click', () => {
-        progTabMonday.classList.add('active');
-        progTabSunday.classList.remove('active');
-        progContentMonday.style.display = 'block';
-        progContentSunday.style.display = 'none';
+    if (historyToggleBtn && historyModal) {
+      historyToggleBtn.addEventListener('click', () => {
+        historyModal.style.display = 'flex';
+      });
+    }
+
+    if (closeHistoryModalBtn && historyModal) {
+      closeHistoryModalBtn.addEventListener('click', () => {
+        historyModal.style.display = 'none';
+      });
+    }
+
+    if (historyModal) {
+      historyModal.addEventListener('click', (e) => {
+        if (e.target === historyModal) {
+          historyModal.style.display = 'none';
+        }
       });
     }
 

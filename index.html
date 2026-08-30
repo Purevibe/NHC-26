@@ -663,6 +663,33 @@
       border-color: #4285f4;
       box-shadow: 0 2px 8px rgba(26, 115, 232, 0.4);
     }
+    .modal-scroll-footer {
+      display: flex;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #090e17;
+      border-top: 1px solid #334155;
+    }
+    .scroll-nav-btn {
+      flex: 1;
+      background: #1e293b;
+      color: #38bdf8;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .scroll-nav-btn:hover {
+      background: #334155;
+      color: #ffffff;
+    }
     .prog-day-title {
       font-size: 1rem;
       font-weight: 900;
@@ -1482,6 +1509,10 @@
         </div>
 
       </div>
+      <div class="modal-scroll-footer">
+        <button class="scroll-nav-btn" id="progScrollUpBtn">▲ Scroll Up</button>
+        <button class="scroll-nav-btn" id="progScrollDownBtn">▼ Scroll Down</button>
+      </div>
     </div>
   </div>
 
@@ -1595,6 +1626,10 @@
             Carnival is all about sharing love, cultural pride, and pure happiness across generations. Put on your brightest colours, bring the family, and come ready to celebrate! ❤️💛💚
           </p>
         </div>
+      </div>
+      <div class="modal-scroll-footer">
+        <button class="scroll-nav-btn" id="histScrollUpBtn">▲ Scroll Up</button>
+        <button class="scroll-nav-btn" id="histScrollDownBtn">▼ Scroll Down</button>
       </div>
     </div>
   </div>
@@ -1794,6 +1829,10 @@
           </div>
         </div>
 
+      </div>
+      <div class="modal-scroll-footer">
+        <button class="scroll-nav-btn" id="travelScrollUpBtn">▲ Scroll Up</button>
+        <button class="scroll-nav-btn" id="travelScrollDownBtn">▼ Scroll Down</button>
       </div>
     </div>
   </div>
@@ -3708,6 +3747,26 @@
         if (langModal) langModal.style.display = 'none';
       });
     });
+
+    // Scroll navigation helpers for Programme, History, and Travel modals
+    const setupModalScroll = (upBtnId, downBtnId, containerQuery) => {
+      const upBtn = document.getElementById(upBtnId);
+      const downBtn = document.getElementById(downBtnId);
+      if (upBtn && downBtn) {
+        upBtn.addEventListener('click', () => {
+          const container = document.querySelector(containerQuery);
+          if (container) container.scrollBy({ top: -220, behavior: 'smooth' });
+        });
+        downBtn.addEventListener('click', () => {
+          const container = document.querySelector(containerQuery);
+          if (container) container.scrollBy({ top: 220, behavior: 'smooth' });
+        });
+      }
+    };
+
+    setupModalScroll('progScrollUpBtn', 'progScrollDownBtn', '#programmeModal .prog-modal-body');
+    setupModalScroll('histScrollUpBtn', 'histScrollDownBtn', '#historyModal .prog-modal-body');
+    setupModalScroll('travelScrollUpBtn', 'travelScrollDownBtn', '#travelModal .prog-modal-body');
 
     applyFilters();
   </script>

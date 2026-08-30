@@ -2750,10 +2750,11 @@
           const gmapsURL = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
           const appleURL = `https://maps.apple.com/?daddr=${lat},${lng}&dirflg=w`;
           const citymapperURL = `https://citymapper.com/directions?endcoord=${lat},${lng}&endname=${encodeURIComponent(title)}`;
+          const planText = (translations[currentLang] && translations[currentLang].planJourney) ? translations[currentLang].planJourney : "🗺️ Plan Your Journey";
 
           return `
         <div class="nav-box">
-          <div class="nav-label">🗺️ Plan Your Journey</div>
+          <div class="nav-label">${planText}</div>
           <div class="nav-buttons">
             <a href="${gmapsURL}" target="_blank" rel="noopener" class="nav-btn nav-btn-gmaps">🗺️ Google Maps</a>
             <a href="${appleURL}" target="_blank" rel="noopener" class="nav-btn nav-btn-apple">🍎 Apple Maps</a>
@@ -3157,7 +3158,10 @@
             iconAnchor: [11, 11]
           });
           L.marker([t[0], t[1]], { icon })
-            .bindPopup(`<div><strong style="color:#38bdf8;">🚻 Public Toilet Station #${i + 1}</strong>${createNavHTML(t[0], t[1], `Toilet Station #${i + 1}`)}</div>`)
+            .bindPopup(() => {
+              const label = (translations[currentLang] && translations[currentLang].toiletTitle) ? translations[currentLang].toiletTitle : "Public Toilet Station";
+              return `<div><strong style="color:#38bdf8;">🚻 ${label} #${i + 1}</strong>${createNavHTML(t[0], t[1], `${label} #${i + 1}`)}</div>`;
+            })
             .addTo(toiletsLayer);
         });
 
@@ -3169,7 +3173,11 @@
             iconAnchor: [12, 12]
           });
           L.marker([fa[0], fa[1]], { icon })
-            .bindPopup(`<div><strong style="color:#4ade80;">🏥 First Aid Post #${i + 1}</strong><div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Medical Support Team</div>${createNavHTML(fa[0], fa[1], `First Aid Post #${i + 1}`)}</div>`)
+            .bindPopup(() => {
+              const label = (translations[currentLang] && translations[currentLang].firstAidTitle) ? translations[currentLang].firstAidTitle : "First Aid Post";
+              const sub = (translations[currentLang] && translations[currentLang].firstAidSub) ? translations[currentLang].firstAidSub : "Medical Support Team";
+              return `<div><strong style="color:#4ade80;">🏥 ${label} #${i + 1}</strong><div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">${sub}</div>${createNavHTML(fa[0], fa[1], `${label} #${i + 1}`)}</div>`;
+            })
             .addTo(firstAidLayer);
         });
 
@@ -3181,7 +3189,11 @@
             iconAnchor: [11, 11]
           });
           L.marker([w[0], w[1]], { icon })
-            .bindPopup(`<div><strong style="color:#f472b6;">💖 Welfare Point #${i + 1}</strong><div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Lost children & welfare support</div>${createNavHTML(w[0], w[1], `Welfare Point #${i + 1}`)}</div>`)
+            .bindPopup(() => {
+              const label = (translations[currentLang] && translations[currentLang].welfareTitle) ? translations[currentLang].welfareTitle : "Welfare Point";
+              const sub = (translations[currentLang] && translations[currentLang].welfareSub) ? translations[currentLang].welfareSub : "Lost children & welfare support";
+              return `<div><strong style="color:#f472b6;">💖 ${label} #${i + 1}</strong><div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">${sub}</div>${createNavHTML(w[0], w[1], `${label} #${i + 1}`)}</div>`;
+            })
             .addTo(welfareLayer);
         });
 
@@ -3261,7 +3273,11 @@
             iconAnchor: [12, 12]
           });
           L.marker([st[0], st[1]], { icon })
-            .bindPopup(`<div><strong style="color:#fb923c;">🍴 Food & Street Trading Zone #${i + 1}</strong><div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">Licensed food stall & refreshments</div>${createNavHTML(st[0], st[1], `Food Stalls #${i + 1}`)}</div>`)
+            .bindPopup(() => {
+              const label = (translations[currentLang] && translations[currentLang].tradingTitle) ? translations[currentLang].tradingTitle : "Food & Street Trading Zone";
+              const sub = (translations[currentLang] && translations[currentLang].tradingSub) ? translations[currentLang].tradingSub : "Licensed food stall & refreshments";
+              return `<div><strong style="color:#fb923c;">🍴 ${label} #${i + 1}</strong><div style="font-size:0.75rem; color:#cbd5e1; margin-top:2px;">${sub}</div>${createNavHTML(st[0], st[1], `${label} #${i + 1}`)}</div>`;
+            })
             .addTo(tradingLayer);
         });
 
@@ -3893,6 +3909,8 @@
             streetTrading: "🍴 Street Trading Stalls (19)", busHubs: "🚌 Special TFL Bus Hubs (6)",
             paradeRoute: "🚩 Parade Route", boundary: "🟨 Perimeter Boundary", genresTitle: "🎵 Music Genres & Presets",
             planJourney: "🗺️ Plan Your Journey", shareLocation: "📲 Share My Location",
+            toiletTitle: "Public Toilet Station", firstAidTitle: "First Aid Post", firstAidSub: "Medical Support Team",
+            welfareTitle: "Welfare Point", welfareSub: "Lost children & welfare support", tradingTitle: "Food & Street Trading Zone", tradingSub: "Licensed food stall & refreshments",
             tflBadge: "🚇 TFL ALERTS", progModalTitle: "Carnival 2026 Programme", progSunTab: "Sun 30 Aug (Family Day)",
             progMonTab: "Mon 31 Aug (Adults Parade)", histModalTitle: "Notting Hill Carnival History",
             histWelcomeTitle: "Welcome to Notting Hill Carnival!",
@@ -3916,6 +3934,8 @@
             streetTrading: "🍴 Puestos Ambulantes (19)", busHubs: "🚌 Centros Especiales de Autobuses TfL (6)",
             paradeRoute: "🚩 Ruta del Desfile", boundary: "🟨 Perímetro Oficial", genresTitle: "🎵 Géneros Musicales",
             planJourney: "🗺️ Planificar Viaje", shareLocation: "📲 Compartir Ubicación",
+            toiletTitle: "Estación de Baños Públicos", firstAidTitle: "Puesto de Primeros Auxilios", firstAidSub: "Equipo de Apoyo Médico",
+            welfareTitle: "Punto de Bienestar", welfareSub: "Niños perdidos y asistencia social", tradingTitle: "Zona de Comida y Venta Ambulante", tradingSub: "Puestos de comida autorizados y refrescos",
             tflBadge: "🚇 ALERTAS TFL", progModalTitle: "Programa Carnaval 2026", progSunTab: "Dom 30 Ago (Día Familiar)",
             progMonTab: "Lun 31 Ago (Desfile Adultos)", histModalTitle: "Historia del Carnaval de Notting Hill",
             histWelcomeTitle: "¡Bienvenidos al Carnaval de Notting Hill!",
@@ -4020,6 +4040,8 @@
             streetTrading: "🍴 Barracas de Rua (19)", busHubs: "🚌 Terminais Especiais de Ônibus TfL (6)",
             paradeRoute: "🚩 Rota do Desfile", boundary: "🟨 Perímetro Oficial", genresTitle: "🎵 Gêneros Musicais",
             planJourney: "🗺️ Planejar Viagem", shareLocation: "📲 Compartilhar Localização",
+            toiletTitle: "Estação de Banheiros Públicos", firstAidTitle: "Posto de Primeiros Socorros", firstAidSub: "Equipe de Apoio Médico",
+            welfareTitle: "Ponto de Apoio Social", welfareSub: "Crianças perdidas e assistência social", tradingTitle: "Zona de Comida e Comércio Ambulante", tradingSub: "Barracas de comida autorizadas e bebidas",
             tflBadge: "🚇 ALERTAS TFL", progModalTitle: "Programação do Carnaval 2026", progSunTab: "Dom 30 Ago (Dia da Família)",
             progMonTab: "Seg 31 Ago (Desfile Principal)", histModalTitle: "História do Carnaval de Notting Hill",
             histWelcomeTitle: "Bem-vindo ao Carnaval de Notting Hill!",
@@ -4124,6 +4146,8 @@
             streetTrading: "🍴 Commerce Ambulant (19)", busHubs: "🚌 Lignes de Bus Spéciales TfL (6)",
             paradeRoute: "🚩 Parcours de la Parade", boundary: "🟨 Périmètre Officiel", genresTitle: "🎵 Genres Musicaux",
             planJourney: "🗺️ Planifier le Trajet", shareLocation: "📲 Partager Ma Position",
+            toiletTitle: "Station de Toilettes Publiques", firstAidTitle: "Poste de Premiers Secours", firstAidSub: "Équipe d'Assistance Médicale",
+            welfareTitle: "Point d'Assistance Sociale", welfareSub: "Enfants perdus et soutien social", tradingTitle: "Zone de Restauration et Commerce", tradingSub: "Stands de nourriture agréés et rafraîchissements",
             tflBadge: "🚇 ALERTES TFL", progModalTitle: "Programme du Carnaval 2026", progSunTab: "Dim 30 Août (Journée Famille)",
             progMonTab: "Lun 31 Août (Grande Parade)", histModalTitle: "Histoire du Carnaval de Notting Hill",
             histWelcomeTitle: "Bienvenue au Carnaval de Notting Hill !",
@@ -4228,6 +4252,8 @@
             streetTrading: "🍴 Bancarelle di Strada (19)", busHubs: "🚌 Hub Speciali Autobus TfL (6)",
             paradeRoute: "🚩 Percorso della Parata", boundary: "🟨 Perimetro Ufficiale", genresTitle: "🎵 Genere Musicale",
             planJourney: "🗺️ Pianifica Itinerario", shareLocation: "📲 Condividi Posizione",
+            toiletTitle: "Stazione Bagni Pubblici", firstAidTitle: "Posto di Primo Soccorso", firstAidSub: "Team di Supporto Medico",
+            welfareTitle: "Punto di Assistenza", welfareSub: "Bambini smarriti e supporto sociale", tradingTitle: "Zona Cibo e Vendita Ambulante", tradingSub: "Bancarelle alimentari autorizzate e rinfreschi",
             tflBadge: "🚇 AVVISI TFL", progModalTitle: "Programma Carnevale 2026", progSunTab: "Dom 30 Ago (Giornata Famiglia)",
             progMonTab: "Lun 31 Ago (Sfilata Principale)", histModalTitle: "Storia del Carnevale di Notting Hill",
             histWelcomeTitle: "Benvenuti al Carnevale di Notting Hill!",
@@ -4332,6 +4358,8 @@
             streetTrading: "🍴 露店ストリート (19)", busHubs: "🚌 TfL 特別バスハブ (6)",
             paradeRoute: "🚩 パレードルート", boundary: "🟨 公式開催エリア境界", genresTitle: "🎵 音楽ジャンル & プリセット",
             planJourney: "🗺️ 経路を調べる", shareLocation: "📲 現在地を共有",
+            toiletTitle: "公衆トイレ設置場所", firstAidTitle: "救護所", firstAidSub: "医療支援チーム",
+            welfareTitle: "福祉・迷子案内所", welfareSub: "迷子保護および福祉支援", tradingTitle: "飲食・露店エリア", tradingSub: "公認飲食露店および軽食",
             tflBadge: "🚇 TFL 運行情報", progModalTitle: "ノッティングヒルカーニバル2026日程", progSunTab: "8月30日(日) ファミリーデイ",
             progMonTab: "8月31日(月) メインパレード", histModalTitle: "ノッティングヒルカーニバルの歴史",
             histWelcomeTitle: "ノッティングヒルカーニバルへようこそ！",
@@ -4436,6 +4464,8 @@
             streetTrading: "🍴 거리 장터 (19)", busHubs: "🚌 TfL 특별 버스 터미널 (6)",
             paradeRoute: "🚩 퍼레이드 경로", boundary: "🟨 공식 구역 경계", genresTitle: "🎵 음악 장르",
             planJourney: "🗺️ 경로 계획", shareLocation: "📲 내 위치 공유",
+            toiletTitle: "공중 화장실 구역", firstAidTitle: "응급 처치소", firstAidSub: "의료 지원팀",
+            welfareTitle: "복지 및 미아 보호소", welfareSub: "미아 보호 및 복지 지원", tradingTitle: "음식 및 노점 구역", tradingSub: "공인 음식점 및 음료",
             tflBadge: "🚇 TFL 운행 알림", progModalTitle: "노팅힐 카니발 2026 일정", progSunTab: "8월 30일 (일) 패밀리 데이",
             progMonTab: "8월 31일 (월) 메인 퍼레이드", histModalTitle: "노팅힐 카니발 역사",
             histWelcomeTitle: "노팅힐 카니발에 오신 것을 환영합니다!",
@@ -4543,6 +4573,8 @@
             streetTrading: "🍴 街头美食摊位区 (19)", busHubs: "🚌 TfL 特快公交枢纽 (6)",
             paradeRoute: "🚩 巡游路线", boundary: "🟨 官方活动边界", genresTitle: "🎵 音乐流派",
             planJourney: "🗺️ 规划路线", shareLocation: "📲 分享我的位置",
+            toiletTitle: "公共卫生间", firstAidTitle: "急救站", firstAidSub: "医疗支援团队",
+            welfareTitle: "福利与寻人点", welfareSub: "儿童走失与福利援助", tradingTitle: "美食与摊位区", tradingSub: "持牌餐饮摊位与饮品",
             tflBadge: "🚇 伦敦交通局提示", progModalTitle: "2026年诺丁山狂欢节日程表", progSunTab: "8月30日周日（家庭日）",
             progMonTab: "8月31日周一（盛装大巡游）", histModalTitle: "诺丁山狂欢节历史介绍",
             histWelcomeTitle: "欢迎参加诺丁山狂欢节！",
@@ -4650,6 +4682,8 @@
             streetTrading: "🍴 أكشاك البيع بالمشي (19)", busHubs: "🚌 محطات حافلات TfL الخاصة (6)",
             paradeRoute: "🚩 مسار الاستعراض الرئيسي", boundary: "🟨 الحدود الرسمية للكرنفال", genresTitle: "🎵 الأنواع الموسيقية",
             planJourney: "🗺️ تخطيط مسار الرحلة", shareLocation: "📲 مشاركة موقعي",
+            toiletTitle: "محطة دورات مياه عامة", firstAidTitle: "مركز الإسعافات الأولية", firstAidSub: "فريق الدعم الطبي",
+            welfareTitle: "نقطة الرعاية والدعم", welfareSub: "الأطفال المفقودين والدعم الاجتماعي", tradingTitle: "منطقة الأطعمة والباعة المتجولين", tradingSub: "أكشاك طعام مرخصة ومشروبات",
             tflBadge: "🚇 تنبيهات النقل", progModalTitle: "جدول فعاليات كرنفال 2026", progSunTab: "الأحد 30 أغسطس (يوم العائلة)",
             progMonTab: "الإثنين 31 أغسطس (الموكب الرئيسي)", histModalTitle: "تاريخ كرنفال نوتينغ هيل",
             histWelcomeTitle: "مرحبًا بكم في كرنفال نوتينغ هيل!",
@@ -4757,6 +4791,8 @@
             streetTrading: "🍴 اسٹریٹ ٹریڈنگ سٹالز (19)", busHubs: "🚌 خصوصی TfL بس ہبس (6)",
             paradeRoute: "🚩 پریڈ کا راستہ", boundary: "🟨 سرکاری حد", genresTitle: "🎵 موسیقی کے انداز",
             planJourney: "🗺️ سفر کا منصوبہ بنائیں", shareLocation: "📲 اپنا مقام شیئر کریں",
+            toiletTitle: "عوامی بیت الخلا اسٹیشن", firstAidTitle: "ابتدائی طبی امداد کا مرکز", firstAidSub: "طبی امدادی ٹیم",
+            welfareTitle: "فلاح و بہبود کا مرکز", welfareSub: "گمشدہ بچوں کی مدد اور فلاحی تعاون", tradingTitle: "خوراک اور اسٹریٹ ٹریڈنگ زون", tradingSub: "مجاز فوڈ اسٹالز اور مشروبات",
             tflBadge: "🚇 ٹرانسپورٹ الرٹس", progModalTitle: "ناٹنگ ہل کارنیوال 2026 پروگرام", progSunTab: "اتوار 30 اگست (فیملی ڈے)",
             progMonTab: "پیر 31 اگست (بڑا پریڈ)", histModalTitle: "ناٹنگ ہل کارنیوال کی تاریخ",
             histWelcomeTitle: "ناٹنگ ہل کارنیوال میں خوش آمدید!",
@@ -4864,6 +4900,8 @@
             streetTrading: "🍴 Sokak Satıcı Stantları (19)", busHubs: "🚌 Özel TfL Otobüs Durakları (6)",
             paradeRoute: "🚩 Kortej Geçit Rotası", boundary: "🟨 Resmi Karnaval Alanı Sınırı", genresTitle: "🎵 Müzik Türleri",
             planJourney: "🗺️ Yol Tarifi Al", shareLocation: "📲 Konumumu Paylaş",
+            toiletTitle: "Genel Tuvalet İstasyonu", firstAidTitle: "İlk Yardım Noktası", firstAidSub: "Tıbbi Destek Ekibi",
+            welfareTitle: "Sosyal Destek Noktası", welfareSub: "Kayıp çocuk ve sosyal yardım", tradingTitle: "Yiyecek ve Sokak Satış Alanı", tradingSub: "Ruhsatlı yiyecek stantları ve içecekler",
             tflBadge: "🚇 TFL ULAŞIM UYARILARI", progModalTitle: "Notting Hill Karnavalı 2026 Programı", progSunTab: "30 Ağu Paz (Aile Günü)",
             progMonTab: "31 Ağu Pzt (Büyük Kortej)", histModalTitle: "Notting Hill Karnavalı Tarihi",
             histWelcomeTitle: "Notting Hill Karnavalı'na Hoş Geldiniz!",
@@ -4968,6 +5006,8 @@
             streetTrading: "🍴 Stoiska Handlowe (19)", busHubs: "🚌 Specjalne Węzły Autobusowe TfL (6)",
             paradeRoute: "🚩 Trasa Parady", boundary: "🟨 Oficjalna Granica", genresTitle: "🎵 Gatunki Muzyczne",
             planJourney: "🗺️ Zaplanuj Podróż", shareLocation: "📲 Udostępnij Lokalizację",
+            toiletTitle: "Stacja Toalet Publicznych", firstAidTitle: "Punkt Pierwszej Pomocy", firstAidSub: "Zespół Wsparcia Medycznego",
+            welfareTitle: "Punkt Opieki i Wsparcia", welfareSub: "Zagubione dzieci i pomoc społeczna", tradingTitle: "Strefa Gastronomiczna i Handlowa", tradingSub: "Licencjonowane stoiska gastronomiczne",
             tflBadge: "🚇 OSTRZEŻENIA TFL", progModalTitle: "Program Karnawału 2026", progSunTab: "Niedz 30 Sierp (Dzień Rodzinny)",
             progMonTab: "Pon 31 Sierp (Parada Główna)", histModalTitle: "Historia Karnawału w Notting Hill",
             histWelcomeTitle: "Witaj na Karnawale w Notting Hill!",
@@ -5072,6 +5112,8 @@
             streetTrading: "🍴 اسٹریٹ ٹریڈنگ سٹالز (19)", busHubs: "🚌 خصوصی TfL بس ہبس (6)",
             paradeRoute: "🚩 پریڈ کا راستہ", boundary: "🟨 سرکاری حد", genresTitle: "🎵 موسیقی کے انداز",
             planJourney: "🗺️ سفر کا منصوبہ بنائیں", shareLocation: "📲 اپنا مقام شیئر کریں",
+            toiletTitle: "عوامی بیت الخلا اسٹیشن", firstAidTitle: "ابتدائی طبی امداد کا مرکز", firstAidSub: "طبی امدادی ٹیم",
+            welfareTitle: "فلاح و بہبود کا مرکز", welfareSub: "گمشدہ بچوں کی مدد اور فلاحی تعاون", tradingTitle: "خوراک اور اسٹریٹ ٹریڈنگ زون", tradingSub: "مجاز فوڈ اسٹالز اور مشروبات",
             tflBadge: "🚇 ٹرانسپورٹ الرٹس", progModalTitle: "ناٹنگ ہل کارنیوال 2026 پروگرام", progSunTab: "اتوار 30 اگست (فیملی ڈے)",
             progMonTab: "پیر 31 اگست (بڑا پریڈ)", histModalTitle: "ناٹنگ ہل کارنیوال کی تاریخ",
             histWelcomeTitle: "ناٹنگ ہل کارنیوال میں خوش آمدید!",

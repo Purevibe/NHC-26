@@ -1164,6 +1164,7 @@
     <!-- MAP -->
     <div id="map">
       <div class="map-custom-controls">
+        <button class="map-control-btn" id="langToggleBtn">🌐 Language</button>
         <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filters and Key</button>
         <button class="map-control-btn" id="programmeToggleBtn">📅 Programme</button>
         <button class="map-control-btn" id="historyToggleBtn">📜 Carnival History</button>
@@ -1231,6 +1232,32 @@
               </div>
             </div>
           </div>
+    </div>
+  </div>
+
+  <!-- LANGUAGE SELECTION MODAL OVERLAY -->
+  <div id="langModal" class="about-modal-overlay" style="display: none;">
+    <div class="about-modal-card" style="max-width: 360px;">
+      <div class="about-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.3rem;">🌐</span>
+          <h2 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin: 0;">Select Language</h2>
+        </div>
+        <button id="closeLangModalBtn" class="about-modal-close">✕</button>
+      </div>
+      <div class="about-modal-body" style="padding: 14px;">
+        <p style="font-size: 0.76rem; color: #94a3b8; margin-bottom: 12px; text-align: center;">Choose your preferred language for interactive UI buttons and menus:</p>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button class="nav-btn lang-option-btn active" data-lang="en" style="background: #1e293b; border: 1px solid #38bdf8; justify-content: flex-start; gap: 10px;">🇬🇧 English (Original)</button>
+          <button class="nav-btn lang-option-btn" data-lang="es" style="background: #1e293b; border: 1px solid #334155; justify-content: flex-start; gap: 10px;">🇲🇽 Español (LATAM)</button>
+          <button class="nav-btn lang-option-btn" data-lang="pt" style="background: #1e293b; border: 1px solid #334155; justify-content: flex-start; gap: 10px;">🇧🇷 Português (Brasil)</button>
+          <button class="nav-btn lang-option-btn" data-lang="fr" style="background: #1e293b; border: 1px solid #334155; justify-content: flex-start; gap: 10px;">🇫🇷 Français</button>
+          <button class="nav-btn lang-option-btn" data-lang="it" style="background: #1e293b; border: 1px solid #334155; justify-content: flex-start; gap: 10px;">🇮🇹 Italiano</button>
+          <button class="nav-btn lang-option-btn" data-lang="ja" style="background: #1e293b; border: 1px solid #334155; justify-content: flex-start; gap: 10px;">🇯🇵 日本語 (Japanese)</button>
+          <button class="nav-btn lang-option-btn" data-lang="zh" style="background: #1e293b; border: 1px solid #334155; justify-content: flex-start; gap: 10px;">🇨🇳 中文 (Chinese)</button>
+          <button class="nav-btn lang-option-btn" data-lang="ar" style="background: #1e293b; border: 1px solid #334155; justify-content: flex-start; gap: 10px;">🇸🇦 العربية (Arabic)</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2645,7 +2672,8 @@
         return matchesPresets && matchesGenreChips && matchesSearch;
       });
 
-      document.getElementById('matchCounter').textContent = `Showing ${filtered.length} of 37 Systems`;
+      const template = (translations[currentLang] && translations[currentLang].showingSystems) ? translations[currentLang].showingSystems : "Showing {count} of 37 Systems";
+      document.getElementById('matchCounter').textContent = template.replace('{count}', filtered.length);
 
       filtered.forEach(s => {
         const isFav = favorites.has(s.name);
@@ -3043,6 +3071,399 @@
         travelContentTube.style.display = 'none';
       });
     }
+
+    // 🌐 Multi-Language Translation System (8 Languages)
+    const translations = {
+      en: {
+        langBtn: "🌐 Language",
+        poiFilterBtn: "🗺️ Filters and Key",
+        progBtn: "📅 Programme",
+        histBtn: "📜 Carnival History",
+        findLocBtn: "📍 Find My Location",
+        travelBtn: "🚌 Travel Info",
+        tflAlertsBtn: "🚇 TfL Alerts",
+        lightMapBtn: "☀️ Light Map",
+        darkMapBtn: "🌙 Dark Map",
+        aboutMeBtn: "ℹ️ About Me",
+        clearFilters: "Clear Filters",
+        selectAll: "Select All",
+        searchPlaceholder: "Search sound system or genre...",
+        showingSystems: "Showing {count} of 37 Systems",
+        poiTitle: "Map Filters and Key",
+        resetBtn: "RESET",
+        facTitle: "📍 Facilities & Map Layers",
+        soundSystems: "🔊 Sound Systems (37)",
+        foodVendors: "🍗 Featured Food Vendors (2)",
+        jouvertLoc: "🌅 J'ouvert Location",
+        judgingZone: "⚖️ MAS Judging Zone",
+        toilets: "🚻 Public Toilets (40)",
+        firstAid: "✚ First Aid (7)",
+        welfare: "💖 Welfare Points (4)",
+        streetTrading: "🍴 Street Trading Stalls (19)",
+        tubeStations: "🚇 Tube Stations (11)",
+        busHubs: "🚌 Bus Hubs & Express Routes (6)",
+        paradeRoute: "🚩 Parade Route",
+        boundary: "🟨 Perimeter Boundary",
+        genresTitle: "🎵 Music Genres & Presets",
+        planJourney: "🗺️ Plan Your Journey",
+        shareLocation: "📲 Share My Location"
+      },
+      es: {
+        langBtn: "🌐 Idioma",
+        poiFilterBtn: "🗺️ Filtros y Clave",
+        progBtn: "📅 Programa",
+        histBtn: "📜 Historia del Carnaval",
+        findLocBtn: "📍 Buscar mi Ubicación",
+        travelBtn: "🚌 Info de Viaje",
+        tflAlertsBtn: "🚇 Alertas TfL",
+        lightMapBtn: "☀️ Mapa Claro",
+        darkMapBtn: "🌙 Mapa Oscuro",
+        aboutMeBtn: "ℹ️ Sobre Mí",
+        clearFilters: "Borrar Filtros",
+        selectAll: "Seleccionar Todo",
+        searchPlaceholder: "Buscar sound system o género...",
+        showingSystems: "Mostrando {count} de 37 Sistemas",
+        poiTitle: "Filtros de Mapa y Clave",
+        resetBtn: "REINICIAR",
+        facTitle: "📍 Instalaciones y Capas",
+        soundSystems: "🔊 Sound Systems (37)",
+        foodVendors: "🍗 Puestos de Comida (2)",
+        jouvertLoc: "🌅 Ubicación J'ouvert",
+        judgingZone: "⚖️ Zona de Jurado MAS",
+        toilets: "🚻 Baños Públicos (40)",
+        firstAid: "✚ Primeros Auxilios (7)",
+        welfare: "💖 Puntos de Bienestar (4)",
+        streetTrading: "🍴 Puestos Ambulantes (19)",
+        tubeStations: "🚇 Estaciones de Metro (11)",
+        busHubs: "🚌 Enlaces de Autobús (6)",
+        paradeRoute: "🚩 Ruta del Desfile",
+        boundary: "🟨 Perímetro Oficial",
+        genresTitle: "🎵 Géneros Musicales",
+        planJourney: "🗺️ Planificar Viaje",
+        shareLocation: "📲 Compartir Ubicación"
+      },
+      pt: {
+        langBtn: "🌐 Idioma",
+        poiFilterBtn: "🗺️ Filtros e Legenda",
+        progBtn: "📅 Programação",
+        histBtn: "📜 História do Carnaval",
+        findLocBtn: "📍 Encontrar Minha Localização",
+        travelBtn: "🚌 Info de Transporte",
+        tflAlertsBtn: "🚇 Alertas TfL",
+        lightMapBtn: "☀️ Mapa Claro",
+        darkMapBtn: "🌙 Mapa Escuro",
+        aboutMeBtn: "ℹ️ Sobre Mim",
+        clearFilters: "Limpar Filtros",
+        selectAll: "Selecionar Tudo",
+        searchPlaceholder: "Buscar sound system ou gênero...",
+        showingSystems: "Mostrando {count} de 37 Sistemas",
+        poiTitle: "Filtros e Legenda do Mapa",
+        resetBtn: "REINICIAR",
+        facTitle: "📍 Instalações e Camadas",
+        soundSystems: "🔊 Sound Systems (37)",
+        foodVendors: "🍗 Vendedores de Comida (2)",
+        jouvertLoc: "🌅 Localização J'ouvert",
+        judgingZone: "⚖️ Zona de Julgamento MAS",
+        toilets: "🚻 Banheiros Públicos (40)",
+        firstAid: "✚ Primeiros Socorros (7)",
+        welfare: "💖 Pontos de Apoio (4)",
+        streetTrading: "🍴 Barracas de Rua (19)",
+        tubeStations: "🚇 Estações de Metrô (11)",
+        busHubs: "🚌 Terminais de Ônibus (6)",
+        paradeRoute: "🚩 Rota do Desfile",
+        boundary: "🟨 Perímetro Oficial",
+        genresTitle: "🎵 Gêneros Musicais",
+        planJourney: "🗺️ Planejar Viagem",
+        shareLocation: "📲 Compartilhar Localização"
+      },
+      fr: {
+        langBtn: "🌐 Langue",
+        poiFilterBtn: "🗺️ Filtres et Légende",
+        progBtn: "📅 Programme",
+        histBtn: "📜 Histoire du Carnaval",
+        findLocBtn: "📍 Ma Position",
+        travelBtn: "🚌 Infos Transports",
+        tflAlertsBtn: "🚇 Alertes TfL",
+        lightMapBtn: "☀️ Carte Claire",
+        darkMapBtn: "🌙 Carte Sombre",
+        aboutMeBtn: "ℹ️ À Propos",
+        clearFilters: "Effacer les Filtres",
+        selectAll: "Tout Sélectionner",
+        searchPlaceholder: "Rechercher sound system ou genre...",
+        showingSystems: "{count} sur 37 Systèmes Affichés",
+        poiTitle: "Filtres et Légende de la Carte",
+        resetBtn: "RÉINITIALISER",
+        facTitle: "📍 Équipements & Cartes",
+        soundSystems: "🔊 Sound Systems (37)",
+        foodVendors: "🍗 Stands Gastronomie (2)",
+        jouvertLoc: "🌅 Départ J'ouvert",
+        judgingZone: "⚖️ Zone de Jugement MAS",
+        toilets: "🚻 Toilettes Publiques (40)",
+        firstAid: "✚ Premiers Secours (7)",
+        welfare: "💖 Points d'Assistance (4)",
+        streetTrading: "🍴 Commerce Ambulant (19)",
+        tubeStations: "🚇 Stations de Métro (11)",
+        busHubs: "🚌 Lignes de Bus (6)",
+        paradeRoute: "🚩 Parcours de la Parade",
+        boundary: "🟨 Périmètre Officiel",
+        genresTitle: "🎵 Genres Musicaux",
+        planJourney: "🗺️ Planifier le Trajet",
+        shareLocation: "📲 Partager Ma Position"
+      },
+      it: {
+        langBtn: "🌐 Lingua",
+        poiFilterBtn: "🗺️ Filtri e Legenda",
+        progBtn: "📅 Programma",
+        histBtn: "📜 Storia del Carnevale",
+        findLocBtn: "📍 Trova la mia Posizione",
+        travelBtn: "🚌 Info Trasporti",
+        tflAlertsBtn: "🚇 Avvisi TfL",
+        lightMapBtn: "☀️ Mappa Chiara",
+        darkMapBtn: "🌙 Mappa Scura",
+        aboutMeBtn: "ℹ️ Su di Me",
+        clearFilters: "Cancella Filtri",
+        selectAll: "Seleziona Tutto",
+        searchPlaceholder: "Cerca sound system o genere...",
+        showingSystems: "Mostrando {count} di 37 Sistemi",
+        poiTitle: "Filtri e Legenda Mappa",
+        resetBtn: "RIPRISTINA",
+        facTitle: "📍 Servizi e Livelli",
+        soundSystems: "🔊 Sound Systems (37)",
+        foodVendors: "🍗 Stand Gastronomici (2)",
+        jouvertLoc: "🌅 Partenza J'ouvert",
+        judgingZone: "⚖️ Zona Giuria MAS",
+        toilets: "🚻 Bagni Pubblici (40)",
+        firstAid: "✚ Primo Soccorso (7)",
+        welfare: "💖 Punti Assistenza (4)",
+        streetTrading: "🍴 Bancarelle di Strada (19)",
+        tubeStations: "🚇 Stazioni Metropolitana (11)",
+        busHubs: "🚌 Hub Autobus (6)",
+        paradeRoute: "🚩 Percorso della Parata",
+        boundary: "🟨 Perimetro Ufficiale",
+        genresTitle: "🎵 Genere Musicale",
+        planJourney: "🗺️ Pianifica Itinerario",
+        shareLocation: "📲 Condividi Posizione"
+      },
+      ja: {
+        langBtn: "🌐 言語切替",
+        poiFilterBtn: "🗺️ フィルター & 凡例",
+        progBtn: "📅 スケジュール",
+        histBtn: "📜 カーニバルの歴史",
+        findLocBtn: "📍 現在地を検索",
+        travelBtn: "🚌 交通アクセス案内",
+        tflAlertsBtn: "🚇 TfL 運行情報",
+        lightMapBtn: "☀️ ライトマップ",
+        darkMapBtn: "🌙 ダークマップ",
+        aboutMeBtn: "ℹ️ 制作者について",
+        clearFilters: "リセット",
+        selectAll: "すべて選択",
+        searchPlaceholder: "サウンドシステムやジャンルを検索...",
+        showingSystems: "37件中 {count} 件のシステムを表示",
+        poiTitle: "マップフィルターと凡例",
+        resetBtn: "初期化",
+        facTitle: "📍 施設 & マップレイヤー",
+        soundSystems: "🔊 サウンドシステム (37)",
+        foodVendors: "🍗 おすすめフードブース (2)",
+        jouvertLoc: "🌅 ジュヴェー出発地",
+        judgingZone: "⚖️ MAS 審査ゾーン",
+        toilets: "🚻 公衆トイレ (40)",
+        firstAid: "✚ 救護所 (7)",
+        welfare: "💖 案内・福祉ポイント (4)",
+        streetTrading: "🍴 露店ストリート (19)",
+        tubeStations: "🚇 地下鉄駅 (11)",
+        busHubs: "🚌 バス harb & 急行路線 (6)",
+        paradeRoute: "🚩 パレードルート",
+        boundary: "🟨 公式開催エリア境界",
+        genresTitle: "🎵 音楽ジャンル & プリセット",
+        planJourney: "🗺️ 経路を調べる",
+        shareLocation: "📲 現在地を共有"
+      },
+      zh: {
+        langBtn: "🌐 语言选择",
+        poiFilterBtn: "🗺️ 筛选与图例",
+        progBtn: "📅 活动日程",
+        histBtn: "📜 狂欢节历史",
+        findLocBtn: "📍 定位我的位置",
+        travelBtn: "🚌 交通出行指南",
+        tflAlertsBtn: "🚇 TfL 运行提示",
+        lightMapBtn: "☀️ 浅色地图",
+        darkMapBtn: "🌙 深色地图",
+        aboutMeBtn: "ℹ️ 关于开发者",
+        clearFilters: "清除筛选",
+        selectAll: "全选",
+        searchPlaceholder: "搜索音响系统或音乐风格...",
+        showingSystems: "显示 37 个系统中的 {count} 个",
+        poiTitle: "地图图层与筛选",
+        resetBtn: "重置",
+        facTitle: "📍 设施与地图图层",
+        soundSystems: "🔊 音响系统 (37)",
+        foodVendors: "🍗 特色美食摊位 (2)",
+        jouvertLoc: "🌅 J'ouvert 晨间开幕点",
+        judgingZone: "⚖️ MAS 盛装巡游评审区",
+        toilets: "🚻 公共卫生间 (40)",
+        firstAid: "✚ 急救站 (7)",
+        welfare: "💖 寻人与援助点 (4)",
+        streetTrading: "🍴 街头美食摊位区 (19)",
+        tubeStations: "🚇 地铁站 (11)",
+        busHubs: "🚌 公交枢纽与快线 (6)",
+        paradeRoute: "🚩 巡游路线",
+        boundary: "🟨 官方活动边界",
+        genresTitle: "🎵 音乐流派",
+        planJourney: "🗺️ 规划路线",
+        shareLocation: "📲 分享我的位置"
+      },
+      ar: {
+        langBtn: "🌐 اللغة",
+        poiFilterBtn: "🗺️ تصفية والمفتاح",
+        progBtn: "📅 برنامج الفعاليات",
+        histBtn: "📜 تاريخ الكرنفال",
+        findLocBtn: "📍 تحديد موقعي",
+        travelBtn: "🚌 معلومات المواصلات",
+        tflAlertsBtn: "🚇 تنبيهات شبكة النقل",
+        lightMapBtn: "☀️ خريطة فاتحة",
+        darkMapBtn: "🌙 خريطة داكنة",
+        aboutMeBtn: "ℹ️ نبذة عني",
+        clearFilters: "مسح الفلاتر",
+        selectAll: "تحديد الكل",
+        searchPlaceholder: "البحث عن نظام صوتي أو نوع موسيقى...",
+        showingSystems: "عرض {count} من أصل 37 نظامًا صوتيًا",
+        poiTitle: "فلاتر الخريطة والدليل",
+        resetBtn: "إعادة ضبط",
+        facTitle: "📍 المرافق وطبقات الخريطة",
+        soundSystems: "🔊 الأنظمة الصوتية (37)",
+        foodVendors: "🍗 أكشاك الطعام المميزة (2)",
+        jouvertLoc: "🌅 موقع انطلاق انطلاق جوفر",
+        judgingZone: "⚖️ منطقة تحكيم العروض",
+        toilets: "🚻 دورات المياه العامة (40)",
+        firstAid: "✚ الإسعافات الأولية (7)",
+        welfare: "💖 نقاط الرعاية والمساعدة (4)",
+        streetTrading: "🍴 أكشاك البيع بالمشي (19)",
+        tubeStations: "🚇 محطات المترو (11)",
+        busHubs: "🚌 محطات الحافلات السريعة (6)",
+        paradeRoute: "🚩 مسار الاستعراض الرئيسي",
+        boundary: "🟨 الحدود الرسمية للكرنفال",
+        genresTitle: "🎵 الأنواع الموسيقية",
+        planJourney: "🗺️ تخطيط مسار الرحلة",
+        shareLocation: "📲 مشاركة موقعي"
+      }
+    };
+
+    let currentLang = 'en';
+
+    function setLanguage(langKey) {
+      if (!translations[langKey]) return;
+      currentLang = langKey;
+      const t = translations[langKey];
+
+      // Update direction if Arabic
+      document.body.dir = langKey === 'ar' ? 'rtl' : 'ltr';
+
+      // Update Map Control Buttons
+      const langBtnEl = document.getElementById('langToggleBtn');
+      const poiBtnEl = document.getElementById('poiFilterToggleBtn');
+      const progBtnEl = document.getElementById('programmeToggleBtn');
+      const histBtnEl = document.getElementById('historyToggleBtn');
+      const findLocBtnEl = document.getElementById('findLocationBtn');
+      const travelBtnEl = document.getElementById('travelInfoToggleBtn');
+      const tflAlertsBtnEl = document.getElementById('tflAlertsToggleBtn');
+      const themeBtnEl = document.getElementById('themeToggleBtn');
+      const aboutMeBtnEl = document.getElementById('aboutMeToggleBtn');
+
+      if (langBtnEl) langBtnEl.textContent = t.langBtn;
+      if (poiBtnEl) poiBtnEl.textContent = t.poiFilterBtn;
+      if (progBtnEl) progBtnEl.textContent = t.progBtn;
+      if (histBtnEl) histBtnEl.textContent = t.histBtn;
+      if (findLocBtnEl) findLocBtnEl.textContent = t.findLocBtn;
+      if (travelBtnEl) travelBtnEl.textContent = t.travelBtn;
+      if (tflAlertsBtnEl) tflAlertsBtnEl.textContent = t.tflAlertsBtn;
+      if (themeBtnEl) {
+        const isDark = document.body.classList.contains('dark-theme');
+        themeBtnEl.textContent = isDark ? t.lightMapBtn : t.darkMapBtn;
+      }
+      if (aboutMeBtnEl) aboutMeBtnEl.textContent = t.aboutMeBtn;
+
+      // Sidebar UI Text
+      const clearBtnEl = document.getElementById('clearGenresBtn');
+      const selectAllBtnEl = document.getElementById('selectAllGenresBtn');
+      const searchInEl = document.getElementById('searchInput');
+
+      if (clearBtnEl) clearBtnEl.textContent = t.clearFilters;
+      if (selectAllBtnEl) selectAllBtnEl.textContent = t.selectAll;
+      if (searchInEl) searchInEl.placeholder = t.searchPlaceholder;
+
+      // Floating Filter Panel
+      const poiTitleEl = document.querySelector('.poi-panel-header span');
+      const resetBtnEl = document.getElementById('resetFiltersBtn');
+      const facTitleEl = document.querySelector('.accordion-header span');
+
+      if (poiTitleEl) poiTitleEl.textContent = t.poiTitle;
+      if (resetBtnEl) resetBtnEl.textContent = t.resetBtn;
+      if (facTitleEl) facTitleEl.textContent = t.facTitle;
+
+      // Update Checkbox Labels
+      const setCheckboxLabel = (poiKey, text) => {
+        const input = document.querySelector(`.poi-toggle-row input[data-poi="${poiKey}"]`);
+        if (input && input.parentElement) {
+          input.parentElement.childNodes[1].nodeValue = " " + text;
+        }
+      };
+
+      setCheckboxLabel('systems', t.soundSystems);
+      setCheckboxLabel('vendors', t.foodVendors);
+      setCheckboxLabel('jouvert', t.jouvertLoc);
+      setCheckboxLabel('judging', t.judgingZone);
+      setCheckboxLabel('toilets', t.toilets);
+      setCheckboxLabel('firstaid', t.firstAid);
+      setCheckboxLabel('welfare', t.welfare);
+      setCheckboxLabel('trading', t.streetTrading);
+      setCheckboxLabel('stations', t.tubeStations);
+      setCheckboxLabel('buses', t.busHubs);
+      setCheckboxLabel('parade', t.paradeRoute);
+      setCheckboxLabel('boundary', t.boundary);
+
+      // Re-apply filters to update matchCounter text
+      applyFilters();
+
+      // Highlight active language button in modal
+      document.querySelectorAll('.lang-option-btn').forEach(btn => {
+        const isMatch = btn.dataset.lang === langKey;
+        btn.classList.toggle('active', isMatch);
+        btn.style.borderColor = isMatch ? '#38bdf8' : '#334155';
+      });
+    }
+
+    // Language Modal Event Listeners
+    const langModal = document.getElementById('langModal');
+    const langToggleBtn = document.getElementById('langToggleBtn');
+    const closeLangModalBtn = document.getElementById('closeLangModalBtn');
+
+    if (langToggleBtn && langModal) {
+      langToggleBtn.addEventListener('click', () => {
+        langModal.style.display = 'flex';
+      });
+    }
+
+    if (closeLangModalBtn && langModal) {
+      closeLangModalBtn.addEventListener('click', () => {
+        langModal.style.display = 'none';
+      });
+    }
+
+    if (langModal) {
+      langModal.addEventListener('click', (e) => {
+        if (e.target === langModal) {
+          langModal.style.display = 'none';
+        }
+      });
+    }
+
+    document.querySelectorAll('.lang-option-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const selectedLang = e.currentTarget.dataset.lang;
+        setLanguage(selectedLang);
+        if (langModal) langModal.style.display = 'none';
+      });
+    });
 
     applyFilters();
   </script>

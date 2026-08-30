@@ -1697,7 +1697,37 @@
     // Sound Systems & Filtering Setup
     let selectedGenres = new Set();
     let selectedPresets = new Set(['all']);
-    let searchQuery = '';
+    let customMapPillGenres = new Set();
+
+    function updateDynamicMapPresetPills() {
+      const container = document.getElementById('mapPresetPills');
+      if (!container) return;
+
+      // Remove existing custom genre pills (data-custom-genre)
+      container.querySelectorAll('.preset-pill[data-custom-genre]').forEach(pill => pill.remove());
+
+      const searchMoreBtn = container.querySelector('[data-preset="searchmore"]');
+
+      // Create a pill for each dynamically selected genre from Search More
+      selectedGenres.forEach(genre => {
+        const btn = document.createElement('button');
+        btn.className = 'preset-pill active';
+        btn.dataset.customGenre = genre;
+        btn.innerHTML = `🎵 ${genre}`;
+        btn.addEventListener('click', () => {
+          selectedGenres.delete(genre);
+          const chip = document.querySelector(`.genre-chip[data-genre="${genre}"]`);
+          if (chip) chip.classList.remove('active');
+          applyFilters();
+        });
+
+        if (searchMoreBtn) {
+          container.insertBefore(btn, searchMoreBtn);
+        } else {
+          container.appendChild(btn);
+        }
+      });
+    }
 
     const genreContainer = document.getElementById('genreContainer');
     if (genreContainer) {
@@ -1748,6 +1778,7 @@
     }
 
     function applyFilters() {
+      updateDynamicMapPresetPills();
       systemsLayer.clearLayers();
       const listEl = document.getElementById('system-list');
       listEl.innerHTML = '';

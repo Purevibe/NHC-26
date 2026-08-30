@@ -482,6 +482,21 @@
     .btn-reset-filters:hover {
       background: #dc2626;
     }
+    .btn-clear-filters {
+      background: #475569;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: background 0.15s;
+    }
+    .btn-clear-filters:hover {
+      background: #64748b;
+    }
     .poi-panel-close {
       background: transparent;
       border: none;
@@ -1298,7 +1313,8 @@
         <div class="poi-panel-header">
           <span>Map Filters and Key</span>
           <div class="poi-panel-header-actions">
-            <button id="resetFiltersBtn" class="btn-reset-filters">RESET</button>
+            <button id="clearFiltersBtn" class="btn-clear-filters" data-i18n="clearBtn">CLEAR</button>
+            <button id="resetFiltersBtn" class="btn-reset-filters" data-i18n="resetBtn">RESET</button>
             <button id="closePoiPanelBtn" class="poi-panel-close">✕</button>
           </div>
         </div>
@@ -2999,6 +3015,16 @@
         section.classList.toggle('open');
       });
     });
+
+    // Clear All Filters Listener (Uncheck all layers)
+    const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+    if (clearFiltersBtn) {
+      clearFiltersBtn.addEventListener('click', () => {
+        Object.keys(layerMap).forEach(lType => {
+          setLayerVisibility(lType, false);
+        });
+      });
+    }
 
     // Reset All Filters Listener
     document.getElementById('resetFiltersBtn').addEventListener('click', () => {

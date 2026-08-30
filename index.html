@@ -1870,6 +1870,8 @@
             </div>
           </div>
         </div>
+      </div>
+
       <!-- SHARE MAP MODAL OVERLAY -->
       <div id="shareMapModal" class="about-modal-overlay" style="display: none;">
         <div class="about-modal-card" style="max-width: 380px; text-align: center;">
@@ -2568,8 +2570,9 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- 9. MOBILE RESPONSIVE TAB BAR -->
+    <!-- 9. MOBILE RESPONSIVE TAB BAR -->
       <div class="mobile-tab-bar">
         <button class="mobile-tab-btn active" id="tabMapBtn">🗺️ Map View</button>
         <button class="mobile-tab-btn" id="tabDrawerBtn">📋 Filters & Systems (37)</button>
@@ -5352,14 +5355,16 @@
           });
         });
 
-        // Restore Saved Language Preference
+        // Restore Saved Language Preference or default to English
         try {
           const savedLang = localStorage.getItem('nhc26_lang');
           if (savedLang && translations[savedLang]) {
             setLanguage(savedLang);
+          } else {
+            setLanguage('en');
           }
         } catch (err) {
-          console.error("Could not load language from localStorage", err);
+          setLanguage('en');
         }
 
         // Scroll navigation helpers for Programme, History, and Travel modals

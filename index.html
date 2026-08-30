@@ -2773,19 +2773,17 @@
     }
 
     function applyFilters() {
-      updateDynamicMapPresetPills();
       systemsLayer.clearLayers();
       const listEl = document.getElementById('system-list');
-      listEl.innerHTML = '';
+      if (listEl) listEl.innerHTML = '';
 
-      const activePresetList = Array.from(selectedPresets).filter(p => p !== 'searchmore');
-      const isAllActive = activePresetList.includes('all') || activePresetList.length === 0;
+      const isFavsActive = selectedPresets.has('favs');
 
       const filtered = soundSystems.filter(s => {
-        // Multi-select OR logic for Presets
-        const matchesPresets = isAllActive || activePresetList.some(pKey => matchesPreset(s, pKey));
+        // If Favorites preset is active
+        if (isFavsActive && !favorites.has(s.name)) return false;
 
-        // Multi-select OR logic for individual Genre Chips
+        // Individual Genre Chips selection (if any selected)
         const matchesGenreChips = selectedGenres.size === 0 || s.genres.some(g => selectedGenres.has(g));
         
         // Search text input
@@ -2794,11 +2792,12 @@
           s.name.toLowerCase().includes(query) ||
           s.genres.some(g => g.toLowerCase().includes(query));
 
-        return matchesPresets && matchesGenreChips && matchesSearch;
+        return matchesGenreChips && matchesSearch;
       });
 
       const template = (translations[currentLang] && translations[currentLang].showingSystems) ? translations[currentLang].showingSystems : "Showing {count} of 37 Systems";
-      document.getElementById('matchCounter').textContent = template.replace('{count}', filtered.length);
+      const counterEl = document.getElementById('matchCounter');
+      if (counterEl) counterEl.textContent = template.replace('{count}', filtered.length);
 
       filtered.forEach(s => {
         const isFav = favorites.has(s.name);
@@ -2818,23 +2817,31 @@
         marker.bindPopup(popupContent);
         marker.addTo(systemsLayer);
 
-        const item = document.createElement('div');
-        item.className = 'list-card';
-        item.innerHTML = `
-          <div class="card-info">
-            <div class="card-title">${s.name}</div>
-            <div class="card-genres">${s.genres.join(' • ')}</div>
-          </div>
-          <button class="card-fav-btn ${isFav ? 'active' : ''}" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
-        `;
+        if (listEl) {
+          const item = document.createElement('div');
+          item.className = 'list-card';
+          item.innerHTML = `
+            <div class="card-info">
+              <div class="card-title">${s.name}</div>
+              <div class="card-genres">${s.genres.join(' • ')}</div>
+            </div>
+            <button class="card-fav-btn ${isFav ? 'active' : ''}" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
+          `;
 
-        item.querySelector('.card-fav-btn').addEventListener('click', (e) => {
-          e.stopPropagation();
-          toggleFavorite(s.name);
-        });
+          item.querySelector('.card-fav-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleFavorite(s.name);
+          });
 
-        item.addEventListener('click', () => {
-          switchToMapView();
+          item.addEventListener('click', () => {
+            switchToMapView();
+            map.flyTo([s.lat, s.lng], 17, { animate: true, duration: 0.6 });
+            marker.openPopup();
+          });
+          listEl.appendChild(item);
+        }
+      });
+    }
           map.flyTo([s.lat, s.lng], 17, { animate: true, duration: 0.6 });
           marker.openPopup();
         });

@@ -491,11 +491,22 @@
       border-radius: 12px;
       width: 100%;
       max-width: 400px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
       box-shadow: 0 20px 40px rgba(0,0,0,0.8);
       overflow: hidden;
       animation: modalFadeIn 0.2s ease-out;
     }
-    @keyframes modalFadeIn {
+    .about-modal-body {
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      flex: 1;
+    }@keyframes modalFadeIn {
       from { opacity: 0; transform: scale(0.95) translateY(10px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
@@ -525,12 +536,6 @@
       background: #ef4444;
       color: #ffffff;
       border-color: #ef4444;
-    }
-    .about-modal-body {
-      padding: 20px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
     }
     .about-profile-hero {
       display: flex;
@@ -623,13 +628,14 @@
     .programme-modal-card {
       max-width: 480px;
       width: 92vw;
-      max-height: 88vh;
+      max-height: 85vh;
       display: flex;
       flex-direction: column;
     }
     .prog-modal-body {
       overflow-y: auto;
-      max-height: calc(88vh - 120px);
+      -webkit-overflow-scrolling: touch;
+      flex: 1;
       padding: 14px 16px;
     }
     .prog-tab-bar {
@@ -2994,11 +3000,19 @@
       });
     }
 
-    if (programmeModal) {
-      programmeModal.addEventListener('click', (e) => {
-        if (e.target === programmeModal) {
-          programmeModal.style.display = 'none';
-        }
+    if (progTabSunday && progTabMonday) {
+      progTabSunday.addEventListener('click', () => {
+        progTabSunday.classList.add('active');
+        progTabMonday.classList.remove('active');
+        progContentSunday.style.display = 'block';
+        progContentMonday.style.display = 'none';
+      });
+
+      progTabMonday.addEventListener('click', () => {
+        progTabMonday.classList.add('active');
+        progTabSunday.classList.remove('active');
+        progContentMonday.style.display = 'block';
+        progContentSunday.style.display = 'none';
       });
     }
 

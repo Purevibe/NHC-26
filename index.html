@@ -2044,25 +2044,30 @@
     let isDarkMode = true;
 
     const themeToggleBtn = document.getElementById('themeToggleBtn');
-    themeToggleBtn.addEventListener('click', () => {
-      if (isDarkMode) {
-        osmTiles.getContainer().classList.remove('dark-map-tiles');
-        themeToggleBtn.textContent = '🌙 Dark Map';
-        isDarkMode = false;
-      } else {
-        osmTiles.getContainer().classList.add('dark-map-tiles');
-        themeToggleBtn.textContent = '☀️ Light Map';
-        isDarkMode = true;
-      }
-    });
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        if (isDarkMode) {
+          osmTiles.getContainer().classList.remove('dark-map-tiles');
+          themeToggleBtn.textContent = '🌙 Dark Map';
+          isDarkMode = false;
+        } else {
+          osmTiles.getContainer().classList.add('dark-map-tiles');
+          themeToggleBtn.textContent = '☀️ Light Map';
+          isDarkMode = true;
+        }
+      });
+    }
 
     // 5. REAL-TIME GPS GEOLOCATION
     let userMarker = null;
     let accuracyCircle = null;
 
-    document.getElementById('findLocationBtn').addEventListener('click', () => {
-      map.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true });
-    });
+    const findLocationBtn = document.getElementById('findLocationBtn');
+    if (findLocationBtn) {
+      findLocationBtn.addEventListener('click', () => {
+        map.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true });
+      });
+    }
 
     // Global Location Sharing Handler
     window.shareLocation = function(lat, lng) {
@@ -2807,25 +2812,35 @@
 
     // Prevent map drag/zoom when touch-scrolling floating panel or preset pills
     if (window.L && L.DomEvent) {
-      L.DomEvent.disableScrollPropagation(poiFilterPanel);
-      L.DomEvent.disableClickPropagation(poiFilterPanel);
+      if (poiFilterPanel) {
+        L.DomEvent.disableScrollPropagation(poiFilterPanel);
+        L.DomEvent.disableClickPropagation(poiFilterPanel);
+      }
       document.querySelectorAll('.map-control-btn, .map-custom-controls').forEach(el => {
-        L.DomEvent.disableScrollPropagation(el);
-        L.DomEvent.disableClickPropagation(el);
+        if (el) {
+          L.DomEvent.disableScrollPropagation(el);
+          L.DomEvent.disableClickPropagation(el);
+        }
       });
       document.querySelectorAll('.preset-pills, .genres-wrapper').forEach(el => {
-        L.DomEvent.disableScrollPropagation(el);
+        if (el) {
+          L.DomEvent.disableScrollPropagation(el);
+        }
       });
     }
 
-    poiFilterToggleBtn.addEventListener('click', () => {
-      const isVisible = poiFilterPanel.style.display !== 'none';
-      poiFilterPanel.style.display = isVisible ? 'none' : 'block';
-    });
+    if (poiFilterToggleBtn && poiFilterPanel) {
+      poiFilterToggleBtn.addEventListener('click', () => {
+        const isVisible = poiFilterPanel.style.display !== 'none';
+        poiFilterPanel.style.display = isVisible ? 'none' : 'block';
+      });
+    }
 
-    closePoiPanelBtn.addEventListener('click', () => {
-      poiFilterPanel.style.display = 'none';
-    });
+    if (closePoiPanelBtn && poiFilterPanel) {
+      closePoiPanelBtn.addEventListener('click', () => {
+        poiFilterPanel.style.display = 'none';
+      });
+    }
 
     // Collapsible Accordion Toggle Listener
     document.querySelectorAll('.accordion-header').forEach(header => {
@@ -2836,30 +2851,33 @@
     });
 
     // Reset All Filters Listener
-    document.getElementById('resetFiltersBtn').addEventListener('click', () => {
-      // 1. Reset Presets to 'all'
-      selectedPresets.clear();
-      selectedPresets.add('all');
-      document.querySelectorAll('.preset-pill').forEach(p => {
-        p.classList.toggle('active', p.dataset.preset === 'all');
+    const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+    if (resetFiltersBtn) {
+      resetFiltersBtn.addEventListener('click', () => {
+        // 1. Reset Presets to 'all'
+        selectedPresets.clear();
+        selectedPresets.add('all');
+        document.querySelectorAll('.preset-pill').forEach(p => {
+          p.classList.toggle('active', p.dataset.preset === 'all');
+        });
+
+        // 2. Reset Genre Chips
+        selectedGenres.clear();
+        document.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
+
+        // 3. Reset Search Input
+        searchQuery = '';
+        if (searchInput) searchInput.value = '';
+        if (searchClearBtn) searchClearBtn.style.display = 'none';
+
+        // 4. Reset POI Layer Checkboxes & Visibility (All ON)
+        Object.keys(layerMap).forEach(lType => {
+          setLayerVisibility(lType, true);
+        });
+
+        applyFilters();
       });
-
-      // 2. Reset Genre Chips
-      selectedGenres.clear();
-      document.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
-
-      // 3. Reset Search Input
-      searchQuery = '';
-      if (searchInput) searchInput.value = '';
-      if (searchClearBtn) searchClearBtn.style.display = 'none';
-
-      // 4. Reset POI Layer Checkboxes & Visibility (All ON)
-      Object.keys(layerMap).forEach(lType => {
-        setLayerVisibility(lType, true);
-      });
-
-      applyFilters();
-    });
+    }
 
     const layerMap = {
       systems: systemsLayer,

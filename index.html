@@ -171,6 +171,8 @@
       flex-direction: column;
       gap: 8px;
       background: #111a2c;
+      overflow-y: auto;
+      max-height: calc(100vh - 120px);
     }
 
     /* Preset Filters & Genre Lists */
@@ -249,6 +251,8 @@
       background: #0a0f1d;
       border-radius: 6px;
       scrollbar-width: none;
+      max-height: 180px;
+      overflow-y: auto;
     }
     .genre-chip {
       padding: 3px 8px;
@@ -1004,6 +1008,19 @@
       }
       .mobile-tab-bar {
         display: flex;
+      }
+    }
+
+    /* Short Screens / Landscape Orientation Fix */
+    @media (max-height: 550px) {
+      .genres-wrapper {
+        max-height: 90px !important;
+      }
+      .controls-container {
+        max-height: calc(100vh - 75px) !important;
+      }
+      #system-list {
+        min-height: 180px;
       }
     }
   </style>

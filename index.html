@@ -343,22 +343,51 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      gap: 6px;
+    }
+    .map-control-btn {
+      background: #131d31;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .map-control-btn:hover {
+      background: #1e293b;
+      border-color: #f59e0b;
+    }
+    .map-menu-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      width: 100%;
     }
     .map-menu-toggle-btn {
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: #ffffff;
       border: 1.5px solid #38bdf8;
-      padding: 9px 15px;
-      border-radius: 8px;
-      font-size: 0.85rem;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.78rem;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 8px;
       transition: all 0.2s ease;
       letter-spacing: 0.3px;
+      width: 100%;
     }
     .map-menu-toggle-btn:hover {
       background: linear-gradient(135deg, #0369a1, #075985);
@@ -369,43 +398,31 @@
       font-size: 0.75rem;
       transition: transform 0.2s ease;
     }
-    .map-custom-controls.open .map-menu-toggle-btn .menu-icon-arrow {
+    .map-menu-container.open .map-menu-toggle-btn .menu-icon-arrow {
       transform: rotate(180deg);
     }
     .map-menu-dropdown {
       display: none;
       flex-direction: column;
       gap: 6px;
-      margin-top: 8px;
+      margin-top: 6px;
       background: #0f172a;
       border: 1.5px solid #334155;
       padding: 8px;
-      border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.75);
-      width: 190px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+      width: 175px;
       animation: modalFadeIn 0.15s ease-out;
     }
-    .map-custom-controls.open .map-menu-dropdown {
+    .map-menu-container.open .map-menu-dropdown {
       display: flex;
     }
-    .map-control-btn {
+    .map-menu-dropdown .map-control-btn {
       background: #1e293b;
-      color: #f8fafc;
-      border: 1px solid #334155;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.15s;
       width: 100%;
       text-align: left;
     }
-    .map-control-btn:hover {
+    .map-menu-dropdown .map-control-btn:hover {
       background: #334155;
       border-color: #f59e0b;
       color: #ffffff;
@@ -1251,19 +1268,22 @@
     <!-- MAP -->
     <div id="map">
       <div class="map-custom-controls" id="mapControlsWrapper">
-        <button class="map-menu-toggle-btn" id="mapMenuToggleBtn">
-          <span>☰</span> <span data-i18n="menuBtn">Menu</span> <span class="menu-icon-arrow">▼</span>
-        </button>
-        <div class="map-menu-dropdown" id="mapMenuDropdown">
-          <button class="map-control-btn" id="langToggleBtn">🌐 Language</button>
-          <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filters and Key</button>
-          <button class="map-control-btn" id="programmeToggleBtn">📅 Programme</button>
-          <button class="map-control-btn" id="historyToggleBtn">📜 Carnival History</button>
-          <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
-          <button class="map-control-btn" id="travelInfoToggleBtn">🚌 Travel Info</button>
-          <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
-          <button class="map-control-btn" id="themeToggleBtn">☀️ Light Map</button>
-          <button class="map-control-btn" id="aboutMeToggleBtn">ℹ️ About Me</button>
+        <button class="map-control-btn" id="langToggleBtn">🌐 Language</button>
+        <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filters and Key</button>
+        <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
+        <button class="map-control-btn" id="themeToggleBtn">☀️ Light Map</button>
+        
+        <div class="map-menu-container" id="mapMenuContainer">
+          <button class="map-menu-toggle-btn" id="mapMenuToggleBtn">
+            <span>☰</span> <span data-i18n="menuBtn">Menu</span> <span class="menu-icon-arrow">▼</span>
+          </button>
+          <div class="map-menu-dropdown" id="mapMenuDropdown">
+            <button class="map-control-btn" id="programmeToggleBtn">📅 Programme</button>
+            <button class="map-control-btn" id="historyToggleBtn">📜 Carnival History</button>
+            <button class="map-control-btn" id="travelInfoToggleBtn">🚌 Travel Info</button>
+            <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
+            <button class="map-control-btn" id="aboutMeToggleBtn">ℹ️ About Me</button>
+          </div>
         </div>
       </div>
 
@@ -2919,26 +2939,26 @@
     }
 
     // Floating Collapsible Menu Toggle Listener
-    const mapControlsWrapper = document.getElementById('mapControlsWrapper');
+    const mapMenuContainer = document.getElementById('mapMenuContainer');
     const mapMenuToggleBtn = document.getElementById('mapMenuToggleBtn');
 
-    if (mapMenuToggleBtn && mapControlsWrapper) {
+    if (mapMenuToggleBtn && mapMenuContainer) {
       mapMenuToggleBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        mapControlsWrapper.classList.toggle('open');
+        mapMenuContainer.classList.toggle('open');
       });
 
       // Close menu when any option inside the menu dropdown is clicked
-      document.querySelectorAll('.map-control-btn').forEach(btn => {
+      document.querySelectorAll('#mapMenuDropdown .map-control-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          mapControlsWrapper.classList.remove('open');
+          mapMenuContainer.classList.remove('open');
         });
       });
 
       // Close menu when clicking outside
       document.addEventListener('click', (e) => {
-        if (!mapControlsWrapper.contains(e.target)) {
-          mapControlsWrapper.classList.remove('open');
+        if (!mapMenuContainer.contains(e.target)) {
+          mapMenuContainer.classList.remove('open');
         }
       });
     }

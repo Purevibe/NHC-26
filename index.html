@@ -2429,7 +2429,7 @@
         const btn = document.createElement('button');
         btn.className = 'preset-pill active';
         btn.dataset.customGenre = genre;
-        btn.innerHTML = `🎵 ${genre}`;
+        btn.innerHTML = `🔊 ${genre}`;
         btn.addEventListener('click', () => {
           selectedGenres.delete(genre);
           const chip = document.querySelector(`.genre-chip[data-genre="${genre}"]`);
@@ -2469,7 +2469,7 @@
     function createSoundIcon(isFav) {
       return L.divIcon({
         className: 'custom-sys-icon',
-        html: `<div class="system-pin ${isFav ? 'is-fav' : ''}">${isFav ? '⭐' : '🎵'}</div>`,
+        html: `<div class="system-pin ${isFav ? 'is-fav' : ''}">${isFav ? '⭐' : '🔊'}</div>`,
         iconSize: [28, 28],
         iconAnchor: [14, 14],
         popupAnchor: [0, -14]

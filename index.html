@@ -1016,30 +1016,66 @@
     <div class="ticker-content-wrap">
       <div class="ticker-track">
         <div class="ticker-item">
-          ⛔ <span class="clickable-station" data-station="Ladbroke Grove Station">Ladbroke Grove Station</span>: CLOSED ALL WEEKEND (Circle / Hammersmith & City)
+          ⛔ <span class="clickable-station" data-station="Ladbroke Grove Station">Ladbroke Grove</span>: Closed all day.
         </div>
         <div class="ticker-item">
-          ⚠️ <span class="clickable-station" data-station="Westbourne Park Station">Westbourne Park Station</span>: EXIT ONLY from 11:00 AM (No Entry)
+          ⚠️ <span class="clickable-station" data-station="Latimer Road Station">Latimer Road</span>: Closes at 11pm and may close during busy periods.
         </div>
         <div class="ticker-item">
-          ⚠️ <span class="clickable-station" data-station="Holland Park Station">Holland Park Station</span>: Often closes early (~15:00)
+          ⚠️ <span class="clickable-station" data-station="Notting Hill Gate Station">Notting Hill Gate</span>: No entry between 11am and 6pm. District & Circle lines will not stop, and no interchange between Central & District/Circle.
         </div>
         <div class="ticker-item">
-          ℹ️ Recommended Alternatives: <span class="clickable-station" data-station="Bayswater Station">Bayswater</span> & <span class="clickable-station" data-station="Queensway Station">Queensway</span> Stations
+          ⚠️ <span class="clickable-station" data-station="Westbourne Park Station">Westbourne Park</span>: No entry from 11am.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Holland Park Station">Holland Park</span>: No entry after 11am and the station closes at 3pm.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Queensway Station">Queensway</span>: No entry between 11am and 6pm.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Royal Oak Station">Royal Oak</span>: No entry after 11am and the station closes at 6pm.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Shepherd's Bush">Shepherd’s Bush</span>: No ticket issuing facilities and no ‘down’ escalator after 4pm.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Kensal Green Station">Kensal Green</span>: Queues outside the station are expected.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Kensal Rise Station">Kensal Rise</span>: Chamberlayne Road entrance closes at 6pm, queuing outside Station Terrace.
         </div>
 
         <!-- Duplicated track for seamless infinite scroll loop -->
         <div class="ticker-item">
-          ⛔ <span class="clickable-station" data-station="Ladbroke Grove Station">Ladbroke Grove Station</span>: CLOSED ALL WEEKEND (Circle / Hammersmith & City)
+          ⛔ <span class="clickable-station" data-station="Ladbroke Grove Station">Ladbroke Grove</span>: Closed all day.
         </div>
         <div class="ticker-item">
-          ⚠️ <span class="clickable-station" data-station="Westbourne Park Station">Westbourne Park Station</span>: EXIT ONLY from 11:00 AM (No Entry)
+          ⚠️ <span class="clickable-station" data-station="Latimer Road Station">Latimer Road</span>: Closes at 11pm and may close during busy periods.
         </div>
         <div class="ticker-item">
-          ⚠️ <span class="clickable-station" data-station="Holland Park Station">Holland Park Station</span>: Often closes early (~15:00)
+          ⚠️ <span class="clickable-station" data-station="Notting Hill Gate Station">Notting Hill Gate</span>: No entry between 11am and 6pm. District & Circle lines will not stop, and no interchange between Central & District/Circle.
         </div>
         <div class="ticker-item">
-          ℹ️ Recommended Alternatives: <span class="clickable-station" data-station="Bayswater Station">Bayswater</span> & <span class="clickable-station" data-station="Queensway Station">Queensway</span> Stations
+          ⚠️ <span class="clickable-station" data-station="Westbourne Park Station">Westbourne Park</span>: No entry from 11am.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Holland Park Station">Holland Park</span>: No entry after 11am and the station closes at 3pm.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Queensway Station">Queensway</span>: No entry between 11am and 6pm.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Royal Oak Station">Royal Oak</span>: No entry after 11am and the station closes at 6pm.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Shepherd's Bush">Shepherd’s Bush</span>: No ticket issuing facilities and no ‘down’ escalator after 4pm.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Kensal Green Station">Kensal Green</span>: Queues outside the station are expected.
+        </div>
+        <div class="ticker-item">
+          ⚠️ <span class="clickable-station" data-station="Kensal Rise Station">Kensal Rise</span>: Chamberlayne Road entrance closes at 6pm, queuing outside Station Terrace.
         </div>
       </div>
     </div>
@@ -1713,17 +1749,18 @@
 
     // Tube & Rail Stations
     const tubeStations = [
-      { name: "Westbourne Park Station", lines: "Circle • Hammersmith & City", status: "⚠️ Exit Only from 11:00 (No Entry)", statusType: "warning", lat: 51.5208, lng: -0.2010 },
-      { name: "Ladbroke Grove Station", lines: "Circle • Hammersmith & City", status: "⛔ CLOSED ALL WEEKEND", statusType: "closed", lat: 51.5173, lng: -0.2106 },
-      { name: "Notting Hill Gate Station", lines: "Central • Circle • District", status: "ℹ️ Extremely Busy / Peak Restrictions", statusType: "busy", lat: 51.5091, lng: -0.1961 },
-      { name: "Holland Park Station", lines: "Central Line", status: "⚠️ Often closes early ~15:00", statusType: "warning", lat: 51.5076, lng: -0.2060 },
-      { name: "Royal Oak Station", lines: "Circle • Hammersmith & City", status: "⚠️ Exit Only 11:00-18:00", statusType: "warning", lat: 51.5190, lng: -0.1878 },
-      { name: "Latimer Road Station", lines: "Circle • Hammersmith & City", status: "ℹ️ Open (Closes ~23:30)", statusType: "busy", lat: 51.5134, lng: -0.2178 },
-      { name: "Bayswater Station", lines: "Circle • District", status: "ℹ️ Open (Recommended alternative)", statusType: "open", lat: 51.5123, lng: -0.1879 },
-      { name: "Queensway Station", lines: "Central Line", status: "ℹ️ Open (Recommended Central alternative)", statusType: "open", lat: 51.5107, lng: -0.1872 },
-      { name: "Kensal Rise Station", lines: "London Overground", status: "🚆 Open (Overground services)", statusType: "open", lat: 51.5305, lng: -0.2205 },
-      { name: "Kensal Green Station", lines: "Bakerloo • London Overground", status: "🚇 Open (North perimeter walking distance)", statusType: "open", lat: 51.5305, lng: -0.2248 },
-      { name: "Paddington Station", lines: "Elizabeth Line • Rail • Underground", status: "🚆 Major interchange hub to East", statusType: "open", lat: 51.5154, lng: -0.1755 }
+      { name: "Ladbroke Grove Station", lines: "Circle • Hammersmith & City", status: "⛔ Closed all day.", statusType: "closed", lat: 51.5173, lng: -0.2106 },
+      { name: "Latimer Road Station", lines: "Circle • Hammersmith & City", status: "⚠️ Closes at 11pm and may close during busy periods.", statusType: "warning", lat: 51.5134, lng: -0.2178 },
+      { name: "Notting Hill Gate Station", lines: "Central • Circle • District", status: "⚠️ No entry 11am-6pm. District/Circle do not stop. No Central-District/Circle interchange.", statusType: "warning", lat: 51.5091, lng: -0.1961 },
+      { name: "Westbourne Park Station", lines: "Circle • Hammersmith & City", status: "⚠️ No entry from 11am.", statusType: "warning", lat: 51.5208, lng: -0.2010 },
+      { name: "Holland Park Station", lines: "Central Line", status: "⚠️ No entry after 11am and closes at 3pm.", statusType: "warning", lat: 51.5076, lng: -0.2060 },
+      { name: "Queensway Station", lines: "Central Line", status: "⚠️ No entry between 11am and 6pm.", statusType: "warning", lat: 51.5107, lng: -0.1872 },
+      { name: "Royal Oak Station", lines: "Circle • Hammersmith & City", status: "⚠️ No entry after 11am and closes at 6pm.", statusType: "warning", lat: 51.5190, lng: -0.1878 },
+      { name: "Shepherd's Bush", lines: "Central Line • Overground", status: "⚠️ No ticket issuing facilities and no down escalator after 4pm.", statusType: "warning", lat: 51.5046, lng: -0.2187 },
+      { name: "Kensal Green Station", lines: "Bakerloo • London Overground", status: "⚠️ Queues outside station expected.", statusType: "warning", lat: 51.5305, lng: -0.2248 },
+      { name: "Kensal Rise Station", lines: "London Overground", status: "⚠️ Chamberlayne Rd entrance closes at 6pm, queuing via Station Terrace.", statusType: "warning", lat: 51.5305, lng: -0.2205 },
+      { name: "Bayswater Station", lines: "Circle • District", status: "🟢 Open (Recommended alternative)", statusType: "open", lat: 51.5123, lng: -0.1879 },
+      { name: "Paddington Station", lines: "Elizabeth Line • Rail • Underground", status: "🟢 Major interchange hub (Recommended)", statusType: "open", lat: 51.5154, lng: -0.1755 }
     ];
 
     // Parade Route Geometry

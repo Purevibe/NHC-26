@@ -1742,6 +1742,7 @@
             <button class="map-control-btn" id="historyToggleBtn">📜 Carnival History</button>
             <button class="map-control-btn" id="travelInfoToggleBtn">🚌 Travel Info</button>
             <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
+            <button class="map-control-btn" id="shareMapToggleBtn">📲 Share Map</button>
             <button class="map-control-btn" id="aboutMeToggleBtn">ℹ️ About Me</button>
           </div>
         </div>
@@ -1867,6 +1868,41 @@
                 style="background: #1e293b; border: 1px solid #334155; justify-content: flex-start; gap: 10px;">🇵🇰
                 اردو (Urdu)</button>
             </div>
+          </div>
+        </div>
+      <!-- SHARE MAP MODAL OVERLAY -->
+      <div id="shareMapModal" class="about-modal-overlay" style="display: none;">
+        <div class="about-modal-card" style="max-width: 380px; text-align: center;">
+          <div class="about-modal-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 1.3rem;">📲</span>
+              <h2 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0;" data-i18n="shareMapTitle">
+                Share Map App</h2>
+            </div>
+            <button id="closeShareModalBtn" class="about-modal-close">✕</button>
+          </div>
+
+          <div class="about-modal-body" style="padding: 20px 16px;">
+            <div style="font-size: 0.88rem; color: #cbd5e1; font-weight: 600; margin-bottom: 14px;" data-i18n="shareMapDesc">
+              Scan QR code with any phone camera or share the web link below with friends!
+            </div>
+
+            <!-- Embedded QR Code -->
+            <div style="background: #ffffff; padding: 12px; border-radius: 12px; display: inline-block; box-shadow: 0 4px 16px rgba(0,0,0,0.5); margin-bottom: 16px;">
+              <img src="TinyURL mtpcxt66-qr QR code.png" alt="NHC '26 App QR Code" style="width: 210px; height: 210px; display: block; border-radius: 6px;" />
+            </div>
+
+            <!-- URL Display & Copy Box -->
+            <div style="background: #090e17; border: 1px solid #334155; border-radius: 8px; padding: 10px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+              <span id="shareUrlText" style="font-size: 0.82rem; color: #f59e0b; font-weight: 800; word-break: break-all;">https://purevibe.github.io/NHC-26/</span>
+              <button id="copyShareUrlBtn" style="background: #1e293b; color: #38bdf8; border: 1px solid #38bdf8; border-radius: 6px; padding: 6px 10px; font-size: 0.74rem; font-weight: 800; cursor: pointer; white-space: nowrap;">
+                📋 Copy Link
+              </button>
+            </div>
+
+            <button id="nativeShareBtn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; border: 1px solid #3b82f6; border-radius: 8px; padding: 10px 16px; font-size: 0.85rem; font-weight: 800; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);">
+              <span>📲 Share via Phone</span>
+            </button>
           </div>
         </div>
       </div>
@@ -3731,6 +3767,66 @@
           closeDrawerBtn.addEventListener('click', switchToMapView);
         }
 
+        // Share Map Modal Listeners
+        const shareMapModal = document.getElementById('shareMapModal');
+        const shareMapToggleBtn = document.getElementById('shareMapToggleBtn');
+        const closeShareModalBtn = document.getElementById('closeShareModalBtn');
+        const copyShareUrlBtn = document.getElementById('copyShareUrlBtn');
+        const nativeShareBtn = document.getElementById('nativeShareBtn');
+
+        if (shareMapToggleBtn && shareMapModal) {
+          shareMapToggleBtn.addEventListener('click', () => {
+            shareMapModal.style.display = 'flex';
+          });
+        }
+
+        if (closeShareModalBtn && shareMapModal) {
+          closeShareModalBtn.addEventListener('click', () => {
+            shareMapModal.style.display = 'none';
+          });
+        }
+
+        if (shareMapModal) {
+          shareMapModal.addEventListener('click', (e) => {
+            if (e.target === shareMapModal) {
+              shareMapModal.style.display = 'none';
+            }
+          });
+        }
+
+        if (copyShareUrlBtn) {
+          copyShareUrlBtn.addEventListener('click', () => {
+            const url = 'https://purevibe.github.io/NHC-26/';
+            navigator.clipboard.writeText(url).then(() => {
+              copyShareUrlBtn.textContent = '✅ Copied!';
+              setTimeout(() => { copyShareUrlBtn.textContent = '📋 Copy Link'; }, 2000);
+            }).catch(() => {
+              const el = document.createElement('textarea');
+              el.value = url;
+              document.body.appendChild(el);
+              el.select();
+              document.execCommand('copy');
+              document.body.removeChild(el);
+              copyShareUrlBtn.textContent = '✅ Copied!';
+              setTimeout(() => { copyShareUrlBtn.textContent = '📋 Copy Link'; }, 2000);
+            });
+          });
+        }
+
+        if (nativeShareBtn) {
+          nativeShareBtn.addEventListener('click', () => {
+            if (navigator.share) {
+              navigator.share({
+                title: "Unofficial Notting Hill Carnival '26 Map App",
+                text: "Interactive map for Notting Hill Carnival 2026. Explore Sound Systems, Food Vendors, Parade Route & Toilets!",
+                url: "https://purevibe.github.io/NHC-26/"
+              }).catch(err => console.log('Share error:', err));
+            } else {
+              copyShareUrlBtn.click();
+            }
+          });
+        }
+
         // About Me Modal Listener
         const aboutMeModal = document.getElementById('aboutMeModal');
         const aboutMeToggleBtn = document.getElementById('aboutMeToggleBtn');
@@ -3901,7 +3997,7 @@
           en: {
             menuBtn: "Menu", langBtn: "🏴󠁧󠁢󠁥󠁮󠁧󠁿 Language", poiFilterBtn: "🗺️ Filters and Key", progBtn: "📅 Programme", histBtn: "📜 Carnival History",
             findLocBtn: "📍 Find My Location", travelBtn: "🚌 Travel Info", tflAlertsBtn: "🚇 TfL Alerts", lightMapBtn: "☀️ Light Map",
-            darkMapBtn: "🌙 Dark Map", aboutMeBtn: "ℹ️ About Me", clearFilters: "Clear Filters", selectAll: "Select All",
+            darkMapBtn: "🌙 Dark Map", shareMapBtn: "📲 Share Map", aboutMeBtn: "ℹ️ About Me", clearFilters: "Clear Filters", selectAll: "Select All",
             searchPlaceholder: "Search sound system or genre...", showingSystems: "Showing {count} of 37 Systems",
             poiTitle: "Map Filters and Key", resetBtn: "RESET", facTitle: "📍 Facilities & Map Layers",
             soundSystems: "🔊 Sound Systems (37)", foodVendors: "🍗 Featured Food Vendors (1)", jouvertLoc: "🌅 J'ouvert Location",
@@ -3926,7 +4022,7 @@
           es: {
             menuBtn: "Menú", langBtn: "🇲🇽 Idioma", poiFilterBtn: "🗺️ Filtros y Clave", progBtn: "📅 Programa", histBtn: "📜 Historia del Carnaval",
             findLocBtn: "📍 Buscar mi Ubicación", travelBtn: "🚌 Info de Viaje", tflAlertsBtn: "🚇 Alertas TfL", lightMapBtn: "☀️ Mapa Claro",
-            darkMapBtn: "🌙 Mapa Oscuro", aboutMeBtn: "ℹ️ Sobre Mí", clearFilters: "Borrar Filtros", selectAll: "Seleccionar Todo",
+            darkMapBtn: "🌙 Mapa Oscuro", shareMapBtn: "📲 Compartir Mapa", aboutMeBtn: "ℹ️ Sobre Mí", clearFilters: "Borrar Filtros", selectAll: "Seleccionar Todo",
             searchPlaceholder: "Buscar sound system o género...", showingSystems: "Mostrando {count} de 37 Sistemas",
             poiTitle: "Filtros de Mapa y Clave", resetBtn: "REINICIAR", facTitle: "📍 Instalaciones y Capas",
             soundSystems: "🔊 Sound Systems (37)", foodVendors: "🍗 Puestos de Comida (1)", jouvertLoc: "🌅 Ubicación J'ouvert",
@@ -4032,7 +4128,7 @@
           pt: {
             menuBtn: "Menu", langBtn: "🇧🇷 Idioma", poiFilterBtn: "🗺️ Filtros e Legenda", progBtn: "📅 Programação", histBtn: "📜 História do Carnaval",
             findLocBtn: "📍 Encontrar Minha Localização", travelBtn: "🚌 Info de Transporte", tflAlertsBtn: "🚇 Alertas TfL", lightMapBtn: "☀️ Mapa Claro",
-            darkMapBtn: "🌙 Mapa Escuro", aboutMeBtn: "ℹ️ Sobre Mim", clearFilters: "Limpar Filtros", selectAll: "Selecionar Tudo",
+            darkMapBtn: "🌙 Mapa Escuro", shareMapBtn: "📲 Compartilhar Mapa", aboutMeBtn: "ℹ️ Sobre Mim", clearFilters: "Limpar Filtros", selectAll: "Selecionar Tudo",
             searchPlaceholder: "Buscar sound system ou gênero...", showingSystems: "Mostrando {count} de 37 Sistemas",
             poiTitle: "Filtros e Legenda do Mapa", resetBtn: "REINICIAR", facTitle: "📍 Instalações e Camadas",
             soundSystems: "🔊 Sound Systems (37)", foodVendors: "🍗 Vendedores de Comida (1)", jouvertLoc: "🌅 Localização J'ouvert",
@@ -4138,7 +4234,7 @@
           fr: {
             menuBtn: "Menu", langBtn: "🇫🇷 Langue", poiFilterBtn: "🗺️ Filtres et Légende", progBtn: "📅 Programme", histBtn: "📜 Histoire du Carnaval",
             findLocBtn: "📍 Ma Position", travelBtn: "🚌 Infos Transports", tflAlertsBtn: "🚇 Alertes TfL", lightMapBtn: "☀️ Carte Claire",
-            darkMapBtn: "🌙 Carte Sombre", aboutMeBtn: "ℹ️ À Propos", clearFilters: "Effacer les Filtres", selectAll: "Tout Sélectionner",
+            darkMapBtn: "🌙 Carte Sombre", shareMapBtn: "📲 Partager la Carte", aboutMeBtn: "ℹ️ À Propos", clearFilters: "Effacer les Filtres", selectAll: "Tout Sélectionner",
             searchPlaceholder: "Rechercher sound system ou genre...", showingSystems: "{count} sur 37 Systèmes Affichés",
             poiTitle: "Filtres et Légende de la Carte", resetBtn: "RÉINITIALISER", facTitle: "📍 Équipements & Cartes",
             soundSystems: "🔊 Sound Systems (37)", foodVendors: "🍗 Stands Gastronomie (1)", jouvertLoc: "🌅 Départ J'ouvert",
@@ -4244,7 +4340,7 @@
           it: {
             menuBtn: "Menu", langBtn: "🇮🇹 Lingua", poiFilterBtn: "🗺️ Filtri e Legenda", progBtn: "📅 Programma", histBtn: "📜 Storia del Carnevale",
             findLocBtn: "📍 Trova la mia Posizione", travelBtn: "🚌 Info Trasporti", tflAlertsBtn: "🚇 Avvisi TfL", lightMapBtn: "☀️ Mappa Chiara",
-            darkMapBtn: "🌙 Mappa Scura", aboutMeBtn: "ℹ️ Su di Me", clearFilters: "Cancella Filtri", selectAll: "Seleziona Tutto",
+            darkMapBtn: "🌙 Mappa Scura", shareMapBtn: "📲 Condividi Mappa", aboutMeBtn: "ℹ️ Su di Me", clearFilters: "Cancella Filtri", selectAll: "Seleziona Tutto",
             searchPlaceholder: "Cerca sound system o genere...", showingSystems: "Mostrando {count} di 37 Sistemi",
             poiTitle: "Filtri e Legenda Mappa", resetBtn: "RIPRISTINA", facTitle: "📍 Servizi e Livelli",
             soundSystems: "🔊 Sound Systems (37)", foodVendors: "🍗 Stand Gastronomici (1)", jouvertLoc: "🌅 Partenza J'ouvert",
@@ -4350,7 +4446,7 @@
           ja: {
             menuBtn: "メニュー", langBtn: "🇯🇵 言語切替", poiFilterBtn: "🗺️ フィルター & 凡例", progBtn: "📅 スケジュール", histBtn: "📜 カーニバルの歴史",
             findLocBtn: "📍 現在地を検索", travelBtn: "🚌 交通アクセス案内", tflAlertsBtn: "🚇 TfL 運行情報", lightMapBtn: "☀️ ライトマップ",
-            darkMapBtn: "🌙 ダークマップ", aboutMeBtn: "ℹ️ 制作者について", clearFilters: "リセット", selectAll: "すべて選択",
+            darkMapBtn: "🌙 ダークマップ", shareMapBtn: "📲 マップを共有", aboutMeBtn: "ℹ️ 制作者について", clearFilters: "リセット", selectAll: "すべて選択",
             searchPlaceholder: "サウンドシステムやジャンルを検索...", showingSystems: "37件中 {count} 件のシステムを表示",
             poiTitle: "マップフィルターと凡例", resetBtn: "初期化", facTitle: "📍 施設 & マップレイヤー",
             soundSystems: "🔊 サウンドシステム (37)", foodVendors: "🍗 おすすめフードブース (1)", jouvertLoc: "🌅 ジュヴェー出発地",
@@ -4456,7 +4552,7 @@
           ko: {
             menuBtn: "메뉴", langBtn: "🇰🇷 언어 변경", poiFilterBtn: "🗺️ 필터 및 범례", progBtn: "📅 일정", histBtn: "📜 카니발 역사",
             findLocBtn: "📍 내 위치 찾기", travelBtn: "🚌 교통 안내", tflAlertsBtn: "🚇 TfL 알림", lightMapBtn: "☀️ 밝은 지도",
-            darkMapBtn: "🌙 어두운 지도", aboutMeBtn: "ℹ️ 제작자 정보", clearFilters: "필터 초기화", selectAll: "전체 선택",
+            darkMapBtn: "🌙 어두운 지도", shareMapBtn: "📲 지도 공유", aboutMeBtn: "ℹ️ 제작자 정보", clearFilters: "필터 초기화", selectAll: "전체 선택",
             searchPlaceholder: "사운드 시스템 또는 장르 검색...", showingSystems: "37개 중 {count}개 시스템 표시",
             poiTitle: "지도 필터 및 범례", resetBtn: "초기화", facTitle: "📍 시설 및 지도 레이어",
             soundSystems: "🔊 사운드 시스템 (37)", foodVendors: "🍗 추천 먹거리 부스 (1)", jouvertLoc: "🌅 주베(J'ouvert) 출발지",
@@ -4565,7 +4661,7 @@
           zh: {
             menuBtn: "菜单", langBtn: "🇨🇳 语言选择", poiFilterBtn: "🗺️ 筛选与图例", progBtn: "📅 活动日程", histBtn: "📜 狂欢节历史",
             findLocBtn: "📍 定位我的位置", travelBtn: "🚌 交通出行指南", tflAlertsBtn: "🚇 TfL 运行提示", lightMapBtn: "☀️ 浅色地图",
-            darkMapBtn: "🌙 深色地图", aboutMeBtn: "ℹ️ 关于开发者", clearFilters: "清除筛选", selectAll: "全选",
+            darkMapBtn: "🌙 深色地图", shareMapBtn: "📲 分享地图", aboutMeBtn: "ℹ️ 关于开发者", clearFilters: "清除筛选", selectAll: "全选",
             searchPlaceholder: "搜索音响系统或音乐风格...", showingSystems: "显示 37 个系统中的 {count} 个",
             poiTitle: "地图图层与筛选", resetBtn: "重置", facTitle: "📍 设施与地图图层",
             soundSystems: "🔊 音响系统 (37)", foodVendors: "🍗 特色美食摊位 (1)", jouvertLoc: "🌅 J'ouvert 晨间开幕点",
@@ -4674,7 +4770,7 @@
           ar: {
             menuBtn: "القائمة", langBtn: "🇸🇦 اللغة", poiFilterBtn: "🗺️ تصفية والمفتاح", progBtn: "📅 برنامج الفعاليات", histBtn: "📜 تاريخ الكرنفال",
             findLocBtn: "📍 تحديد موقعي", travelBtn: "🚌 معلومات المواصلات", tflAlertsBtn: "🚇 تنبيهات شبكة النقل", lightMapBtn: "☀️ خريطة فاتحة",
-            darkMapBtn: "🌙 خريطة داكنة", aboutMeBtn: "ℹ️ نبذة عني", clearFilters: "مسح الفلاتر", selectAll: "تحديد الكل",
+            darkMapBtn: "🌙 خريطة داكنة", shareMapBtn: "📲 مشاركة الخريطة", aboutMeBtn: "ℹ️ نبذة عني", clearFilters: "مسح الفلاتر", selectAll: "تحديد الكل",
             searchPlaceholder: "البحث عن نظام صوتي أو نوع موسيقى...", showingSystems: "عرض {count} من أصل 37 نظامًا صوتيًا",
             poiTitle: "فلاتر الخريطة والدليل", resetBtn: "إعادة ضبط", facTitle: "📍 المرافق وطبقات الخريطة",
             soundSystems: "🔊 الأنظمة الصوتية (37)", foodVendors: "🍗 أكشاك الطعام المميزة (1)", jouvertLoc: "🌅 موقع انطلاق انطلاق جوفر",
@@ -4783,7 +4879,7 @@
           ur: {
             menuBtn: "مینو", langBtn: "🇵🇰 زبان", poiFilterBtn: "🗺️ فلٹرز اور رہنمائی", progBtn: "📅 پروگرام", histBtn: "📜 کارنیوال کی تاریخ",
             findLocBtn: "📍 میرا مقام تلاش کریں", travelBtn: "🚌 سفر کی معلومات", tflAlertsBtn: "🚇 TfL الرٹس", lightMapBtn: "☀️ روشن نقشہ",
-            darkMapBtn: "🌙 تاریک نقشہ", aboutMeBtn: "ℹ️ میرے بارے میں", clearFilters: "فلٹرز صاف کریں", selectAll: "تمام منتخب کریں",
+            darkMapBtn: "🌙 تاریک نقشہ", shareMapBtn: "📲 نقشہ شیئر کریں", aboutMeBtn: "ℹ️ میرے بارے میں", clearFilters: "فلٹرز صاف کریں", selectAll: "تمام منتخب کریں",
             searchPlaceholder: "ساؤنڈ سسٹم یا موسیقی کا انداز تلاش کریں...", showingSystems: "37 میں سے {count} سسٹمز دکھائے جا رہے ہیں",
             poiTitle: "نقشہ فلٹرز اور رہنمائی", resetBtn: "ری سیٹ", facTitle: "📍 سہولیات اور نقشہ کی تہیں",
             soundSystems: "🔊 ساؤنڈ سسٹمز (37)", foodVendors: "🍗 کھانے کے سٹالز (1)", jouvertLoc: "🌅 جوورٹ کا آغاز",
@@ -4892,7 +4988,7 @@
           tr: {
             menuBtn: "Menü", langBtn: "🇹🇷 Dil Seçimi", poiFilterBtn: "🗺️ Filtreler ve Harita Anahtarı", progBtn: "📅 Program", histBtn: "📜 Karnaval Tarihi",
             findLocBtn: "📍 Konumumu Bul", travelBtn: "🚌 Ulaşım Bilgisi", tflAlertsBtn: "🚇 TfL Bildirimleri", lightMapBtn: "☀️ Açık Harita",
-            darkMapBtn: "🌙 Koyu Harita", aboutMeBtn: "ℹ️ Hakkımda", clearFilters: "Filtreleri Temizle", selectAll: "Tümünü Seç",
+            darkMapBtn: "🌙 Koyu Harita", shareMapBtn: "📲 Haritayı Paylaş", aboutMeBtn: "ℹ️ Hakkımda", clearFilters: "Filtreleri Temizle", selectAll: "Tümünü Seç",
             searchPlaceholder: "Ses sistemi veya müzik türü ara...", showingSystems: "37 Sistemden {count} Tanesi Gösteriliyor",
             poiTitle: "Harita Filtreleri ve Bilgi", resetBtn: "SIFIRLA", facTitle: "📍 Tesisler ve Harita Katmanları",
             soundSystems: "🔊 Ses Sistemleri (37)", foodVendors: "🍗 Öne Çıkan Yemek Stantları (1)", jouvertLoc: "🌅 J'ouvert Başlangıç Noktası",
@@ -4998,7 +5094,7 @@
           pl: {
             menuBtn: "Menu", langBtn: "🇵🇱 Język", poiFilterBtn: "🗺️ Filtry i Legenda", progBtn: "📅 Program", histBtn: "📜 Historia Karnawału",
             findLocBtn: "📍 Znajdź Moją Lokalizację", travelBtn: "🚌 Info o Transportu", tflAlertsBtn: "🚇 Ostrzeżenia TfL", lightMapBtn: "☀️ Jasna Mapa",
-            darkMapBtn: "🌙 Ciemna Mapa", aboutMeBtn: "ℹ️ O Mnie", clearFilters: "Wyczyść Filtry", selectAll: "Zaznacz Wszystko",
+            darkMapBtn: "🌙 Ciemna Mapa", shareMapBtn: "📲 Udostępnij Mapę", aboutMeBtn: "ℹ️ O Mnie", clearFilters: "Wyczyść Filtry", selectAll: "Zaznacz Wszystko",
             searchPlaceholder: "Szukaj sound systemu lub gatunku...", showingSystems: "Pokazywanie {count} z 37 Systemów",
             poiTitle: "Filtry i Legenda Mapy", resetBtn: "RESETUJ", facTitle: "📍 Obiekty i Warstwy Mapy",
             soundSystems: "🔊 Sound Systemy (37)", foodVendors: "🍗 Stoiska Gastronomiczne (1)", jouvertLoc: "🌅 Miejsce Startu J'ouvert",
@@ -5104,7 +5200,7 @@
           ur: {
             menuBtn: "مینو", langBtn: "🇵🇰 زبان", poiFilterBtn: "🗺️ فلٹرز اور رہنمائی", progBtn: "📅 پروگرام", histBtn: "📜 کارنیوال کی تاریخ",
             findLocBtn: "📍 میرا مقام تلاش کریں", travelBtn: "🚌 سفر کی معلومات", tflAlertsBtn: "🚇 TfL الرٹس", lightMapBtn: "☀️ روشن نقشہ",
-            darkMapBtn: "🌙 تاریک نقشہ", aboutMeBtn: "ℹ️ میرے بارے میں", clearFilters: "فلٹرز صاف کریں", selectAll: "تمام منتخب کریں",
+            darkMapBtn: "🌙 تاریک نقشہ", shareMapBtn: "📲 نقشہ شیئر کریں", aboutMeBtn: "ℹ️ میرے بارے میں", clearFilters: "فلٹرز صاف کریں", selectAll: "تمام منتخب کریں",
             searchPlaceholder: "ساؤنڈ سسٹم یا موسیقی کا انداز تلاش کریں...", showingSystems: "37 میں سے {count} سسٹمز دکھائے جا رہے ہیں",
             poiTitle: "نقشہ فلٹرز اور رہنمائی", resetBtn: "ری سیٹ", facTitle: "📍 سہولیات اور نقشہ کی تہیں",
             soundSystems: "🔊 ساؤنڈ سسٹمز (37)", foodVendors: "🍗 کھانے کے سٹالز (1)", jouvertLoc: "🌅 جوورٹ کا آغاز",
@@ -5156,6 +5252,7 @@
           const findLocBtnEl = document.getElementById('findLocationBtn');
           const travelBtnEl = document.getElementById('travelInfoToggleBtn');
           const tflAlertsBtnEl = document.getElementById('tflAlertsToggleBtn');
+          const shareBtnEl = document.getElementById('shareMapToggleBtn');
           const themeBtnEl = document.getElementById('themeToggleBtn');
           const aboutMeBtnEl = document.getElementById('aboutMeToggleBtn');
 
@@ -5166,6 +5263,7 @@
           if (findLocBtnEl) findLocBtnEl.textContent = t.findLocBtn;
           if (travelBtnEl) travelBtnEl.textContent = t.travelBtn;
           if (tflAlertsBtnEl) tflAlertsBtnEl.textContent = t.tflAlertsBtn;
+          if (shareBtnEl && t.shareMapBtn) shareBtnEl.textContent = t.shareMapBtn;
           if (themeBtnEl) {
             const isDark = document.body.classList.contains('dark-theme');
             themeBtnEl.textContent = isDark ? t.lightMapBtn : t.darkMapBtn;

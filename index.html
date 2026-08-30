@@ -1861,8 +1861,34 @@
       map.locate({ setView: true, maxZoom: 17, enableHighAccuracy: true });
     });
 
+    // Global Location Sharing Handler
+    window.shareLocation = function(lat, lng) {
+      const gmapsShareURL = `https://www.google.com/maps?q=${lat},${lng}`;
+      const shareData = {
+        title: "My Live Location - Notting Hill Carnival '26",
+        text: `📍 I'm currently at Notting Hill Carnival '26! Find me here:`,
+        url: gmapsShareURL
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData).catch(err => {
+          console.log("Share dismissed or error:", err);
+        });
+      } else {
+        // Fallback: Copy link to clipboard
+        navigator.clipboard.writeText(gmapsShareURL).then(() => {
+          alert("📍 Location link copied to clipboard!\n\n" + gmapsShareURL);
+        }).catch(() => {
+          prompt("Copy your location link:", gmapsShareURL);
+        });
+      }
+    };
+
     map.on('locationfound', (e) => {
       const radius = e.accuracy / 2;
+      const lat = e.latlng.lat.toFixed(6);
+      const lng = e.latlng.lng.toFixed(6);
+
       if (userMarker) map.removeLayer(userMarker);
       if (accuracyCircle) map.removeLayer(accuracyCircle);
 
@@ -1873,8 +1899,18 @@
         iconAnchor: [9, 9]
       });
 
+      const userPopupHTML = `
+        <div style="min-width: 210px; text-align: center;">
+          <div style="font-size: 0.95rem; font-weight: 800; color: #38bdf8; margin-bottom: 2px;">📍 You Are Here</div>
+          <div style="font-size: 0.72rem; color: #94a3b8; margin-bottom: 8px;">GPS Accuracy: within ${Math.round(radius)}m</div>
+          <button onclick="window.shareLocation(${lat}, ${lng})" style="width: 100%; padding: 7px 10px; background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: none; border-radius: 6px; font-size: 0.8rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);">
+            📲 Share My Location
+          </button>
+        </div>
+      `;
+
       userMarker = L.marker(e.latlng, { icon: gpsIcon }).addTo(map)
-        .bindPopup(`<strong>📍 You are here</strong><br>Accuracy: within ${Math.round(radius)} meters`).openPopup();
+        .bindPopup(userPopupHTML).openPopup();
       
       accuracyCircle = L.circle(e.latlng, radius, {
         color: '#38bdf8',

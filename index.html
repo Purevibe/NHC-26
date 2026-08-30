@@ -2868,25 +2868,35 @@
 
     // Prevent map drag/zoom when touch-scrolling floating panel or preset pills
     if (window.L && L.DomEvent) {
-      L.DomEvent.disableScrollPropagation(poiFilterPanel);
-      L.DomEvent.disableClickPropagation(poiFilterPanel);
+      if (poiFilterPanel) {
+        L.DomEvent.disableScrollPropagation(poiFilterPanel);
+        L.DomEvent.disableClickPropagation(poiFilterPanel);
+      }
       document.querySelectorAll('.map-control-btn, .map-custom-controls').forEach(el => {
-        L.DomEvent.disableScrollPropagation(el);
-        L.DomEvent.disableClickPropagation(el);
+        if (el) {
+          L.DomEvent.disableScrollPropagation(el);
+          L.DomEvent.disableClickPropagation(el);
+        }
       });
       document.querySelectorAll('.preset-pills, .genres-wrapper').forEach(el => {
-        L.DomEvent.disableScrollPropagation(el);
+        if (el) {
+          L.DomEvent.disableScrollPropagation(el);
+        }
       });
     }
 
-    poiFilterToggleBtn.addEventListener('click', () => {
-      const isVisible = poiFilterPanel.style.display !== 'none';
-      poiFilterPanel.style.display = isVisible ? 'none' : 'block';
-    });
+    if (poiFilterToggleBtn && poiFilterPanel) {
+      poiFilterToggleBtn.addEventListener('click', () => {
+        const isVisible = poiFilterPanel.style.display !== 'none';
+        poiFilterPanel.style.display = isVisible ? 'none' : 'block';
+      });
+    }
 
-    closePoiPanelBtn.addEventListener('click', () => {
-      poiFilterPanel.style.display = 'none';
-    });
+    if (closePoiPanelBtn && poiFilterPanel) {
+      closePoiPanelBtn.addEventListener('click', () => {
+        poiFilterPanel.style.display = 'none';
+      });
+    }
 
     // Collapsible Accordion Toggle Listener
     document.querySelectorAll('.accordion-header').forEach(header => {
@@ -2897,7 +2907,9 @@
     });
 
     // Reset All Filters Listener
-    document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+    const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+    if (resetFiltersBtn) {
+      resetFiltersBtn.addEventListener('click', () => {
       // 1. Reset Presets to 'all'
       selectedPresets.clear();
       selectedPresets.add('all');
@@ -2920,7 +2932,8 @@
       });
 
       applyFilters();
-    });
+      });
+    }
 
     const layerMap = {
       systems: systemsLayer,

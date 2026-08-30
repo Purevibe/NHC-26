@@ -1111,6 +1111,8 @@
             <div class="accordion-content">
               <label class="poi-toggle-row"><input type="checkbox" data-poi="systems" checked> 🔊 Sound Systems (37)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="vendors" checked> 🍗 Featured Food Vendors (2)</label>
+              <label class="poi-toggle-row"><input type="checkbox" data-poi="jouvert" checked> 🌅 J'ouvert Location</label>
+              <label class="poi-toggle-row"><input type="checkbox" data-poi="judging" checked> ✂️ MAS Judging Zone</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="toilets" checked> 🚻 Public Toilets (40)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="firstaid" checked> 🏥 First Aid (8)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="welfare" checked> 💖 Welfare Points (4)</label>
@@ -1647,6 +1649,70 @@
     const foodVendorsLayer = L.layerGroup().addTo(map);
     const tradingLayer = L.layerGroup().addTo(map);
     const systemsLayer = L.layerGroup().addTo(map);
+    const jouvertLayer = L.layerGroup().addTo(map);
+    const judgingLayer = L.layerGroup().addTo(map);
+
+    // J'ouvert Starting Point Marker
+    const jouvertIcon = L.divIcon({
+      className: 'custom-facility-icon',
+      html: `
+        <div style="background: linear-gradient(135deg, #ea580c, #dc2626); color: #ffffff; border: 2px solid #fef08a; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 0 14px rgba(234, 88, 12, 0.85); font-weight: bold;">
+          🌅
+        </div>
+      `,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -16]
+    });
+
+    const jouvertPopupHTML = `
+      <div style="min-width: 220px; max-width: 260px;">
+        <div style="background: linear-gradient(135deg, #ea580c, #dc2626); margin: -10px -10px 8px -10px; padding: 8px 10px; border-top-left-radius: 6px; border-top-right-radius: 6px;">
+          <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #fef08a;">🌅 OFFICIAL CARNIVAL START</div>
+          <div style="font-size: 1rem; font-weight: 900; color: #ffffff; line-height: 1.1;">J'ouvert Starting Point</div>
+          <div style="font-size: 0.72rem; color: #fef3c7; margin-top: 2px; font-weight: 600;">📍 Sainsbury's, Canal Way Roundabout</div>
+        </div>
+        <div style="font-size: 0.76rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 8px;">
+          Traditional early morning celebration (06:00 - 09:00, Sunday 30th August). Expect colourful paints, powder, and high-energy music to open Notting Hill Carnival.
+        </div>
+        ${createNavHTML(51.52631037203265, -0.21775117393302137, "J'ouvert Starting Point")}
+      </div>
+    `;
+
+    L.marker([51.52631037203265, -0.21775117393302137], { icon: jouvertIcon })
+      .bindPopup(jouvertPopupHTML)
+      .addTo(jouvertLayer);
+
+    // MAS Judging Point Marker
+    const judgingIcon = L.divIcon({
+      className: 'custom-facility-icon',
+      html: `
+        <div style="background: linear-gradient(135deg, #7e22ce, #db2777); color: #ffffff; border: 2px solid #fef08a; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; box-shadow: 0 0 14px rgba(219, 39, 119, 0.85); font-weight: bold;">
+          ✂️
+        </div>
+      `,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -16]
+    });
+
+    const judgingPopupHTML = `
+      <div style="min-width: 220px; max-width: 260px;">
+        <div style="background: linear-gradient(135deg, #7e22ce, #db2777); margin: -10px -10px 8px -10px; padding: 8px 10px; border-top-left-radius: 6px; border-top-right-radius: 6px;">
+          <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #fef08a;">✂️ MAS JUDGING ZONE</div>
+          <div style="font-size: 1rem; font-weight: 900; color: #ffffff; line-height: 1.1;">Official MAS Judging Point</div>
+          <div style="font-size: 0.72rem; color: #fce7f3; margin-top: 2px; font-weight: 600;">📍 Great Western Road</div>
+        </div>
+        <div style="font-size: 0.76rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 8px;">
+          The official Judging Zone Grandstand where all MAS costume bands are judged at their absolute best! Grandstand tickets open to the public.
+        </div>
+        ${createNavHTML(51.519411121363184, -0.19925499182714257, "MAS Judging Point")}
+      </div>
+    `;
+
+    L.marker([51.519411121363184, -0.19925499182714257], { icon: judgingIcon })
+      .bindPopup(judgingPopupHTML)
+      .addTo(judgingLayer);
 
     const stationMarkers = {};
 
@@ -2220,6 +2286,8 @@
     const layerMap = {
       systems: systemsLayer,
       vendors: foodVendorsLayer,
+      jouvert: jouvertLayer,
+      judging: judgingLayer,
       toilets: toiletsLayer,
       firstaid: firstAidLayer,
       welfare: welfareLayer,

@@ -342,26 +342,73 @@
       z-index: 1000;
       display: flex;
       flex-direction: column;
+      align-items: flex-end;
+    }
+    .map-menu-toggle-btn {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      border: 1.5px solid #38bdf8;
+      padding: 9px 15px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
       gap: 8px;
+      transition: all 0.2s ease;
+      letter-spacing: 0.3px;
+    }
+    .map-menu-toggle-btn:hover {
+      background: linear-gradient(135deg, #0369a1, #075985);
+      border-color: #7dd3fc;
+      transform: translateY(-1px);
+    }
+    .map-menu-toggle-btn .menu-icon-arrow {
+      font-size: 0.75rem;
+      transition: transform 0.2s ease;
+    }
+    .map-custom-controls.open .map-menu-toggle-btn .menu-icon-arrow {
+      transform: rotate(180deg);
+    }
+    .map-menu-dropdown {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+      background: #0f172a;
+      border: 1.5px solid #334155;
+      padding: 8px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.75);
+      width: 190px;
+      animation: modalFadeIn 0.15s ease-out;
+    }
+    .map-custom-controls.open .map-menu-dropdown {
+      display: flex;
     }
     .map-control-btn {
-      background: #131d31;
+      background: #1e293b;
       color: #f8fafc;
       border: 1px solid #334155;
       padding: 8px 12px;
       border-radius: 6px;
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       transition: all 0.15s;
+      width: 100%;
+      text-align: left;
     }
     .map-control-btn:hover {
-      background: #1e293b;
+      background: #334155;
       border-color: #f59e0b;
+      color: #ffffff;
     }
 
     /* Collapsible Accordion & POI Filter Panel */
@@ -1203,16 +1250,21 @@
 
     <!-- MAP -->
     <div id="map">
-      <div class="map-custom-controls">
-        <button class="map-control-btn" id="langToggleBtn">🌐 Language</button>
-        <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filters and Key</button>
-        <button class="map-control-btn" id="programmeToggleBtn">📅 Programme</button>
-        <button class="map-control-btn" id="historyToggleBtn">📜 Carnival History</button>
-        <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
-        <button class="map-control-btn" id="travelInfoToggleBtn">🚌 Travel Info</button>
-        <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
-        <button class="map-control-btn" id="themeToggleBtn">☀️ Light Map</button>
-        <button class="map-control-btn" id="aboutMeToggleBtn">ℹ️ About Me</button>
+      <div class="map-custom-controls" id="mapControlsWrapper">
+        <button class="map-menu-toggle-btn" id="mapMenuToggleBtn">
+          <span>☰</span> <span data-i18n="menuBtn">Menu</span> <span class="menu-icon-arrow">▼</span>
+        </button>
+        <div class="map-menu-dropdown" id="mapMenuDropdown">
+          <button class="map-control-btn" id="langToggleBtn">🌐 Language</button>
+          <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filters and Key</button>
+          <button class="map-control-btn" id="programmeToggleBtn">📅 Programme</button>
+          <button class="map-control-btn" id="historyToggleBtn">📜 Carnival History</button>
+          <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
+          <button class="map-control-btn" id="travelInfoToggleBtn">🚌 Travel Info</button>
+          <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
+          <button class="map-control-btn" id="themeToggleBtn">☀️ Light Map</button>
+          <button class="map-control-btn" id="aboutMeToggleBtn">ℹ️ About Me</button>
+        </div>
       </div>
 
       <!-- Quick Floating POI Filter Panel for Mobile & Map View -->
@@ -2867,6 +2919,31 @@
       });
     }
 
+    // Floating Collapsible Menu Toggle Listener
+    const mapControlsWrapper = document.getElementById('mapControlsWrapper');
+    const mapMenuToggleBtn = document.getElementById('mapMenuToggleBtn');
+
+    if (mapMenuToggleBtn && mapControlsWrapper) {
+      mapMenuToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mapControlsWrapper.classList.toggle('open');
+      });
+
+      // Close menu when any option inside the menu dropdown is clicked
+      document.querySelectorAll('.map-control-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          mapControlsWrapper.classList.remove('open');
+        });
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!mapControlsWrapper.contains(e.target)) {
+          mapControlsWrapper.classList.remove('open');
+        }
+      });
+    }
+
     poiFilterToggleBtn.addEventListener('click', () => {
       const isVisible = poiFilterPanel.style.display !== 'none';
       poiFilterPanel.style.display = isVisible ? 'none' : 'block';
@@ -3155,7 +3232,7 @@
     // 🌐 Multi-Language Translation System (8 Languages)
     const translations = {
       en: {
-        langBtn: "🌐 Language", poiFilterBtn: "🗺️ Filters and Key", progBtn: "📅 Programme", histBtn: "📜 Carnival History",
+        menuBtn: "Menu", langBtn: "🌐 Language", poiFilterBtn: "🗺️ Filters and Key", progBtn: "📅 Programme", histBtn: "📜 Carnival History",
         findLocBtn: "📍 Find My Location", travelBtn: "🚌 Travel Info", tflAlertsBtn: "🚇 TfL Alerts", lightMapBtn: "☀️ Light Map",
         darkMapBtn: "🌙 Dark Map", aboutMeBtn: "ℹ️ About Me", clearFilters: "Clear Filters", selectAll: "Select All",
         searchPlaceholder: "Search sound system or genre...", showingSystems: "Showing {count} of 37 Systems",
@@ -3178,7 +3255,7 @@
         aboutBio: "Hello! Like my cooking this app was made with love, for culture and community; to help you explore smoothly, stay safe, and have as much fun as possible at NHC '26. — One Love! ✌🏾❤️"
       },
       es: {
-        langBtn: "🌐 Idioma", poiFilterBtn: "🗺️ Filtros y Clave", progBtn: "📅 Programa", histBtn: "📜 Historia del Carnaval",
+        menuBtn: "Menú", langBtn: "🌐 Idioma", poiFilterBtn: "🗺️ Filtros y Clave", progBtn: "📅 Programa", histBtn: "📜 Historia del Carnaval",
         findLocBtn: "📍 Buscar mi Ubicación", travelBtn: "🚌 Info de Viaje", tflAlertsBtn: "🚇 Alertas TfL", lightMapBtn: "☀️ Mapa Claro",
         darkMapBtn: "🌙 Mapa Oscuro", aboutMeBtn: "ℹ️ Sobre Mí", clearFilters: "Borrar Filtros", selectAll: "Seleccionar Todo",
         searchPlaceholder: "Buscar sound system o género...", showingSystems: "Mostrando {count} de 37 Sistemas",
@@ -3282,7 +3359,7 @@
         aboutBio: "¡Hola! Al igual que mi cocina, esta aplicación fue hecha con amor, por la cultura y la comunidad; para ayudarte a explorar fácilmente, mantenerte seguro y divertirte al máximo en NHC '26. — ¡One Love! ✌🏾❤️"
       },
       pt: {
-        langBtn: "🌐 Idioma", poiFilterBtn: "🗺️ Filtros e Legenda", progBtn: "📅 Programação", histBtn: "📜 História do Carnaval",
+        menuBtn: "Menu", langBtn: "🌐 Idioma", poiFilterBtn: "🗺️ Filtros e Legenda", progBtn: "📅 Programação", histBtn: "📜 História do Carnaval",
         findLocBtn: "📍 Encontrar Minha Localização", travelBtn: "🚌 Info de Transporte", tflAlertsBtn: "🚇 Alertas TfL", lightMapBtn: "☀️ Mapa Claro",
         darkMapBtn: "🌙 Mapa Escuro", aboutMeBtn: "ℹ️ Sobre Mim", clearFilters: "Limpar Filtros", selectAll: "Selecionar Tudo",
         searchPlaceholder: "Buscar sound system ou gênero...", showingSystems: "Mostrando {count} de 37 Sistemas",
@@ -3386,7 +3463,7 @@
         aboutBio: "Olá! Assim como minha comida, este aplicativo foi feito com amor, pela cultura e pela comunidade; para ajudar você a explorar facilmente, manter-se seguro e se divertir ao máximo no NHC '26. — One Love! ✌🏾❤️"
       },
       fr: {
-        langBtn: "🌐 Langue", poiFilterBtn: "🗺️ Filtres et Légende", progBtn: "📅 Programme", histBtn: "📜 Histoire du Carnaval",
+        menuBtn: "Menu", langBtn: "🌐 Langue", poiFilterBtn: "🗺️ Filtres et Légende", progBtn: "📅 Programme", histBtn: "📜 Histoire du Carnaval",
         findLocBtn: "📍 Ma Position", travelBtn: "🚌 Infos Transports", tflAlertsBtn: "🚇 Alertes TfL", lightMapBtn: "☀️ Carte Claire",
         darkMapBtn: "🌙 Carte Sombre", aboutMeBtn: "ℹ️ À Propos", clearFilters: "Effacer les Filtres", selectAll: "Tout Sélectionner",
         searchPlaceholder: "Rechercher sound system ou genre...", showingSystems: "{count} sur 37 Systèmes Affichés",
@@ -3490,7 +3567,7 @@
         aboutBio: "Bonjour ! Tout comme ma cuisine, cette application a été conçue avec amour pour la culture et la communauté ; pour vous aider à explorer facilement, à rester en sécurité et à profiter au maximum du NHC '26. — One Love ! ✌🏾❤️"
       },
       it: {
-        langBtn: "🌐 Lingua", poiFilterBtn: "🗺️ Filtri e Legenda", progBtn: "📅 Programma", histBtn: "📜 Storia del Carnevale",
+        menuBtn: "Menu", langBtn: "🌐 Lingua", poiFilterBtn: "🗺️ Filtri e Legenda", progBtn: "📅 Programma", histBtn: "📜 Storia del Carnevale",
         findLocBtn: "📍 Trova la mia Posizione", travelBtn: "🚌 Info Trasporti", tflAlertsBtn: "🚇 Avvisi TfL", lightMapBtn: "☀️ Mappa Chiara",
         darkMapBtn: "🌙 Mappa Scura", aboutMeBtn: "ℹ️ Su di Me", clearFilters: "Cancella Filtri", selectAll: "Seleziona Tutto",
         searchPlaceholder: "Cerca sound system o genere...", showingSystems: "Mostrando {count} di 37 Sistemi",
@@ -3594,7 +3671,7 @@
         aboutBio: "Ciao! Proprio come la mia cucina, questa applicazione è stata fatta con amore per la cultura e la comunità; per aiutarti a esplorare facilmente, stare al sicuro e divertirti al massimo a NHC '26. — One Love! ✌🏾❤️"
       },
       ja: {
-        langBtn: "🌐 言語切替", poiFilterBtn: "🗺️ フィルター & 凡例", progBtn: "📅 スケジュール", histBtn: "📜 カーニバルの歴史",
+        menuBtn: "メニュー", langBtn: "🌐 言語切替", poiFilterBtn: "🗺️ フィルター & 凡例", progBtn: "📅 スケジュール", histBtn: "📜 カーニバルの歴史",
         findLocBtn: "📍 現在地を検索", travelBtn: "🚌 交通アクセス案内", tflAlertsBtn: "🚇 TfL 運行情報", lightMapBtn: "☀️ ライトマップ",
         darkMapBtn: "🌙 ダークマップ", aboutMeBtn: "ℹ️ 制作者について", clearFilters: "リセット", selectAll: "すべて選択",
         searchPlaceholder: "サウンドシステムやジャンルを検索...", showingSystems: "37件中 {count} 件のシステムを表示",
@@ -3698,7 +3775,7 @@
         aboutBio: "こんにちは！私の料理と同じように、このアプリも文化とコミュニティへの愛を込めて制作しました。NHC '26をスムーズに探索し、安全に、そして全力で楽しんでいただくためのお供です。 — One Love! ✌🏾❤️"
       },
       ko: {
-        langBtn: "🌐 언어 변경", poiFilterBtn: "🗺️ 필터 및 범례", progBtn: "📅 일정", histBtn: "📜 카니발 역사",
+        menuBtn: "메뉴", langBtn: "🌐 언어 변경", poiFilterBtn: "🗺️ 필터 및 범례", progBtn: "📅 일정", histBtn: "📜 카니발 역사",
         findLocBtn: "📍 내 위치 찾기", travelBtn: "🚌 교통 안내", tflAlertsBtn: "🚇 TfL 알림", lightMapBtn: "☀️ 밝은 지도",
         darkMapBtn: "🌙 어두운 지도", aboutMeBtn: "ℹ️ 제작자 정보", clearFilters: "필터 초기화", selectAll: "전체 선택",
         searchPlaceholder: "사운드 시스템 또는 장르 검색...", showingSystems: "37개 중 {count}개 시스템 표시",
@@ -3805,7 +3882,7 @@
         aboutBio: "안녕하세요! 제 요리처럼 이 앱도 문화와 공동체에 대한 사랑으로 만들어졌습니다. NHC '26을 편안하고 안전하게, 그리고 마음껏 즐기실 수 있도록 도와드립니다. — One Love! ✌🏾❤️"
       },
       zh: {
-        langBtn: "🌐 语言选择", poiFilterBtn: "🗺️ 筛选与图例", progBtn: "📅 活动日程", histBtn: "📜 狂欢节历史",
+        menuBtn: "菜单", langBtn: "🌐 语言选择", poiFilterBtn: "🗺️ 筛选与图例", progBtn: "📅 活动日程", histBtn: "📜 狂欢节历史",
         findLocBtn: "📍 定位我的位置", travelBtn: "🚌 交通出行指南", tflAlertsBtn: "🚇 TfL 运行提示", lightMapBtn: "☀️ 浅色地图",
         darkMapBtn: "🌙 深色地图", aboutMeBtn: "ℹ️ 关于开发者", clearFilters: "清除筛选", selectAll: "全选",
         searchPlaceholder: "搜索音响系统或音乐风格...", showingSystems: "显示 37 个系统中的 {count} 个",
@@ -3912,7 +3989,7 @@
         aboutBio: "你好！就像我的烹饪一样，这款 App 融入了对文化与社区的爱；旨在帮助大家在 NHC '26 狂欢节期间轻松探索、保障安全，尽情享受美妙时光。 — One Love! ✌🏾❤️"
       },
       ar: {
-        langBtn: "🌐 اللغة", poiFilterBtn: "🗺️ تصفية والمفتاح", progBtn: "📅 برنامج الفعاليات", histBtn: "📜 تاريخ الكرنفال",
+        menuBtn: "القائمة", langBtn: "🌐 اللغة", poiFilterBtn: "🗺️ تصفية والمفتاح", progBtn: "📅 برنامج الفعاليات", histBtn: "📜 تاريخ الكرنفال",
         findLocBtn: "📍 تحديد موقعي", travelBtn: "🚌 معلومات المواصلات", tflAlertsBtn: "🚇 تنبيهات شبكة النقل", lightMapBtn: "☀️ خريطة فاتحة",
         darkMapBtn: "🌙 خريطة داكنة", aboutMeBtn: "ℹ️ نبذة عني", clearFilters: "مسح الفلاتر", selectAll: "تحديد الكل",
         searchPlaceholder: "البحث عن نظام صوتي أو نوع موسيقى...", showingSystems: "عرض {count} من أصل 37 نظامًا صوتيًا",
@@ -4019,7 +4096,7 @@
         aboutBio: "مرحباً! مثل طهيي، تم تصميم هذا التطبيق بحب للثقافة والمجتمع؛ لمساعدتك على الاستكشاف بسلاسة والبقاء آمناً وقضاء أكبر قدر ممكن من المتعة في NHC '26. — One Love! ✌🏾❤️"
       },
       ur: {
-        langBtn: "🌐 زبان", poiFilterBtn: "🗺️ فلٹرز اور رہنمائی", progBtn: "📅 پروگرام", histBtn: "📜 کارنیوال کی تاریخ",
+        menuBtn: "مینو", langBtn: "🌐 زبان", poiFilterBtn: "🗺️ فلٹرز اور رہنمائی", progBtn: "📅 پروگرام", histBtn: "📜 کارنیوال کی تاریخ",
         findLocBtn: "📍 میرا مقام تلاش کریں", travelBtn: "🚌 سفر کی معلومات", tflAlertsBtn: "🚇 TfL الرٹس", lightMapBtn: "☀️ روشن نقشہ",
         darkMapBtn: "🌙 تاریک نقشہ", aboutMeBtn: "ℹ️ میرے بارے میں", clearFilters: "فلٹرز صاف کریں", selectAll: "تمام منتخب کریں",
         searchPlaceholder: "ساؤنڈ سسٹم یا موسیقی کا انداز تلاش کریں...", showingSystems: "37 میں سے {count} سسٹمز دکھائے جا رہے ہیں",
@@ -4126,7 +4203,7 @@
         aboutBio: "ہیلو! میرے پکوان کی طرح یہ ایپ بھی ثقافت اور کمیونٹی کی محبت کے ساتھ بنائی گئی ہے؛ تاکہ آپ آسانی سے گھوم سکیں، محفوظ رہیں اور این ایچ سی '26 میں بھرپور لطف اندوز ہو سکیں۔ — ون لوو! ✌🏾❤️"
       },
       tr: {
-        langBtn: "🌐 Dil Seçimi", poiFilterBtn: "🗺️ Filtreler ve Harita Anahtarı", progBtn: "📅 Program", histBtn: "📜 Karnaval Tarihi",
+        menuBtn: "Menü", langBtn: "🌐 Dil Seçimi", poiFilterBtn: "🗺️ Filtreler ve Harita Anahtarı", progBtn: "📅 Program", histBtn: "📜 Karnaval Tarihi",
         findLocBtn: "📍 Konumumu Bul", travelBtn: "🚌 Ulaşım Bilgisi", tflAlertsBtn: "🚇 TfL Bildirimleri", lightMapBtn: "☀️ Açık Harita",
         darkMapBtn: "🌙 Koyu Harita", aboutMeBtn: "ℹ️ Hakkımda", clearFilters: "Filtreleri Temizle", selectAll: "Tümünü Seç",
         searchPlaceholder: "Ses sistemi veya müzik türü ara...", showingSystems: "37 Sistemden {count} Tanesi Gösteriliyor",
@@ -4230,7 +4307,7 @@
         aboutBio: "Merhaba! Yemeklerim gibi bu uygulama da kültür ve topluluk sevgisiyle yapıldı; rahatça keşfetmenize, güvende kalmanıza ve NHC '26'da mümkün olduğunca eğlenmenize yardımcı olmak için. — One Love! ✌🏾❤️"
       },
       pl: {
-        langBtn: "🌐 Język", poiFilterBtn: "🗺️ Filtry i Legenda", progBtn: "📅 Program", histBtn: "📜 Historia Karnawału",
+        menuBtn: "Menu", langBtn: "🌐 Język", poiFilterBtn: "🗺️ Filtry i Legenda", progBtn: "📅 Program", histBtn: "📜 Historia Karnawału",
         findLocBtn: "📍 Znajdź Moją Lokalizację", travelBtn: "🚌 Info o Transportu", tflAlertsBtn: "🚇 Ostrzeżenia TfL", lightMapBtn: "☀️ Jasna Mapa",
         darkMapBtn: "🌙 Ciemna Mapa", aboutMeBtn: "ℹ️ O Mnie", clearFilters: "Wyczyść Filtry", selectAll: "Zaznacz Wszystko",
         searchPlaceholder: "Szukaj sound systemu lub gatunku...", showingSystems: "Pokazywanie {count} z 37 Systemów",
@@ -4334,7 +4411,7 @@
         aboutBio: "Cześć! Podobnie jak moje gotowanie, ta aplikacja powstała z miłości do kultury i społeczności; aby pomóc Ci płynnie zwiedzać, zachować bezpieczeństwo i bawić się jak najlepiej na NHC '26. — One Love! ✌🏾❤️"
       },
       ur: {
-        langBtn: "🌐 زبان", poiFilterBtn: "🗺️ فلٹرز اور رہنمائی", progBtn: "📅 پروگرام", histBtn: "📜 کارنیوال کی تاریخ",
+        menuBtn: "مینو", langBtn: "🌐 زبان", poiFilterBtn: "🗺️ فلٹرز اور رہنمائی", progBtn: "📅 پروگرام", histBtn: "📜 کارنیوال کی تاریخ",
         findLocBtn: "📍 میرا مقام تلاش کریں", travelBtn: "🚌 سفر کی معلومات", tflAlertsBtn: "🚇 TfL الرٹس", lightMapBtn: "☀️ روشن نقشہ",
         darkMapBtn: "🌙 تاریک نقشہ", aboutMeBtn: "ℹ️ میرے بارے میں", clearFilters: "فلٹرز صاف کریں", selectAll: "تمام منتخب کریں",
         searchPlaceholder: "ساؤنڈ سسٹم یا موسیقی کا انداز تلاش کریں...", showingSystems: "37 میں سے {count} سسٹمز دکھائے جا رہے ہیں",

@@ -614,6 +614,99 @@
       transform: scale(1.1);
       background: #dc2626;
     }
+
+    /* Programme Modal CSS Styling */
+    .programme-modal-card {
+      max-width: 480px;
+      width: 92vw;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .prog-modal-body {
+      overflow-y: auto;
+      max-height: calc(88vh - 120px);
+      padding: 14px 16px;
+    }
+    .prog-tab-bar {
+      display: flex;
+      background: #090e17;
+      border-bottom: 1px solid #334155;
+      padding: 6px;
+      gap: 6px;
+    }
+    .prog-tab-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 6px;
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .prog-tab-btn.active {
+      background: #1a73e8;
+      color: #ffffff;
+      border-color: #4285f4;
+      box-shadow: 0 2px 8px rgba(26, 115, 232, 0.4);
+    }
+    .prog-day-title {
+      font-size: 1rem;
+      font-weight: 900;
+      color: #f59e0b;
+      margin-bottom: 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #334155;
+    }
+    .prog-event-card {
+      background: #0c1424;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .prog-event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .prog-event-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+    .prog-event-time {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #38bdf8;
+      background: #131d31;
+      padding: 2px 8px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+    .prog-event-loc {
+      font-size: 0.74rem;
+      color: #fbbf24;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .prog-event-desc {
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      line-height: 1.4;
+      margin: 0;
+    }
+    .highlight-card {
+      background: linear-gradient(135deg, #451a03, #1e1b4b);
+      border: 1.5px solid #f59e0b;
+    }
+    .highlight-card .prog-event-title {
+      color: #fef08a;
+    }
     .about-name {
       font-size: 1.25rem;
       font-weight: 900;
@@ -992,6 +1085,7 @@
     <div id="map">
       <div class="map-custom-controls">
         <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filters</button>
+        <button class="map-control-btn" id="programmeToggleBtn">📅 Programme</button>
         <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
         <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
         <button class="map-control-btn" id="themeToggleBtn">☀️ Light Map</button>
@@ -1112,6 +1206,149 @@
       <button id="closeLightboxModalBtn" class="lightbox-modal-close" title="Close Fullscreen Image">✕</button>
       <img src="jason_profile.jpg" alt="Jason Johnson - Full Photo" class="lightbox-expanded-img" />
       <div class="lightbox-caption">Jason Johnson 🇯🇲</div>
+    </div>
+  </div>
+
+  <!-- CARNIVAL PROGRAMME MODAL OVERLAY -->
+  <div id="programmeModal" class="about-modal-overlay" style="display: none;">
+    <div class="about-modal-card programme-modal-card">
+      <div class="about-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.4rem;">📅</span>
+          <h2 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0;">Carnival 2026 Programme</h2>
+        </div>
+        <button id="closeProgrammeModalBtn" class="about-modal-close">✕</button>
+      </div>
+
+      <!-- Tab Switcher for Sunday vs Monday -->
+      <div class="prog-tab-bar">
+        <button class="prog-tab-btn active" id="progTabSunday">Sun 30 Aug (Family Day)</button>
+        <button class="prog-tab-btn" id="progTabMonday">Mon 31 Aug (Adults Parade)</button>
+      </div>
+
+      <div class="about-modal-body prog-modal-body">
+        
+        <!-- SUNDAY 30 AUGUST CONTENT -->
+        <div id="progContentSunday" class="prog-day-content">
+          <div class="prog-day-title">Sunday 30 August 2026</div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🌅 J'ouvert</span>
+              <span class="prog-event-time">06:00 – 09:00</span>
+            </div>
+            <div class="prog-event-loc">📍 Starting at Sainsbury's, by Canal Way Roundabout</div>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">✂️ Official Opening Ceremony</span>
+              <span class="prog-event-time">10:00 – 10:30</span>
+            </div>
+            <div class="prog-event-loc">📍 MAS Judging Point, Great Western Road</div>
+            <p class="prog-event-desc">
+              Traditionally Carnival is opened by local residents and participants, accompanied by the organisers and friends of Carnival. The Judging Zone Grandstand is open to the public.
+            </p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">👶 Children's Day Parade</span>
+              <span class="prog-event-time">All Day</span>
+            </div>
+            <div class="prog-event-loc">📍 Parade Route</div>
+            <p class="prog-event-desc">
+              Sunday is for the children, encouraging increased participation with a range of family-friendly activities. The main event is children's mas with young participants dancing in costume.
+            </p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🎨 Dutty / Fun Mas</span>
+              <span class="prog-event-time">All Day</span>
+            </div>
+            <div class="prog-event-loc">📍 Parade Route</div>
+            <p class="prog-event-desc">
+              Get down and 'dutty'. Spectators can expect to be splashed with brightly coloured paints, powder, or melted chocolate. Pure revelry and high-energy chipping along the parade.
+            </p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🔊 Sound Systems</span>
+              <span class="prog-event-time">12:00 – 19:00</span>
+            </div>
+            <div class="prog-event-loc">📍 37 Sound Systems across Notting Hill</div>
+            <p class="prog-event-desc">
+              Rooted in Jamaican culture and Reggae, featuring everything from Rare Groove to House, Dub, Soca, and Samba.
+            </p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🎤 Live Stages</span>
+              <span class="prog-event-time">12:00 – 19:00</span>
+            </div>
+            <div class="prog-event-loc">📍 Powis Square Stage (Produced by Alvaro Barrington) — Powis Square, W11 2AY</div>
+          </div>
+
+          <div class="prog-event-card highlight-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🕊️ Moment of Reflection</span>
+              <span class="prog-event-time">15:00 sharp</span>
+            </div>
+            <p class="prog-event-desc">
+              At 3:00 PM, a 72-second silence is held to remember the 72 lives tragically lost in the Grenfell Tower fire and beloved community pioneers.
+            </p>
+          </div>
+        </div>
+
+        <!-- MONDAY 31 AUGUST CONTENT -->
+        <div id="progContentMonday" class="prog-day-content" style="display: none;">
+          <div class="prog-day-title">Monday 31 August 2026</div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">💃 Adult's Parade (The Climax)</span>
+              <span class="prog-event-time">10:30 onwards</span>
+            </div>
+            <div class="prog-event-loc">📍 Parade Route</div>
+            <p class="prog-event-desc">
+              The Carnival climax and last lap! MAS Bands perform in full elaborate costumes. Grab a whistle or horn, find a spot early along the parade route, and jump up to the floats.
+            </p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🔊 Sound Systems</span>
+              <span class="prog-event-time">12:00 – 19:00</span>
+            </div>
+            <div class="prog-event-loc">📍 37 Sound Systems across Notting Hill</div>
+            <p class="prog-event-desc">
+              37 static sound systems playing full volume across the carnival area until 19:00.
+            </p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🎤 Live Stages</span>
+              <span class="prog-event-time">12:00 – 19:00</span>
+            </div>
+            <div class="prog-event-loc">📍 Powis Square Stage — Powis Square, W11 2AY</div>
+          </div>
+
+          <div class="prog-event-card highlight-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🕊️ Moment of Reflection</span>
+              <span class="prog-event-time">15:00 sharp</span>
+            </div>
+            <p class="prog-event-desc">
+              At 3:00 PM, a 72-second silence is held across the entire Carnival area in honor of Grenfell Tower victims and community pioneers.
+            </p>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -2096,11 +2333,48 @@
       });
     }
 
-    if (imageLightboxModal) {
-      imageLightboxModal.addEventListener('click', (e) => {
-        if (e.target === imageLightboxModal) {
-          imageLightboxModal.style.display = 'none';
+    // Programme Modal Listeners
+    const programmeModal = document.getElementById('programmeModal');
+    const programmeToggleBtn = document.getElementById('programmeToggleBtn');
+    const closeProgrammeModalBtn = document.getElementById('closeProgrammeModalBtn');
+    const progTabSunday = document.getElementById('progTabSunday');
+    const progTabMonday = document.getElementById('progTabMonday');
+    const progContentSunday = document.getElementById('progContentSunday');
+    const progContentMonday = document.getElementById('progContentMonday');
+
+    if (programmeToggleBtn && programmeModal) {
+      programmeToggleBtn.addEventListener('click', () => {
+        programmeModal.style.display = 'flex';
+      });
+    }
+
+    if (closeProgrammeModalBtn && programmeModal) {
+      closeProgrammeModalBtn.addEventListener('click', () => {
+        programmeModal.style.display = 'none';
+      });
+    }
+
+    if (programmeModal) {
+      programmeModal.addEventListener('click', (e) => {
+        if (e.target === programmeModal) {
+          programmeModal.style.display = 'none';
         }
+      });
+    }
+
+    if (progTabSunday && progTabMonday) {
+      progTabSunday.addEventListener('click', () => {
+        progTabSunday.classList.add('active');
+        progTabMonday.classList.remove('active');
+        progContentSunday.style.display = 'block';
+        progContentMonday.style.display = 'none';
+      });
+
+      progTabMonday.addEventListener('click', () => {
+        progTabMonday.classList.add('active');
+        progTabSunday.classList.remove('active');
+        progContentMonday.style.display = 'block';
+        progContentSunday.style.display = 'none';
       });
     }
 

@@ -1903,7 +1903,7 @@
             </div>
 
             <button id="nativeShareBtn" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; border: 1px solid #3b82f6; border-radius: 8px; padding: 10px 16px; font-size: 0.85rem; font-weight: 800; width: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.4);">
-              <span data-i18n="sharePhoneBtn">📲 Share via Phone</span>
+              <span data-i18n="shareViaPhoneBtn">📲 Share via Phone</span>
             </button>
           </div>
         </div>
@@ -2650,31 +2650,25 @@
 
           // Update any visible popup favorite buttons for this system
           document.querySelectorAll('.popup-fav-btn').forEach(btn => {
-            if (btn.dataset.systemName === systemName || (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(systemName))) {
+            if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(systemName)) {
               btn.classList.toggle('active', isNowFav);
               btn.textContent = isNowFav ? '⭐' : '★';
             }
           });
 
-          // Update sidebar list card favorite buttons
-          document.querySelectorAll('.list-card').forEach(card => {
-            if (card.dataset.systemName === systemName) {
-              const favBtn = card.querySelector('.card-fav-btn');
-              if (favBtn) {
-                favBtn.classList.toggle('active', isNowFav);
-                favBtn.textContent = isNowFav ? '⭐' : '★';
-              }
-            }
-          });
-
-          // If viewing the Favorites preset, re-apply filters to refresh the list view
+          // If viewing the Favorites preset, re-apply filters to update the list view
           if (selectedPresets.has('favs')) {
             applyFilters();
           } else {
-            // Otherwise, update the map marker icon for this system
-            systemsLayer.eachLayer(layer => {
-              if (layer.options && layer.options.systemName === systemName) {
-                layer.setIcon(createSoundIcon(isNowFav, systemName));
+            // Otherwise just update the list card buttons in the sidebar without re-rendering layers
+            document.querySelectorAll('.list-card').forEach(card => {
+              const titleEl = card.querySelector('.card-title');
+              if (titleEl && titleEl.textContent === systemName) {
+                const favBtn = card.querySelector('.card-fav-btn');
+                if (favBtn) {
+                  favBtn.classList.toggle('active', isNowFav);
+                  favBtn.textContent = isNowFav ? '⭐' : '★';
+                }
               }
             });
           }
@@ -3437,15 +3431,14 @@
 
           filtered.forEach(s => {
             const isFav = favorites.has(s.name);
-            const marker = L.marker([s.lat, s.lng], { icon: createSoundIcon(isFav, s.name), systemName: s.name });
+            const marker = L.marker([s.lat, s.lng], { icon: createSoundIcon(isFav, s.name) });
             const badgeHTML = s.genres.map(g => `<span class="popup-badge">${g}</span>`).join('');
-            const escapedName = s.name.replace(/'/g, "\\'");
 
             const popupContent = `
           <div>
             <div class="popup-header-row">
               <div class="popup-title">${s.name}</div>
-              <button class="popup-fav-btn ${isFav ? 'active' : ''}" data-system-name="${s.name}" onclick="toggleFavorite('${escapedName}')" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
+              <button class="popup-fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${s.name}')" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
             </div>
             <div class="popup-badge-list">${badgeHTML}</div>
             ${createNavHTML(s.lat, s.lng, s.name)}
@@ -3457,13 +3450,12 @@
             if (listEl) {
               const item = document.createElement('div');
               item.className = 'list-card';
-              item.dataset.systemName = s.name;
               item.innerHTML = `
             <div class="card-info">
               <div class="card-title">${s.name}</div>
               <div class="card-genres">${s.genres.join(' • ')}</div>
             </div>
-            <button class="card-fav-btn ${isFav ? 'active' : ''}" data-system-name="${s.name}" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
+            <button class="card-fav-btn ${isFav ? 'active' : ''}" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
           `;
 
               item.querySelector('.card-fav-btn').addEventListener('click', (e) => {
@@ -3789,21 +3781,22 @@
           copyShareUrlBtn.addEventListener('click', () => {
             const url = 'https://purevibe.github.io/NHC-26/';
             const t = translations[currentLang] || translations.en;
-            const originalText = t.copyLinkBtn || '📋 Copy Link';
-            const copiedText = t.linkCopiedText || '✅ Copied!';
+            const copiedText = t.copiedBtn || '✅ Copied!';
+            const defaultText = t.copyLinkBtn || '📋 Copy Link';
 
-            navigator.clipboard.writeText(url).then(() => {
+            const showFeedback = () => {
               copyShareUrlBtn.textContent = copiedText;
-              setTimeout(() => { copyShareUrlBtn.textContent = originalText; }, 2000);
-            }).catch(() => {
+              setTimeout(() => { copyShareUrlBtn.textContent = defaultText; }, 2000);
+            };
+
+            navigator.clipboard.writeText(url).then(showFeedback).catch(() => {
               const el = document.createElement('textarea');
               el.value = url;
               document.body.appendChild(el);
               el.select();
               document.execCommand('copy');
               document.body.removeChild(el);
-              copyShareUrlBtn.textContent = copiedText;
-              setTimeout(() => { copyShareUrlBtn.textContent = originalText; }, 2000);
+              showFeedback();
             });
           });
         }
@@ -4011,7 +4004,7 @@
             locateOnMap: "📍 Locate on Map", locateHubOnMap: "📍 Locate Hub on Map",
             aboutModalTitle: "About Me", aboutTagline: "Creator and developer of this unofficial map app! 🤓",
             aboutBio: "Hello! Like my cooking this app was made with love, for culture and community; to help you explore smoothly, stay safe, and have as much fun as possible at NHC '26. — One Love! ✌🏾❤️",
-            shareMapTitle: "Share Map App", shareMapDesc: "Scan QR code with any phone camera or share the web link below with friends!", copyLinkBtn: "📋 Copy Link", linkCopiedText: "✅ Copied!", sharePhoneBtn: "📲 Share via Phone"
+            shareMapTitle: "Share Map App", shareMapDesc: "Scan QR code with any phone camera or share the web link below with friends!", copyLinkBtn: "📋 Copy Link", copiedBtn: "✅ Copied!", shareViaPhoneBtn: "📲 Share via Phone"
           },
           es: {
             menuBtn: "Menú", langBtn: "🇲🇽 Idioma", poiFilterBtn: "🗺️ Filtros y Clave", progBtn: "📅 Programa", histBtn: "📜 Historia del Carnaval",
@@ -4116,7 +4109,7 @@
             aboutModalTitle: "Sobre Mí",
             aboutTagline: "¡Creador y desarrollador de esta app no oficial del mapa! 🤓",
             aboutBio: "¡Hola! Al igual que mi cocina, esta aplicación fue hecha con amor, por la cultura y la comunidad; para ayudarte a explorar fácilmente, mantenerte seguro y divertirte al máximo en NHC '26. — ¡One Love! ✌🏾❤️",
-            shareMapTitle: "Compartir Aplicación del Mapa", shareMapDesc: "¡Escanea el código QR con cualquier cámara o comparte el enlace abajo con tus amigos!", copyLinkBtn: "📋 Copiar Enlace", linkCopiedText: "✅ ¡Copiado!", sharePhoneBtn: "📲 Compartir por Teléfono"
+            shareMapTitle: "Compartir Aplicación del Mapa", shareMapDesc: "¡Escanea el código QR con cualquier cámara o comparte el enlace abajo con amigos!", copyLinkBtn: "📋 Copiar Enlace", copiedBtn: "✅ ¡Copiado!", shareViaPhoneBtn: "📲 Compartir por Teléfono"
           },
           pt: {
             menuBtn: "Menu", langBtn: "🇧🇷 Idioma", poiFilterBtn: "🗺️ Filtros e Legenda", progBtn: "📅 Programação", histBtn: "📜 História do Carnaval",
@@ -4221,7 +4214,7 @@
             aboutModalTitle: "Sobre Mim",
             aboutTagline: "Criador e desenvolvedor deste aplicativo de mapa não oficial! 🤓",
             aboutBio: "Olá! Assim como minha comida, este aplicativo foi feito com amor, pela cultura e pela comunidade; para ajudar você a explorar facilmente, manter-se seguro e se divertir ao máximo no NHC '26. — One Love! ✌🏾❤️",
-            shareMapTitle: "Compartilhar App do Mapa", shareMapDesc: "Escaneie o código QR com a câmera do celular ou compartilhe o link abaixo com seus amigos!", copyLinkBtn: "📋 Copiar Link", linkCopiedText: "✅ Copiado!", sharePhoneBtn: "📲 Compartilhar pelo Celular"
+            shareMapTitle: "Compartilhar Aplicativo do Mapa", shareMapDesc: "Escaneie o código QR com a câmera do celular ou compartilhe o link abaixo com amigos!", copyLinkBtn: "📋 Copiar Link", copiedBtn: "✅ Copiado!", shareViaPhoneBtn: "📲 Compartilhar pelo Celular"
           },
           fr: {
             menuBtn: "Menu", langBtn: "🇫🇷 Langue", poiFilterBtn: "🗺️ Filtres et Légende", progBtn: "📅 Programme", histBtn: "📜 Histoire du Carnaval",
@@ -4326,7 +4319,7 @@
             aboutModalTitle: "À Propos",
             aboutTagline: "Créateur et développeur de cette application de carte non officielle ! 🤓",
             aboutBio: "Bonjour ! Tout comme ma cuisine, cette application a été conçue avec amour pour la culture et la communauté ; pour vous aider à explorer facilement, à rester en sécurité et à profiter au maximum du NHC '26. — One Love ! ✌🏾❤️",
-            shareMapTitle: "Partager la Carte", shareMapDesc: "Scannez le QR code avec votre téléphone ou partagez le lien ci-dessous avec vos amis !", copyLinkBtn: "📋 Copier le Lien", linkCopiedText: "✅ Copié !", sharePhoneBtn: "📲 Partager via Téléphone"
+            shareMapTitle: "Partager l'Application Carte", shareMapDesc: "Scannez le code QR avec un smartphone ou partagez le lien ci-dessous avec vos amis !", copyLinkBtn: "📋 Copier le Lien", copiedBtn: "✅ Copié !", shareViaPhoneBtn: "📲 Partager via Smartphone"
           },
           it: {
             menuBtn: "Menu", langBtn: "🇮🇹 Lingua", poiFilterBtn: "🗺️ Filtri e Legenda", progBtn: "📅 Programma", histBtn: "📜 Storia del Carnevale",
@@ -4431,7 +4424,7 @@
             aboutModalTitle: "Su di Me",
             aboutTagline: "Creatore e sviluppatore di questa app mappa non ufficiale! 🤓",
             aboutBio: "Ciao! Proprio come la mia cucina, questa applicazione è stata fatta con amore per la cultura e la comunità; per aiutarti a esplorare facilmente, stare al sicuro e divertirti al massimo a NHC '26. — One Love! ✌🏾❤️",
-            shareMapTitle: "Condividi App Mappa", shareMapDesc: "Scansiona il codice QR con la fotocamera o condividi il link qui sotto con i tuoi amici!", copyLinkBtn: "📋 Copia Link", linkCopiedText: "✅ Copiato!", sharePhoneBtn: "📲 Condividi tramite Telefono"
+            shareMapTitle: "Condividi App Mappa", shareMapDesc: "Scansiona il codice QR con la fotocamera o condividi il link qui sotto con gli amici!", copyLinkBtn: "📋 Copia Link", copiedBtn: "✅ Copiato!", shareViaPhoneBtn: "📲 Condividi tramite Telefono"
           },
           ja: {
             menuBtn: "メニュー", langBtn: "🇯🇵 言語切替", poiFilterBtn: "🗺️ フィルター & 凡例", progBtn: "📅 スケジュール", histBtn: "📜 カーニバルの歴史",
@@ -4535,8 +4528,8 @@
             locateHubOnMap: "📍 バスターミナルをマップ表示",
             aboutModalTitle: "制作者について",
             aboutTagline: "この非公式マップアプリの制作者＆エンジニアです！ 🤓",
-            aboutBio: "こんにちは！私の料理と同じように、このアプリも文化とコミュニティへの愛を込めて制作しました。NHC '26をスムーズに探索し、安全に、そして全力で楽しんでいただくためのお供です。 — One Love! ✌🏾❤️",
-            shareMapTitle: "マップアプリを共有", shareMapDesc: "スマホのカメラでQRコードを読み取るか、以下のリンクをお友達に共有してください！", copyLinkBtn: "📋 リンクをコピー", linkCopiedText: "✅ コピー完了！", sharePhoneBtn: "📲 スマホで共有"
+            aboutBio: "こんにちは！私の料理と同じように、このアプリも文化とコミュニティへの愛を込めて制作しました。NHC '26をスムーズに探索し、安全に、探そして全力で楽しんでいただくためのお供です。 — One Love! ✌🏾❤️",
+            shareMapTitle: "マップアプリを共有", shareMapDesc: "スマホのカメラでQRコードを読み取るか、下のリンクを友達に共有してください！", copyLinkBtn: "📋 リンクをコピー", copiedBtn: "✅ コピー完了！", shareViaPhoneBtn: "📲 スマホで共有"
           },
           ko: {
             menuBtn: "메뉴", langBtn: "🇰🇷 언어 변경", poiFilterBtn: "🗺️ 필터 및 범례", progBtn: "📅 일정", histBtn: "📜 카니발 역사",
@@ -4644,7 +4637,7 @@
             aboutModalTitle: "제작자 정보",
             aboutTagline: "이 비공식 지도 앱의 제작자 및 개발자입니다! 🤓",
             aboutBio: "안녕하세요! 제 요리처럼 이 앱도 문화와 공동체에 대한 사랑으로 만들어졌습니다. NHC '26을 편안하고 안전하게, 그리고 마음껏 즐기실 수 있도록 도와드립니다. — One Love! ✌🏾❤️",
-            shareMapTitle: "지도 앱 공유하기", shareMapDesc: "카메라로 QR 코드를 스캔하거나 아래 링크를 친구들에게 공유하세요!", copyLinkBtn: "📋 링크 복사", linkCopiedText: "✅ 복사 완료!", sharePhoneBtn: "📲 휴대전화로 공유"
+            shareMapTitle: "지도 앱 공유하기", shareMapDesc: "카메라로 QR 코드를 스캔하거나 아래 링크를 친구들에게 공유하세요!", copyLinkBtn: "📋 링크 복사", copiedBtn: "✅ 복사 완료!", shareViaPhoneBtn: "📲 휴대전화로 공유"
           },
           zh: {
             menuBtn: "菜单", langBtn: "🇨🇳 语言选择", poiFilterBtn: "🗺️ 筛选与图例", progBtn: "📅 活动日程", histBtn: "📜 狂欢节历史",
@@ -4752,7 +4745,7 @@
             aboutModalTitle: "关于开发者",
             aboutTagline: "这款非官方地图 App 的创作者与开发者！ 🤓",
             aboutBio: "你好！就像我的烹饪一样，这款 App 融入了对文化与社区的爱；旨在帮助大家在 NHC '26 狂欢节期间轻松探索、保障安全，尽情享受美妙时光。 — One Love! ✌🏾❤️",
-            shareMapTitle: "分享地图应用", shareMapDesc: "使用手机摄像头扫描 QR 码，或将下方链接分享给好友！", copyLinkBtn: "📋 复制链接", linkCopiedText: "✅ 已复制！", sharePhoneBtn: "📲 通过手机分享"
+            shareMapTitle: "分享地图应用", shareMapDesc: "使用手机摄像头扫描二维码，或将下方链接分享给好友！", copyLinkBtn: "📋 复制链接", copiedBtn: "✅ 已复制！", shareViaPhoneBtn: "📲 通过手机分享"
           },
           ar: {
             menuBtn: "القائمة", langBtn: "🇸🇦 اللغة", poiFilterBtn: "🗺️ تصفية والمفتاح", progBtn: "📅 برنامج الفعاليات", histBtn: "📜 تاريخ الكرنفال",
@@ -4860,7 +4853,7 @@
             aboutModalTitle: "نبذة عني",
             aboutTagline: "مبتكر ومطور تطبيق الخريطة غير الرسمي هذا! 🤓",
             aboutBio: "مرحباً! مثل طهيي، تم تصميم هذا التطبيق بحب للثقافة والمجتمع؛ لمساعدتك على الاستكشاف بسلاسة والبقاء آمناً وقضاء أكبر قدر ممكن من المتعة في NHC '26. — One Love! ✌🏾❤️",
-            shareMapTitle: "مشاركة تطبيق الخريطة", shareMapDesc: "امسح رمز QR بكاميرا الهاتف أو شارك الرابط أدناه مع أصدقائك!", copyLinkBtn: "📋 نسخ الرابط", linkCopiedText: "✅ تم النسخ!", sharePhoneBtn: "📲 مشاركة عبر الهاتف"
+            shareMapTitle: "مشاركة تطبيق الخريطة", shareMapDesc: "امسح رمز QR بكاميرا الهاتف أو شارك الرابط أدناه مع الأصدقاء!", copyLinkBtn: "📋 نسخ الرابط", copiedBtn: "✅ تم النسخ!", shareViaPhoneBtn: "📲 مشاركة عبر الهاتف"
           },
           ur: {
             menuBtn: "مینو", langBtn: "🇵🇰 زبان", poiFilterBtn: "🗺️ فلٹرز اور رہنمائی", progBtn: "📅 پروگرام", histBtn: "📜 کارنیوال کی تاریخ",
@@ -4968,7 +4961,7 @@
             aboutModalTitle: "میرے بارے میں",
             aboutTagline: "اس غیر سرکاری نقشہ ایپ کا خالق اور ڈویلپر! 🤓",
             aboutBio: "ہیلو! میرے پکوان کی طرح یہ ایپ بھی ثقافت اور کمیونٹی کی محبت کے ساتھ بنائی گئی ہے؛ تاکہ آپ آسانی سے گھوم سکیں، محفوظ رہیں اور این ایچ سی '26 میں بھرپور لطف اندوز ہو سکیں۔ — ون لوو! ✌🏾❤️",
-            shareMapTitle: "نقشہ ایپ شیئر کریں", shareMapDesc: "کسی بھی فون کیمرے سے QR کوڈ اسکین کریں یا نیچے دیا گیا لنک دوستوں کے ساتھ شیئر کریں!", copyLinkBtn: "📋 لنک کاپی کریں", linkCopiedText: "✅ کاپی ہو گیا!", sharePhoneBtn: "📲 فون کے ذریعے شیئر کریں"
+            shareMapTitle: "نقشہ ایپ شیئر کریں", shareMapDesc: "فون کیمرے سے QR کوڈ اسکین کریں یا نیچے دیا گیا لنک دوستوں کے ساتھ شیئر کریں!", copyLinkBtn: "📋 لنک کاپی کریں", copiedBtn: "✅ کاپی ہو گیا!", shareViaPhoneBtn: "📲 فون سے شیئر کریں"
           },
           tr: {
             menuBtn: "Menü", langBtn: "🇹🇷 Dil Seçimi", poiFilterBtn: "🗺️ Filtreler ve Harita Anahtarı", progBtn: "📅 Program", histBtn: "📜 Karnaval Tarihi",
@@ -5072,8 +5065,7 @@
             locateHubOnMap: "📍 Ana Durağı Haritada Göster",
             aboutModalTitle: "Hakkımda",
             aboutTagline: "Bu gayri resmi harita uygulamasının yaratıcısı ve geliştiricisi! 🤓",
-            aboutBio: "Merhaba! Yemeklerim gibi bu uygulama da kültür ve topluluk sevgisiyle yapıldı; rahatça keşfetmenize, güvende kalmanıza ve NHC '26'da mümkün olduğunca eğlenmenize yardımcı olmak için. — One Love! ✌🏾❤️",
-            shareMapTitle: "Harita Uygulamasını Paylaş", shareMapDesc: "QR kodunu telefon kameranızla tarayın veya aşağıdaki bağlantıyı arkadaşlarınızla paylaşın!", copyLinkBtn: "📋 Bağlantıyı Kopyala", linkCopiedText: "✅ Kopyalandı!", sharePhoneBtn: "📲 Telefonla Paylaş"
+            aboutBio: "Merhaba! Yemeklerim gibi bu uygulama da kültür ve topluluk sevgisiyle yapıldı; rahatça keşfetmenize, güvende kalmanıza ve NHC '26'da mümkün olduğunca eğlenmenize yardımcı olmak için. — One Love! ✌🏾❤️"
           },
           pl: {
             menuBtn: "Menu", langBtn: "🇵🇱 Język", poiFilterBtn: "🗺️ Filtry i Legenda", progBtn: "📅 Program", histBtn: "📜 Historia Karnawału",
@@ -5178,7 +5170,7 @@
             aboutModalTitle: "O Mnie",
             aboutTagline: "Twórca i deweloper tej nieoficjalnej aplikacji z mapą! 🤓",
             aboutBio: "Cześć! Podobnie jak moje gotowanie, ta aplikacja powstała z miłości do kultury i społeczności; aby pomóc Ci płynnie zwiedzać, zachować bezpieczeństwo i bawić się jak najlepiej na NHC '26. — One Love! ✌🏾❤️",
-            shareMapTitle: "Udostępnij Aplikację Mapy", shareMapDesc: "Zeskanuj kod QR aparatem telefonu lub udostępnij poniższy link znajomym!", copyLinkBtn: "📋 Kopiuj Link", linkCopiedText: "✅ Skopiowano!", sharePhoneBtn: "📲 Udostępnij przez Telefon"
+            shareMapTitle: "Udostępnij Aplikację Mapy", shareMapDesc: "Zeskanuj kod QR aparatem telefonu lub udostępnij poniższy link znajomym!", copyLinkBtn: "📋 Kopiuj Link", copiedBtn: "✅ Skopiowano!", shareViaPhoneBtn: "📲 Udostępnij przez Telefon"
           },
           ur: {
             menuBtn: "مینو", langBtn: "🇵🇰 زبان", poiFilterBtn: "🗺️ فلٹرز اور رہنمائی", progBtn: "📅 پروگرام", histBtn: "📜 کارنیوال کی تاریخ",

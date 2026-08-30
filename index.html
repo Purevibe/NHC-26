@@ -1138,9 +1138,9 @@
     <div id="map">
       <div class="map-custom-controls">
         <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filters and Key</button>
-        <button class="map-control-btn" id="travelInfoToggleBtn">🚌 Travel Info</button>
         <button class="map-control-btn" id="programmeToggleBtn">📅 Programme</button>
         <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
+        <button class="map-control-btn" id="travelInfoToggleBtn">🚌 Travel Info</button>
         <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
         <button class="map-control-btn" id="themeToggleBtn">☀️ Light Map</button>
         <button class="map-control-btn" id="aboutMeToggleBtn">ℹ️ About Me</button>
@@ -1792,9 +1792,9 @@
       { name: "LADBROKE GROVE", lat: 51.5200, lng: -0.2117, rotation: -115 },
       { name: "KENSAL ROAD", lat: 51.5263, lng: -0.2132, rotation: -3 },
       { name: "ELKSTONE ROAD", lat: 51.5257, lng: -0.2078, rotation: 12 },
-      { name: "GREAT WESTERN ROAD", lat: 51.5222, lng: -0.2014, rotation: 62 },
+      { name: "GREAT WESTERN ROAD", lat: 51.5222, lng: -0.2014, rotation: 118 },
       { name: "CHEPSTOW ROAD", lat: 51.5165, lng: -0.1956, rotation: 78 },
-      { name: "WESTBOURNE GROVE", lat: 51.5135, lng: -0.2015, rotation: 18 }
+      { name: "WESTBOURNE GROVE", lat: 51.5135, lng: -0.2015, rotation: -162 }
     ];
 
     const carnivalBoundaryCoords = [
@@ -2562,11 +2562,10 @@
     if (window.L && L.DomEvent) {
       L.DomEvent.disableScrollPropagation(poiFilterPanel);
       L.DomEvent.disableClickPropagation(poiFilterPanel);
-      const mapControlsContainer = document.querySelector('.map-custom-controls');
-      if (mapControlsContainer) {
-        L.DomEvent.disableScrollPropagation(mapControlsContainer);
-        L.DomEvent.disableClickPropagation(mapControlsContainer);
-      }
+      document.querySelectorAll('.map-control-btn, .map-custom-controls').forEach(el => {
+        L.DomEvent.disableScrollPropagation(el);
+        L.DomEvent.disableClickPropagation(el);
+      });
       document.querySelectorAll('.preset-pills, .genres-wrapper').forEach(el => {
         L.DomEvent.disableScrollPropagation(el);
         L.DomEvent.disableClickPropagation(el);

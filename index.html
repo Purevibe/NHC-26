@@ -2715,10 +2715,42 @@
         });
       }
 
+      // 1. Highlight built-in preset pills
       document.querySelectorAll('.preset-pill').forEach(p => {
         const pKey = p.dataset.preset;
-        if (pKey === 'favs' || pKey === 'searchmore') return;
+        if (pKey === 'favs' || pKey === 'searchmore' || p.dataset.customGenre) return;
         p.classList.toggle('active', activePresets.has(pKey));
+      });
+
+      // 2. Render dynamic pills under "Music Genres & Presets" for selected genres not covered by standard presets
+      const standardGenres = new Set(Object.values(presetToGenresMap).flat());
+      const customSelected = Array.from(selectedGenres).filter(g => !standardGenres.has(g));
+
+      document.querySelectorAll('.preset-pills').forEach(container => {
+        // Remove old dynamic custom genre pills
+        container.querySelectorAll('.preset-pill[data-custom-genre]').forEach(pill => pill.remove());
+
+        const searchMoreBtn = container.querySelector('[data-preset="searchmore"]');
+
+        customSelected.forEach(genre => {
+          const pill = document.createElement('button');
+          pill.className = 'preset-pill active';
+          pill.dataset.customGenre = genre;
+          pill.innerHTML = `🔊 ${genre}`;
+          pill.addEventListener('click', () => {
+            selectedGenres.delete(genre);
+            const chip = document.querySelector(`.genre-chip[data-genre="${genre}"]`);
+            if (chip) chip.classList.remove('active');
+            syncPresetPillsWithGenreChips();
+            applyFilters();
+          });
+
+          if (searchMoreBtn) {
+            container.insertBefore(pill, searchMoreBtn);
+          } else {
+            container.appendChild(pill);
+          }
+        });
       });
     }
 

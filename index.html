@@ -2650,25 +2650,31 @@
 
           // Update any visible popup favorite buttons for this system
           document.querySelectorAll('.popup-fav-btn').forEach(btn => {
-            if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(systemName)) {
+            if (btn.dataset.systemName === systemName || (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(systemName))) {
               btn.classList.toggle('active', isNowFav);
               btn.textContent = isNowFav ? '⭐' : '★';
             }
           });
 
-          // If viewing the Favorites preset, re-apply filters to update the list view
+          // Update sidebar list card favorite buttons
+          document.querySelectorAll('.list-card').forEach(card => {
+            if (card.dataset.systemName === systemName) {
+              const favBtn = card.querySelector('.card-fav-btn');
+              if (favBtn) {
+                favBtn.classList.toggle('active', isNowFav);
+                favBtn.textContent = isNowFav ? '⭐' : '★';
+              }
+            }
+          });
+
+          // If viewing the Favorites preset, re-apply filters to refresh the list view
           if (selectedPresets.has('favs')) {
             applyFilters();
           } else {
-            // Otherwise just update the list card buttons in the sidebar without re-rendering layers
-            document.querySelectorAll('.list-card').forEach(card => {
-              const titleEl = card.querySelector('.card-title');
-              if (titleEl && titleEl.textContent === systemName) {
-                const favBtn = card.querySelector('.card-fav-btn');
-                if (favBtn) {
-                  favBtn.classList.toggle('active', isNowFav);
-                  favBtn.textContent = isNowFav ? '⭐' : '★';
-                }
+            // Otherwise, update the map marker icon for this system
+            systemsLayer.eachLayer(layer => {
+              if (layer.options && layer.options.systemName === systemName) {
+                layer.setIcon(createSoundIcon(isNowFav, systemName));
               }
             });
           }
@@ -3431,14 +3437,15 @@
 
           filtered.forEach(s => {
             const isFav = favorites.has(s.name);
-            const marker = L.marker([s.lat, s.lng], { icon: createSoundIcon(isFav, s.name) });
+            const marker = L.marker([s.lat, s.lng], { icon: createSoundIcon(isFav, s.name), systemName: s.name });
             const badgeHTML = s.genres.map(g => `<span class="popup-badge">${g}</span>`).join('');
+            const escapedName = s.name.replace(/'/g, "\\'");
 
             const popupContent = `
           <div>
             <div class="popup-header-row">
               <div class="popup-title">${s.name}</div>
-              <button class="popup-fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${s.name}')" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
+              <button class="popup-fav-btn ${isFav ? 'active' : ''}" data-system-name="${s.name}" onclick="toggleFavorite('${escapedName}')" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
             </div>
             <div class="popup-badge-list">${badgeHTML}</div>
             ${createNavHTML(s.lat, s.lng, s.name)}
@@ -3450,12 +3457,13 @@
             if (listEl) {
               const item = document.createElement('div');
               item.className = 'list-card';
+              item.dataset.systemName = s.name;
               item.innerHTML = `
             <div class="card-info">
               <div class="card-title">${s.name}</div>
               <div class="card-genres">${s.genres.join(' • ')}</div>
             </div>
-            <button class="card-fav-btn ${isFav ? 'active' : ''}" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
+            <button class="card-fav-btn ${isFav ? 'active' : ''}" data-system-name="${s.name}" title="Toggle Favorite">${isFav ? '⭐' : '★'}</button>
           `;
 
               item.querySelector('.card-fav-btn').addEventListener('click', (e) => {

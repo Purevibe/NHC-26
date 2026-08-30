@@ -491,12 +491,11 @@
       border-radius: 12px;
       width: 100%;
       max-width: 400px;
-      max-height: 82vh;
+      max-height: 85vh;
       display: flex;
       flex-direction: column;
       box-shadow: 0 20px 40px rgba(0,0,0,0.8);
       overflow: hidden;
-      position: relative;
       animation: modalFadeIn 0.2s ease-out;
     }
     .about-modal-body {
@@ -505,11 +504,9 @@
       flex-direction: column;
       gap: 16px;
       overflow-y: auto;
-      scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       flex: 1;
-    }
-    @keyframes modalFadeIn {
+    }@keyframes modalFadeIn {
       from { opacity: 0; transform: scale(0.95) translateY(10px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
@@ -520,46 +517,7 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #334155;
-      flex-shrink: 0;
     }
-
-    /* Modal Bottom Scroll Footer Bar */
-    .modal-scroll-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 12px;
-      background: #090e17;
-      border-top: 1px solid #334155;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-    .scroll-nav-btn {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 7px 12px;
-      background: #1e293b;
-      color: #38bdf8;
-      border: 1px solid #334155;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      user-select: none;
-    }
-    .scroll-nav-btn:hover {
-      background: #334155;
-      color: #ffffff;
-      border-color: #38bdf8;
-    }
-    .scroll-nav-btn:active {
-      transform: scale(0.97);
-    }
-
     .about-modal-close {
       background: rgba(255,255,255,0.08);
       border: 1px solid #475569;
@@ -670,13 +628,12 @@
     .programme-modal-card {
       max-width: 480px;
       width: 92vw;
-      max-height: 82vh;
+      max-height: 85vh;
       display: flex;
       flex-direction: column;
     }
     .prog-modal-body {
       overflow-y: auto;
-      scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       flex: 1;
       padding: 14px 16px;
@@ -1518,14 +1475,10 @@
             </div>
             <p class="prog-event-desc" data-i18n="reflectionDesc">
               At 3:00 PM, a 72-second silence is held across the entire Carnival area in honor of Grenfell Tower victims and community pioneers.
+            </p>
+          </div>
         </div>
 
-      </div>
-
-      <!-- Scroll Navigation Footer Buttons -->
-      <div class="modal-scroll-footer">
-        <button class="scroll-nav-btn" data-scroll-target="#programmeModal .prog-modal-body" data-scroll-dir="-1" data-i18n="scrollUp">▲ Scroll Up</button>
-        <button class="scroll-nav-btn" data-scroll-target="#programmeModal .prog-modal-body" data-scroll-dir="1" data-i18n="scrollDown">▼ Scroll Down</button>
       </div>
     </div>
   </div>
@@ -1640,12 +1593,6 @@
             Carnival is all about sharing love, cultural pride, and pure happiness across generations. Put on your brightest colours, bring the family, and come ready to celebrate! ❤️💛💚
           </p>
         </div>
-      </div>
-
-      <!-- Scroll Navigation Footer Buttons -->
-      <div class="modal-scroll-footer">
-        <button class="scroll-nav-btn" data-scroll-target="#historyModal .prog-modal-body" data-scroll-dir="-1" data-i18n="scrollUp">▲ Scroll Up</button>
-        <button class="scroll-nav-btn" data-scroll-target="#historyModal .prog-modal-body" data-scroll-dir="1" data-i18n="scrollDown">▼ Scroll Down</button>
       </div>
     </div>
   </div>
@@ -1845,12 +1792,6 @@
           </div>
         </div>
 
-      </div>
-
-      <!-- Scroll Navigation Footer Buttons -->
-      <div class="modal-scroll-footer">
-        <button class="scroll-nav-btn" data-scroll-target="#travelModal .prog-modal-body" data-scroll-dir="-1" data-i18n="scrollUp">▲ Scroll Up</button>
-        <button class="scroll-nav-btn" data-scroll-target="#travelModal .prog-modal-body" data-scroll-dir="1" data-i18n="scrollDown">▼ Scroll Down</button>
       </div>
     </div>
   </div>
@@ -3076,23 +3017,6 @@
       });
     }
 
-    // Modal Scroll Navigation Buttons Handler
-    document.querySelectorAll('.scroll-nav-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetSelector = btn.getAttribute('data-scroll-target');
-        const dir = parseInt(btn.getAttribute('data-scroll-dir'), 10) || 1;
-        const container = document.querySelector(targetSelector);
-        if (container) {
-          const scrollDistance = container.clientHeight * 0.7;
-          container.scrollBy({
-            top: scrollDistance * dir,
-            behavior: 'smooth'
-          });
-        }
-      });
-    });
-
     // Carnival History Modal Listeners
     const historyModal = document.getElementById('historyModal');
     const historyToggleBtn = document.getElementById('historyToggleBtn');
@@ -3184,8 +3108,7 @@
         histBeganDesc: "What started as a grassroots community gathering has blossomed into a world-renowned cultural institution:",
         histExperienceTitle: "What to See & Experience",
         travelModalTitle: "Travel & Transport Guide", travelTubeTab: "🚇 Tube & Rail Guide", travelBusTab: "🚌 Bus Diversions & Express",
-        locateOnMap: "📍 Locate on Map", locateHubOnMap: "📍 Locate Hub on Map",
-        scrollUp: "▲ Scroll Up", scrollDown: "▼ Scroll Down"
+        locateOnMap: "📍 Locate on Map", locateHubOnMap: "📍 Locate Hub on Map"
       },
       es: {
         langBtn: "🌐 Idioma", poiFilterBtn: "🗺️ Filtros y Clave", progBtn: "📅 Programa", histBtn: "📜 Historia del Carnaval",
@@ -3287,9 +3210,7 @@
         tfl_kensalgreen: "Se esperan filas fuera de la estación Kensal Green.",
         tfl_kensalrise: "La entrada de Chamberlayne Road cierra a las 18:00 con filas por Station Terrace.",
         locateOnMap: "📍 Ubicar en el Mapa",
-        locateHubOnMap: "📍 Ubicar Terminal en Mapa",
-        scrollUp: "▲ Desplazar Arriba",
-        scrollDown: "▼ Desplazar Abajo"
+        locateHubOnMap: "📍 Ubicar Terminal en Mapa"
       },
       pt: {
         langBtn: "🌐 Idioma", poiFilterBtn: "🗺️ Filtros e Legenda", progBtn: "📅 Programação", histBtn: "📜 História do Carnaval",

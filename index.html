@@ -844,6 +844,23 @@
       pointer-events: none;
     }
 
+    /* Road Name Labels Aligned Along Parade Circuit Lines */
+    .route-street-label-aligned {
+      background: #7f1d1d;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #fca5a5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.85);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+
     /* Popup & Navigation Buttons */
     .leaflet-popup-content-wrapper {
       background: #131d31;
@@ -1550,6 +1567,15 @@
       { lat: 51.5135, lng: -0.2034, bearing: 245 }
     ];
 
+    const paradeRoadLabels = [
+      { name: "LADBROKE GROVE", lat: 51.5215, lng: -0.2124, rotation: -68 },
+      { name: "KENSAL ROAD", lat: 51.5263, lng: -0.2122, rotation: -2 },
+      { name: "ELKSTONE ROAD", lat: 51.5257, lng: -0.2078, rotation: 18 },
+      { name: "GREAT WESTERN ROAD", lat: 51.5212, lng: -0.2008, rotation: 65 },
+      { name: "CHEPSTOW ROAD", lat: 51.5170, lng: -0.1957, rotation: 78 },
+      { name: "WESTBOURNE GROVE", lat: 51.5137, lng: -0.2028, rotation: -20 }
+    ];
+
     const carnivalBoundaryCoords = [
       [51.5273, -0.2175], [51.5268, -0.2085], [51.5240, -0.2010],
       [51.5215, -0.1975], [51.5175, -0.1915], [51.5130, -0.1920],
@@ -1814,6 +1840,22 @@
       });
 
       L.marker([a.lat, a.lng], { icon: doubleArrowIcon, interactive: false }).addTo(paradeLayer);
+    });
+
+    // Street Road Names Aligned Along Parade Circuit Lines
+    paradeRoadLabels.forEach(rl => {
+      const labelIcon = L.divIcon({
+        className: 'route-arrow-marker',
+        html: `
+          <div style="transform: rotate(${rl.rotation}deg); display: flex; align-items: center; justify-content: center;">
+            <div class="route-street-label-aligned">${rl.name}</div>
+          </div>
+        `,
+        iconSize: [140, 24],
+        iconAnchor: [70, 12]
+      });
+
+      L.marker([rl.lat, rl.lng], { icon: labelIcon, interactive: false }).addTo(paradeLayer);
     });
 
     // Boundary

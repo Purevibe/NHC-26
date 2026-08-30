@@ -1102,6 +1102,7 @@
     <div id="map">
       <div class="map-custom-controls">
         <button class="map-control-btn" id="poiFilterToggleBtn">🗺️ Filters</button>
+        <button class="map-control-btn" id="travelInfoToggleBtn">🚌 Travel Info</button>
         <button class="map-control-btn" id="programmeToggleBtn">📅 Programme</button>
         <button class="map-control-btn" id="findLocationBtn">📍 Find My Location</button>
         <button class="map-control-btn" id="tflAlertsToggleBtn">🚇 TfL Alerts</button>
@@ -1135,6 +1136,7 @@
               <label class="poi-toggle-row"><input type="checkbox" data-poi="welfare" checked> 💖 Welfare Points (4)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="trading" checked> 🍴 Street Trading Stalls (19)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="stations" checked> 🚇 Tube Stations (11)</label>
+              <label class="poi-toggle-row"><input type="checkbox" data-poi="buses" checked> 🚌 Bus Hubs & Express Routes (6)</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="parade" checked> 🔴 Parade Route</label>
               <label class="poi-toggle-row"><input type="checkbox" data-poi="boundary" checked> 🟡 Perimeter Boundary</label>
             </div>
@@ -1364,6 +1366,188 @@
             <p class="prog-event-desc">
               At 3:00 PM, a 72-second silence is held across the entire Carnival area in honor of Grenfell Tower victims and community pioneers.
             </p>
+          </div>
+        </div>
+
+  </div>
+
+  <!-- TRAVEL INFO MODAL OVERLAY -->
+  <div id="travelModal" class="about-modal-overlay" style="display: none;">
+    <div class="about-modal-card programme-modal-card">
+      <div class="about-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.4rem;">🚌</span>
+          <h2 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0;">Travel & Transport Guide</h2>
+        </div>
+        <button id="closeTravelModalBtn" class="about-modal-close">✕</button>
+      </div>
+
+      <!-- Tab Switcher for Tube vs Bus -->
+      <div class="prog-tab-bar">
+        <button class="prog-tab-btn active" id="travelTabTube">🚇 Tube & Rail Guide</button>
+        <button class="prog-tab-btn" id="travelTabBus">🚌 Bus Diversions & Express</button>
+      </div>
+
+      <div class="about-modal-body prog-modal-body">
+        
+        <!-- TUBE & RAIL CONTENT -->
+        <div id="travelContentTube" class="prog-day-content">
+          <div class="prog-day-title">Tube & Train Station Statuses</div>
+
+          <div style="background: #1e1b4b; border: 1.5px solid #6366f1; border-radius: 8px; padding: 10px; margin-bottom: 12px; font-size: 0.78rem; color: #e0e7ff; line-height: 1.4;">
+            💡 <strong>TfL Top Tip:</strong> For the easiest and least crowded journey, take the Tube or Elizabeth Line to <strong>Paddington Station</strong>, <strong>Kensal Rise</strong>, or <strong>Shepherd's Bush</strong> and follow the signed walking route.
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">⛔ Ladbroke Grove Station</span>
+              <span class="prog-event-time" style="color: #ef4444; border-color: #ef4444; background: #451a03;">CLOSED ALL DAY</span>
+            </div>
+            <p class="prog-event-desc">Closed all day on both Sunday and Monday for safety.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">⚠️ Notting Hill Gate Station</span>
+              <span class="prog-event-time">NO ENTRY 11:00 - 18:00</span>
+            </div>
+            <p class="prog-event-desc">
+              No entry between 11:00 AM and 6:00 PM. District & Circle lines will not stop, and there is no interchange between Central and District/Circle lines.
+            </p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">⚠️ Westbourne Park Station</span>
+              <span class="prog-event-time">EXIT ONLY from 11:00</span>
+            </div>
+            <p class="prog-event-desc">Exit only from 11:00 AM onwards. No entry permitted.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">⚠️ Holland Park Station</span>
+              <span class="prog-event-time">CLOSES 15:00</span>
+            </div>
+            <p class="prog-event-desc">No entry after 11:00 AM. Station closes completely at 15:00.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">⚠️ Queensway Station</span>
+              <span class="prog-event-time">NO ENTRY 11:00 - 18:00</span>
+            </div>
+            <p class="prog-event-desc">No entry between 11:00 AM and 6:00 PM. Exit only.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">⚠️ Royal Oak Station</span>
+              <span class="prog-event-time">CLOSES 18:00</span>
+            </div>
+            <p class="prog-event-desc">No entry after 11:00 AM. Station closes completely at 18:00.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">⚠️ Latimer Road Station</span>
+              <span class="prog-event-time">CLOSES 23:00</span>
+            </div>
+            <p class="prog-event-desc">Closes at 23:00. May also close temporarily during busy periods.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">⚠️ Shepherd's Bush</span>
+              <span class="prog-event-time">RESTRICTED FROM 16:00</span>
+            </div>
+            <p class="prog-event-desc">No ticket issuing facilities and no down escalator after 16:00.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">⚠️ Kensal Rise & Kensal Green</span>
+              <span class="prog-event-time">QUEUES EXPECTED</span>
+            </div>
+            <p class="prog-event-desc">Kensal Green queues expected outside. Kensal Rise Chamberlayne Road entrance closes at 18:00 with queuing via Station Terrace.</p>
+          </div>
+
+          <div class="prog-event-card highlight-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🟢 Recommended Hub: Paddington Station</span>
+              <span class="prog-event-time" style="color: #4ade80; border-color: #22c55e; background: #064e3b;">OPEN / RECOMMENDED</span>
+            </div>
+            <p class="prog-event-desc">
+              Major interchange hub for Elizabeth Line, National Rail, Bakerloo, Circle, District, and Hammersmith & City lines. Short signed walk directly to Carnival.
+            </p>
+          </div>
+        </div>
+
+        <!-- BUS ROUTES CONTENT -->
+        <div id="travelContentBus" class="prog-day-content" style="display: none;">
+          <div class="prog-day-title">Bus Services & Diversions</div>
+
+          <div style="background: #451a03; border: 1.5px solid #ea580c; border-radius: 8px; padding: 10px; margin-bottom: 12px; font-size: 0.78rem; color: #ffedd5; line-height: 1.4;">
+            🚍 <strong>Bus Diversions:</strong> Buses operate from two main hubs outside the carnival perimeter: <strong>Prince of Wales (Harrow Road)</strong> in the north, and <strong>Notting Hill Gate</strong> in the south.
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🚌 Special Express Bus 148X</span>
+              <span class="prog-event-time">10:00 – 22:00</span>
+            </div>
+            <div class="prog-event-loc">📍 Notting Hill Gate ↔ Victoria & Vauxhall</div>
+            <p class="prog-event-desc">Limited-stop express service running between Notting Hill Gate and Victoria (10:00 - 17:00), then extending to Vauxhall until 22:00.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🚌 Special Express Bus 7X</span>
+              <span class="prog-event-time">Daytime</span>
+            </div>
+            <div class="prog-event-loc">📍 Oxford Circus ↔ Paddington ↔ Du Cane Road ↔ East Acton</div>
+            <p class="prog-event-desc">Direct limited-stop express service connects central London with East Acton via Paddington.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🚌 Special Express Bus 18X</span>
+              <span class="prog-event-time">12:00 – 22:00</span>
+            </div>
+            <div class="prog-event-loc">📍 Prince of Wales (Harrow Rd) ↔ Warren Street ↔ Stonebridge Park</div>
+            <p class="prog-event-desc">Runs between Warren Street and Stonebridge Park via Prince of Wales pub hub.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🚌 Special Express Bus 36X</span>
+              <span class="prog-event-time">Daytime</span>
+            </div>
+            <div class="prog-event-loc">📍 Peckham ➔ Harrow Road (One Direction Only)</div>
+            <p class="prog-event-desc">Runs one-way from Peckham and South London to Harrow Road.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🚌 Special Express Bus 23X</span>
+              <span class="prog-event-time">Monday Afternoon Only</span>
+            </div>
+            <div class="prog-event-loc">📍 Harrow Road (Prince of Wales) ↔ Victoria</div>
+            <p class="prog-event-desc">Four special trips running on Monday afternoon only.</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🚏 Diverted Day Bus Routes</span>
+            </div>
+            <p class="prog-event-desc"><strong>Day Routes:</strong> 7, 18, 23, 27, 28, 31, 36, 52, 70, 228, 295, 302, 316, 328</p>
+          </div>
+
+          <div class="prog-event-card">
+            <div class="prog-event-header">
+              <span class="prog-event-title">🌙 Diverted Night Bus Routes</span>
+            </div>
+            <p class="prog-event-desc"><strong>Night Routes:</strong> N7, N27, N28, N31</p>
           </div>
         </div>
 
@@ -1677,6 +1861,71 @@
     const systemsLayer = L.layerGroup().addTo(map);
     const jouvertLayer = L.layerGroup().addTo(map);
     const judgingLayer = L.layerGroup().addTo(map);
+    const busesLayer = L.layerGroup().addTo(map);
+
+    // 🚌 TfL Bus Hubs & Express Bus Terminals
+    const busHubs = [
+      {
+        name: "Prince of Wales Bus Hub (Harrow Rd)",
+        subtitle: "North Carnival Bus Hub",
+        lat: 51.52821105312384,
+        lng: -0.20367205142974854,
+        routes: "• Express 18X (to Warren St & Stonebridge Park)<br>• Express 23X (to Victoria - Mon afternoon)<br>• Routes 31 & 316 (to North London)<br>• Route 36 (to South London)<br>• Route 328 (to North London & Chelsea)"
+      },
+      {
+        name: "Notting Hill Gate Bus Hub",
+        subtitle: "South Carnival Bus Hub",
+        lat: 51.5091230192837,
+        lng: -0.19612349081239,
+        routes: "• Express 148X (to Victoria & Vauxhall)<br>• Express 7X (to Paddington & Oxford Circus)<br>• Route 27 (to Euston & Hammersmith)<br>• Route 28 (to Wandsworth)<br>• Route 52 (Shuttle to Victoria)<br>• Route 94 (to Piccadilly Circus)<br>• Route 148 (to Camberwell)<br>• Route 452 (to Vauxhall)"
+      },
+      {
+        name: "Maida Vale & Warwick Avenue Hub",
+        subtitle: "North-East Bus Hub",
+        lat: 51.527182910238,
+        lng: -0.183491823901,
+        routes: "• Route 6 (to Victoria & Willesden Bus Garage)"
+      },
+      {
+        name: "Willesden Bus Garage Terminal",
+        subtitle: "North-West Bus Terminus",
+        lat: 51.543201928301,
+        lng: -0.231902830192,
+        routes: "• Route 302 terminates here<br>• Transfer to Route 6 or 52 for Carnival"
+      }
+    ];
+
+    busHubs.forEach(b => {
+      const busIcon = L.divIcon({
+        className: 'custom-facility-icon',
+        html: `
+          <div style="background: linear-gradient(135deg, #dc2626, #991b1b); color: #ffffff; border: 2px solid #ffffff; border-radius: 6px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(0,0,0,0.6); font-weight: bold;">
+            🚌
+          </div>
+        `,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -14]
+      });
+
+      const busPopupHTML = `
+        <div style="min-width: 230px; max-width: 270px;">
+          <div style="background: linear-gradient(135deg, #dc2626, #991b1b); margin: -10px -10px 8px -10px; padding: 8px 10px; border-top-left-radius: 6px; border-top-right-radius: 6px;">
+            <div style="font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #fef08a;">🚌 TFL BUS HUB</div>
+            <div style="font-size: 0.95rem; font-weight: 900; color: #ffffff; line-height: 1.1;">${b.name}</div>
+            <div style="font-size: 0.72rem; color: #fee2e2; margin-top: 2px; font-weight: 600;">${b.subtitle}</div>
+          </div>
+          <div style="font-size: 0.76rem; color: #cbd5e1; line-height: 1.45; margin-bottom: 8px; background: #0c1424; border: 1px solid #1e293b; border-radius: 6px; padding: 8px;">
+            ${b.routes}
+          </div>
+          ${createNavHTML(b.lat, b.lng, b.name)}
+        </div>
+      `;
+
+      L.marker([b.lat, b.lng], { icon: busIcon })
+        .bindPopup(busPopupHTML)
+        .addTo(busesLayer);
+    });
 
     // J'ouvert Starting Point Marker
     const jouvertIcon = L.divIcon({
@@ -2335,6 +2584,7 @@
       welfare: welfareLayer,
       trading: tradingLayer,
       stations: stationsLayer,
+      buses: busesLayer,
       parade: paradeLayer,
       boundary: boundaryLayer
     };
@@ -2485,6 +2735,48 @@
         progTabSunday.classList.remove('active');
         progContentMonday.style.display = 'block';
         progContentSunday.style.display = 'none';
+    // Travel Info Modal Listeners
+    const travelModal = document.getElementById('travelModal');
+    const travelInfoToggleBtn = document.getElementById('travelInfoToggleBtn');
+    const closeTravelModalBtn = document.getElementById('closeTravelModalBtn');
+    const travelTabTube = document.getElementById('travelTabTube');
+    const travelTabBus = document.getElementById('travelTabBus');
+    const travelContentTube = document.getElementById('travelContentTube');
+    const travelContentBus = document.getElementById('travelContentBus');
+
+    if (travelInfoToggleBtn && travelModal) {
+      travelInfoToggleBtn.addEventListener('click', () => {
+        travelModal.style.display = 'flex';
+      });
+    }
+
+    if (closeTravelModalBtn && travelModal) {
+      closeTravelModalBtn.addEventListener('click', () => {
+        travelModal.style.display = 'none';
+      });
+    }
+
+    if (travelModal) {
+      travelModal.addEventListener('click', (e) => {
+        if (e.target === travelModal) {
+          travelModal.style.display = 'none';
+        }
+      });
+    }
+
+    if (travelTabTube && travelTabBus) {
+      travelTabTube.addEventListener('click', () => {
+        travelTabTube.classList.add('active');
+        travelTabBus.classList.remove('active');
+        travelContentTube.style.display = 'block';
+        travelContentBus.style.display = 'none';
+      });
+
+      travelTabBus.addEventListener('click', () => {
+        travelTabBus.classList.add('active');
+        travelTabTube.classList.remove('active');
+        travelContentBus.style.display = 'block';
+        travelContentTube.style.display = 'none';
       });
     }
 

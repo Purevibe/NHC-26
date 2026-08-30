@@ -3021,6 +3021,14 @@
       });
     }
 
+    if (imageLightboxModal) {
+      imageLightboxModal.addEventListener('click', (e) => {
+        if (e.target === imageLightboxModal) {
+          imageLightboxModal.style.display = 'none';
+        }
+      });
+    }
+
     // Programme Modal Listeners
     const programmeModal = document.getElementById('programmeModal');
     const programmeToggleBtn = document.getElementById('programmeToggleBtn');
@@ -3039,6 +3047,14 @@
     if (closeProgrammeModalBtn && programmeModal) {
       closeProgrammeModalBtn.addEventListener('click', () => {
         programmeModal.style.display = 'none';
+      });
+    }
+
+    if (programmeModal) {
+      programmeModal.addEventListener('click', (e) => {
+        if (e.target === programmeModal) {
+          programmeModal.style.display = 'none';
+        }
       });
     }
 

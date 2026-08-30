@@ -2162,19 +2162,33 @@
     }).addTo(map);
 
     let isDarkMode = true;
+    try {
+      const savedTheme = localStorage.getItem('nhc26_theme');
+      if (savedTheme === 'light') {
+        isDarkMode = false;
+        osmTiles.getContainer().classList.remove('dark-map-tiles');
+      }
+    } catch (e) {
+      console.error("Could not load theme from localStorage", e);
+    }
 
     const themeToggleBtn = document.getElementById('themeToggleBtn');
-    themeToggleBtn.addEventListener('click', () => {
-      if (isDarkMode) {
-        osmTiles.getContainer().classList.remove('dark-map-tiles');
-        themeToggleBtn.textContent = '🌙 Dark Map';
-        isDarkMode = false;
-      } else {
-        osmTiles.getContainer().classList.add('dark-map-tiles');
-        themeToggleBtn.textContent = '☀️ Light Map';
-        isDarkMode = true;
-      }
-    });
+    if (themeToggleBtn) {
+      themeToggleBtn.textContent = isDarkMode ? '☀️ Light Map' : '🌙 Dark Map';
+      themeToggleBtn.addEventListener('click', () => {
+        if (isDarkMode) {
+          osmTiles.getContainer().classList.remove('dark-map-tiles');
+          themeToggleBtn.textContent = '🌙 Dark Map';
+          isDarkMode = false;
+          try { localStorage.setItem('nhc26_theme', 'light'); } catch (e) {}
+        } else {
+          osmTiles.getContainer().classList.add('dark-map-tiles');
+          themeToggleBtn.textContent = '☀️ Light Map';
+          isDarkMode = true;
+          try { localStorage.setItem('nhc26_theme', 'dark'); } catch (e) {}
+        }
+      });
+    }
 
     // 5. REAL-TIME GPS GEOLOCATION
     let userMarker = null;
@@ -3021,12 +3035,28 @@
       boundary: boundaryLayer
     };
 
+    // Layer Visibility State & Persistence
+    let hiddenLayers = new Set();
+    try {
+      const savedHidden = localStorage.getItem('nhc26_hidden_layers');
+      if (savedHidden) hiddenLayers = new Set(JSON.parse(savedHidden));
+    } catch (e) {}
+
     function setLayerVisibility(layerType, isActive) {
       const targetLayer = layerMap[layerType];
       if (targetLayer) {
         isActive ? map.addLayer(targetLayer) : map.removeLayer(targetLayer);
       }
       
+      if (isActive) {
+        hiddenLayers.delete(layerType);
+      } else {
+        hiddenLayers.add(layerType);
+      }
+      try {
+        localStorage.setItem('nhc26_hidden_layers', JSON.stringify(Array.from(hiddenLayers)));
+      } catch (e) {}
+
       // Sync sidebar buttons
       const sidebarBtn = document.querySelector(`.layer-toggle-btn[data-layer="${layerType}"]`);
       if (sidebarBtn) {
@@ -3039,6 +3069,13 @@
         checkbox.checked = isActive;
       }
     }
+
+    // Restore layer visibility state on load
+    Object.keys(layerMap).forEach(lType => {
+      if (hiddenLayers.has(lType)) {
+        setLayerVisibility(lType, false);
+      }
+    });
 
     // Layer Controls (Sidebar buttons)
     document.querySelectorAll('.layer-toggle-btn').forEach(btn => {
@@ -4621,9 +4658,20 @@
       btn.addEventListener('click', (e) => {
         const selectedLang = e.currentTarget.dataset.lang;
         setLanguage(selectedLang);
+        try { localStorage.setItem('nhc26_lang', selectedLang); } catch (err) {}
         if (langModal) langModal.style.display = 'none';
       });
     });
+
+    // Restore Saved Language Preference
+    try {
+      const savedLang = localStorage.getItem('nhc26_lang');
+      if (savedLang && translations[savedLang]) {
+        setLanguage(savedLang);
+      }
+    } catch (err) {
+      console.error("Could not load language from localStorage", err);
+    }
 
     // Scroll navigation helpers for Programme, History, and Travel modals
     const setupModalScroll = (upBtnId, downBtnId, containerQuery) => {

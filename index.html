@@ -3562,11 +3562,7 @@
         if (window.L && L.DomEvent) {
           L.DomEvent.disableScrollPropagation(poiFilterPanel);
           L.DomEvent.disableClickPropagation(poiFilterPanel);
-          document.querySelectorAll('.map-control-btn, .map-custom-controls').forEach(el => {
-            L.DomEvent.disableScrollPropagation(el);
-            L.DomEvent.disableClickPropagation(el);
-          });
-          document.querySelectorAll('.preset-pills, .genres-wrapper').forEach(el => {
+          document.querySelectorAll('.map-custom-controls, .preset-pills, .genres-wrapper').forEach(el => {
             L.DomEvent.disableScrollPropagation(el);
           });
         }

@@ -2689,33 +2689,37 @@
     let selectedPresets = new Set(['all']);
     let customMapPillGenres = new Set();
 
-    function updateDynamicMapPresetPills() {
-      const container = document.getElementById('mapPresetPills');
-      if (!container) return;
+    const presetToGenresMap = {
+      soca: ['Soca', 'Calypso'],
+      reggae: ['Reggae', 'Lovers Rock', 'Steppers', 'Roots Reggae'],
+      dancehall: ['Dancehall', 'Bashment', 'Ragga'],
+      dub: ['Dub', 'Dubwise'],
+      junglednb: ['Jungle', 'Drum & Bass', 'Breakbeat'],
+      garage: ['Garage'],
+      house: ['House', 'Deep House', 'Funky House', 'Vocal House', 'Acid Techno', 'Electronic', 'Techno'],
+      bailefunk: ['Baile Funk', 'Latin'],
+      reggaeton: ['Reggaeton', 'Latin'],
+      hiphop: ['Hip-Hop', 'Grime', 'Drill'],
+      rnb: ['R&B', 'Neo-Soul', 'Soul', 'Funk', 'Rare Groove']
+    };
 
-      // Remove existing custom genre pills (data-custom-genre)
-      container.querySelectorAll('.preset-pill[data-custom-genre]').forEach(pill => pill.remove());
-
-      const searchMoreBtn = container.querySelector('[data-preset="searchmore"]');
-
-      // Create a pill for each dynamically selected genre from Search More
-      selectedGenres.forEach(genre => {
-        const btn = document.createElement('button');
-        btn.className = 'preset-pill active';
-        btn.dataset.customGenre = genre;
-        btn.innerHTML = `🔊 ${genre}`;
-        btn.addEventListener('click', () => {
-          selectedGenres.delete(genre);
-          const chip = document.querySelector(`.genre-chip[data-genre="${genre}"]`);
-          if (chip) chip.classList.remove('active');
-          applyFilters();
+    function syncPresetPillsWithGenreChips() {
+      const activePresets = new Set();
+      if (selectedGenres.size === 0) {
+        activePresets.add('all');
+      } else {
+        Object.keys(presetToGenresMap).forEach(pKey => {
+          const associated = presetToGenresMap[pKey];
+          if (associated.some(g => selectedGenres.has(g))) {
+            activePresets.add(pKey);
+          }
         });
+      }
 
-        if (searchMoreBtn) {
-          container.insertBefore(btn, searchMoreBtn);
-        } else {
-          container.appendChild(btn);
-        }
+      document.querySelectorAll('.preset-pill').forEach(p => {
+        const pKey = p.dataset.preset;
+        if (pKey === 'favs' || pKey === 'searchmore') return;
+        p.classList.toggle('active', activePresets.has(pKey));
       });
     }
 
@@ -2734,6 +2738,7 @@
             selectedGenres.add(genre);
             chip.classList.add('active');
           }
+          syncPresetPillsWithGenreChips();
           applyFilters();
         });
         genreContainer.appendChild(chip);
@@ -2837,10 +2842,9 @@
       });
     }
 
-    // Preset Pill Multi-Select Click Listeners
     document.querySelectorAll('.preset-pill').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const selectedPreset = e.target.dataset.preset;
+        const selectedPreset = e.currentTarget.dataset.preset;
 
         if (selectedPreset === 'searchmore') {
           switchToDrawerContainer();
@@ -2855,24 +2859,32 @@
         if (selectedPreset === 'all') {
           selectedPresets.clear();
           selectedPresets.add('all');
-        } else {
-          selectedPresets.delete('all');
-          if (selectedPresets.has(selectedPreset)) {
-            selectedPresets.delete(selectedPreset);
-            if (selectedPresets.size === 0) {
-              selectedPresets.add('all');
-            }
+          selectedGenres.clear();
+          document.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
+        } else if (selectedPreset === 'favs') {
+          if (selectedPresets.has('favs')) {
+            selectedPresets.delete('favs');
           } else {
-            selectedPresets.add(selectedPreset);
+            selectedPresets.add('favs');
           }
+          btn.classList.toggle('active', selectedPresets.has('favs'));
+        } else if (presetToGenresMap[selectedPreset]) {
+          const associated = presetToGenresMap[selectedPreset];
+          const isCurrentlyActive = associated.some(g => selectedGenres.has(g));
+
+          if (isCurrentlyActive) {
+            associated.forEach(g => selectedGenres.delete(g));
+          } else {
+            associated.forEach(g => selectedGenres.add(g));
+          }
+
+          document.querySelectorAll('.genre-chip').forEach(chip => {
+            const g = chip.dataset.genre;
+            chip.classList.toggle('active', selectedGenres.has(g));
+          });
         }
 
-        // Synchronize UI active classes across both preset pill lists
-        document.querySelectorAll('.preset-pill').forEach(p => {
-          const pKey = p.dataset.preset;
-          p.classList.toggle('active', selectedPresets.has(pKey));
-        });
-        
+        syncPresetPillsWithGenreChips();
         applyFilters();
       });
     });

@@ -2829,19 +2829,28 @@
 
         const themeToggleBtn = document.getElementById('themeToggleBtn');
         if (themeToggleBtn) {
-          themeToggleBtn.textContent = isDarkMode ? '☀️ Light Map' : '🌙 Dark Map';
+          const updateThemeBtnLabel = () => {
+            const lang = (typeof currentLang !== 'undefined' && typeof translations !== 'undefined' && translations[currentLang]) ? currentLang : 'en';
+            const t = translations[lang] || (typeof translations !== 'undefined' ? translations.en : null);
+            if (t) {
+              themeToggleBtn.textContent = isDarkMode ? t.lightMapBtn : t.darkMapBtn;
+            } else {
+              themeToggleBtn.textContent = isDarkMode ? '☀️ Light Map' : '🌙 Dark Map';
+            }
+          };
+          updateThemeBtnLabel();
+
           themeToggleBtn.addEventListener('click', () => {
             if (isDarkMode) {
               osmTiles.getContainer().classList.remove('dark-map-tiles');
-              themeToggleBtn.textContent = '🌙 Dark Map';
               isDarkMode = false;
               try { localStorage.setItem('nhc26_theme', 'light'); } catch (e) { }
             } else {
               osmTiles.getContainer().classList.add('dark-map-tiles');
-              themeToggleBtn.textContent = '☀️ Light Map';
               isDarkMode = true;
               try { localStorage.setItem('nhc26_theme', 'dark'); } catch (e) { }
             }
+            updateThemeBtnLabel();
           });
         }
 
@@ -5386,8 +5395,7 @@
           if (tflAlertsBtnEl) tflAlertsBtnEl.textContent = t.tflAlertsBtn;
           if (shareBtnEl && t.shareMapBtn) shareBtnEl.textContent = t.shareMapBtn;
           if (themeBtnEl) {
-            const isDark = document.body.classList.contains('dark-theme');
-            themeBtnEl.textContent = isDark ? t.lightMapBtn : t.darkMapBtn;
+            themeBtnEl.textContent = isDarkMode ? t.lightMapBtn : t.darkMapBtn;
           }
           if (aboutMeBtnEl) aboutMeBtnEl.textContent = t.aboutMeBtn;
 

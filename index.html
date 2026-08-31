@@ -2830,8 +2830,8 @@
         const themeToggleBtn = document.getElementById('themeToggleBtn');
         if (themeToggleBtn) {
           const updateThemeBtnLabel = () => {
-            const lang = (typeof currentLang !== 'undefined' && typeof translations !== 'undefined' && translations[currentLang]) ? currentLang : 'en';
-            const t = translations[lang] || (typeof translations !== 'undefined' ? translations.en : null);
+            const lang = window.currentLang || 'en';
+            const t = (window.translations && window.translations[lang]) ? window.translations[lang] : null;
             if (t) {
               themeToggleBtn.textContent = isDarkMode ? t.lightMapBtn : t.darkMapBtn;
             } else {
@@ -5365,10 +5365,13 @@
         };
 
         let currentLang = 'en';
+        window.currentLang = 'en';
 
         function setLanguage(langKey) {
           if (!translations[langKey]) return;
           currentLang = langKey;
+          window.currentLang = langKey;
+          window.translations = translations;
           const t = translations[langKey];
 
           // Update direction if Arabic or Urdu

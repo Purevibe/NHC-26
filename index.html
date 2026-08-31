@@ -2012,14 +2012,14 @@
 
           <!-- Tab Switcher for Sunday vs Monday -->
           <div class="prog-tab-bar">
-            <button class="prog-tab-btn active" id="progTabSunday">Sun 30 Aug (Family Day)</button>
-            <button class="prog-tab-btn" id="progTabMonday">Mon 31 Aug (Adults Parade)</button>
+            <button class="prog-tab-btn" id="progTabSunday">Sun 30 Aug (Family Day)</button>
+            <button class="prog-tab-btn active" id="progTabMonday">Mon 31 Aug (Adults Parade)</button>
           </div>
 
           <div class="about-modal-body prog-modal-body">
 
             <!-- SUNDAY 30 AUGUST CONTENT -->
-            <div id="progContentSunday" class="prog-day-content">
+            <div id="progContentSunday" class="prog-day-content" style="display: none;">
               <div class="prog-day-title" data-i18n="progSunTitle">Sunday 30 August 2026</div>
 
               <div class="prog-event-card">
@@ -2101,7 +2101,7 @@
             </div>
 
             <!-- MONDAY 31 AUGUST CONTENT -->
-            <div id="progContentMonday" class="prog-day-content" style="display: none;">
+            <div id="progContentMonday" class="prog-day-content">
               <div class="prog-day-title" data-i18n="progMonTitle">Monday 31 August 2026</div>
 
               <div class="prog-event-card">
@@ -3871,6 +3871,12 @@
 
         if (programmeToggleBtn && programmeModal) {
           programmeToggleBtn.addEventListener('click', () => {
+            if (progTabMonday && progTabSunday && progContentMonday && progContentSunday) {
+              progTabMonday.classList.add('active');
+              progTabSunday.classList.remove('active');
+              progContentMonday.style.display = 'block';
+              progContentSunday.style.display = 'none';
+            }
             programmeModal.style.display = 'flex';
           });
         }
